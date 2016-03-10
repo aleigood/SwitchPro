@@ -1,7 +1,5 @@
 package alei.switchpro;
 
-import java.io.FileNotFoundException;
-
 import alei.switchpro.battery.BatteryIndicatorUtils;
 import alei.switchpro.load.XmlEntity;
 import alei.switchpro.net.NetUtils;
@@ -30,9 +28,10 @@ import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.RemoteViews;
 
-public class WidgetProviderUtil
-{
-    // ¿ª¹Ø×´Ì¬
+import java.io.FileNotFoundException;
+
+public class WidgetProviderUtil {
+    // ï¿½ï¿½ï¿½ï¿½×´Ì¬
     public static final int STATE_OTHER = -1;
     public static final int STATE_DISABLED = 0;
     public static final int STATE_ENABLED = 1;
@@ -42,11 +41,11 @@ public class WidgetProviderUtil
     public static final int IND_POS_CENTER = 2;
     public static final int IND_POS_RIGHT = 3;
 
-    // Ä¬ÈÏµÄ°´Å¥Ë³Ðò
+    // Ä¬ï¿½ÏµÄ°ï¿½Å¥Ë³ï¿½ï¿½
     public static final String EXTRA_BUTTON_ID = "buttonId";
     public static final String URI_SCHEME = "SWITCH_PRO_WIDGET";
     public static volatile boolean dataConnectionFlag = false;
-    // ×÷ÎªÊÇ±¾Èí¼þ´ò¿ªµÄ±ê¼Ç£¬Èç¹ûÎªtrue£¬¾Í±íÊ¾ÊÇ´Ó±¾widget´¥·¢µÄ£¬ÐèÒªÏÔÊ¾ÖØÔØÍêµÄÌáÊ¾
+    // ï¿½ï¿½Îªï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ò¿ªµÄ±ï¿½Ç£ï¿½ï¿½ï¿½ï¿½Îªtrueï¿½ï¿½ï¿½Í±ï¿½Ê¾ï¿½Ç´Ó±ï¿½widgetï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½Òªï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
     public static volatile boolean scanMediaFlag = false;
 
     public static Bitmap BITMAP_WIFI;
@@ -83,34 +82,29 @@ public class WidgetProviderUtil
     public static Bitmap BITMAP_NFC;
 
     /**
-     * É¾³ýÃ¿¸öwidget¶ÔÓ¦µÄ²ÎÊý
+     * É¾ï¿½ï¿½Ã¿ï¿½ï¿½widgetï¿½ï¿½Ó¦ï¿½Ä²ï¿½ï¿½ï¿½
      */
-    public static void onDeleted(Context context, int[] appWidgetIds)
-    {
-        for (int appWidgetId : appWidgetIds)
-        {
-            // É¾³ýÉ¾³ýÃ¿¸öwidgetÊµÀýµÄ°´Å¥²ÎÊý,Èç¹û²»É¾³ýÔò»áÔÚÐÞ¸ÄÊÇÏÔÊ¾³öÀ´
+    public static void onDeleted(Context context, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            // É¾ï¿½ï¿½É¾ï¿½ï¿½Ã¿ï¿½ï¿½widgetÊµï¿½ï¿½ï¿½Ä°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor configEditor = config.edit();
 
-            // Èç¹ûÊÇwidget¾ÍÉ¾³ýÏàÓ¦²ÎÊý
+            // ï¿½ï¿½ï¿½ï¿½ï¿½widgetï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
             String[] notificationWidgetIds = config.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "").split(",");
             boolean isExist = false;
 
-            for (int i = 0; i < notificationWidgetIds.length; i++)
-            {
-                if (!notificationWidgetIds[i].equals("") && appWidgetId == Integer.parseInt(notificationWidgetIds[i]))
-                {
+            for (int i = 0; i < notificationWidgetIds.length; i++) {
+                if (!notificationWidgetIds[i].equals("") && appWidgetId == Integer.parseInt(notificationWidgetIds[i])) {
                     isExist = true;
                     break;
                 }
             }
 
-            if (!isExist)
-            {
+            if (!isExist) {
                 String fileName = config.getString(
                         String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, appWidgetId), "");
-                // É¾³ý±³¾°Í¼Æ¬ÎÄ¼þ
+                // É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½Ä¼ï¿½
                 context.deleteFile(fileName);
 
                 configEditor.remove(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, appWidgetId));
@@ -126,24 +120,21 @@ public class WidgetProviderUtil
         }
     }
 
-    public static void updateAction(Context context, Intent intent, Class<?> cls)
-    {
+    public static void updateAction(Context context, Intent intent, Class<?> cls) {
         // long curTime = System.currentTimeMillis();
         performButtonEvent(context, intent);
 
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // ÆäËû¸üÐÂÊÂ¼þ¡£Ò»°ãÊÇ½ÓÊÕµ½×´Ì¬¸üÐÂµÄÏûÏ¢£¬ËùÒÔÒª¸üÐÂËùÓÐµÄwidget
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ç½ï¿½ï¿½Õµï¿½×´Ì¬ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½widget
         int[] widgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(intent.getComponent());
 
-        for (int i = 0; i < widgetIds.length; i++)
-        {
-            // ViewsÓÐ¿ÉÄÜÎª¿Õ£¬Èç¹ûÎª¿ÕÖ±½ÓÌø¹ý£¬²»¸üÐÂ
+        for (int i = 0; i < widgetIds.length; i++) {
+            // Viewsï¿½Ð¿ï¿½ï¿½ï¿½Îªï¿½Õ£ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             RemoteViews views = buildAndUpdateButtons(context, widgetIds[i], config, cls);
             AppWidgetManager gm = AppWidgetManager.getInstance(context);
 
-            if (views != null)
-            {
+            if (views != null) {
                 gm.updateAppWidget(widgetIds[i], views);
             }
         }
@@ -151,24 +142,20 @@ public class WidgetProviderUtil
         // (System.currentTimeMillis() - curTime));
     }
 
-    public static void performButtonEvent(Context context, Intent intent)
-    {
+    public static void performButtonEvent(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // Èç¹ûÊÇ°´Å¥µã»÷µÄÊÂ¼þ
-        if (intent.hasCategory(Intent.CATEGORY_ALTERNATIVE) && bundle != null)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
+        if (intent.hasCategory(Intent.CATEGORY_ALTERNATIVE) && bundle != null) {
             int buttonId = bundle.getInt(EXTRA_BUTTON_ID, -1);
 
-            if (config.getBoolean(Constants.PREFS_HAPTIC_FEEDBACK, true))
-            {
+            if (config.getBoolean(Constants.PREFS_HAPTIC_FEEDBACK, true)) {
                 Vibrator vibrator = (Vibrator) context.getSystemService("vibrator");
                 vibrator.vibrate(25);
             }
 
-            switch (buttonId)
-            {
+            switch (buttonId) {
                 case Constants.BUTTON_NET_SWITCH:
                     SwitchUtils.toggleNetSwitch(context);
                     break;
@@ -267,36 +254,32 @@ public class WidgetProviderUtil
         }
     }
 
-    public static RemoteViews buildAndUpdateButtons(Context context, XmlEntity entity)
-    {
+    public static RemoteViews buildAndUpdateButtons(Context context, XmlEntity entity) {
         return buildAndUpdateButtons(context, null, entity.getBtnIds(), entity.getLayoutName(), entity.getIconColor(),
                 entity.getIconTrans(), entity.getIndColor(), entity.getDividerColor(), entity.getBackColor(), null);
     }
 
     public static RemoteViews buildAndUpdateButtons(Context context, Integer widgetId, String strBtnIds,
-            String layoutName, int iconColor, int iconTrans, int indColor, int dividerColor, int backColor,
-            Bitmap backImg)
-    {
+                                                    String layoutName, int iconColor, int iconTrans, int indColor, int dividerColor, int backColor,
+                                                    Bitmap backImg) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
-        // ¶ÁÈ¡ËùÓÐ²ÎÊý
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½
 
-        if (layoutName == null || layoutName.equals(""))
-        {
+        if (layoutName == null || layoutName.equals("")) {
             return null;
         }
 
         int layoutId = getLayoutId(context, layoutName);
 
-        // ¹¹ÔìRemoteViews
+        // ï¿½ï¿½ï¿½ï¿½RemoteViews
         RemoteViews views = new RemoteViews(context.getPackageName(), layoutId);
 
-        // Èç¹ûÊÇ×Ô¶¨ÒåÑÕÉ«±³¾°µÄÖ±½ÓÉèÖÃÑÕÉ«
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
         updateBackground(context, widgetId, views, layoutName, backColor, backImg);
         updateDivider(context, views, layoutName, dividerColor);
 
-        // °´Å¥±»É¾ÍêÁËµÄÇéÐÎ
-        if (strBtnIds == null || strBtnIds.trim().equals(""))
-        {
+        // ï¿½ï¿½Å¥ï¿½ï¿½É¾ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½
+        if (strBtnIds == null || strBtnIds.trim().equals("")) {
             return views;
         }
 
@@ -308,165 +291,134 @@ public class WidgetProviderUtil
 
     /**
      * Load image for given widget and build {@link RemoteViews} for it.
-     * 
+     *
      * @param context
      * @param appWidgetId
      * @param config
-     * @param cls
-     *            ¿ÉÒÔÎª¿Õ
+     * @param cls         ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½
      * @return
      */
     public static RemoteViews buildAndUpdateButtons(Context context, int appWidgetId, SharedPreferences config,
-            Class<?> cls)
-    {
-        // ÅÐ¶ÏÅäÖÃÀïÊÇ·ñÓÐÕâ¸öWidgetId,Èç¹ûÔÚÅäÖÃ½çÃæµã»÷Home¼üÍË³öÊ±£¬»á´´½¨Ò»¸öWidgetId
-        if (!config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, appWidgetId)))
-        {
+                                                    Class<?> cls) {
+        // ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½WidgetId,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½Homeï¿½ï¿½ï¿½Ë³ï¿½Ê±ï¿½ï¿½ï¿½á´´ï¿½ï¿½Ò»ï¿½ï¿½WidgetId
+        if (!config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, appWidgetId))) {
             return null;
         }
 
-        // ÉèÖÃLayout
+        // ï¿½ï¿½ï¿½ï¿½Layout
         String layoutName = config.getString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, appWidgetId),
                 context.getString(R.string.list_pre_bg_default));
         int layoutId = getLayoutId(context, layoutName);
 
-        // »ñÈ¡°´Å¥ID
+        // ï¿½ï¿½È¡ï¿½ï¿½Å¥ID
         String buttonIdsStr = config.getString(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, appWidgetId),
                 WidgetConfigBaseActivity.DEFAULT_BUTTON_IDS);
 
-        if (buttonIdsStr == null || buttonIdsStr.trim().equals(""))
-        {
+        if (buttonIdsStr == null || buttonIdsStr.trim().equals("")) {
             return null;
         }
 
         int[] buttonIds = getButtonIdsFromStr(context, buttonIdsStr);
 
-        // »ñÈ¡Ö¸Ê¾Æ÷µÄÑÕÉ«
+        // ï¿½ï¿½È¡Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
         int indColor = config.getInt(String.format(Constants.PREFS_IND_COLOR_FIELD_PATTERN, appWidgetId),
                 Constants.IND_COLOR_DEFAULT);
 
-        // »ñÈ¡Í¼±êÑÕÉ«
+        // ï¿½ï¿½È¡Í¼ï¿½ï¿½ï¿½ï¿½É«
         int iconColor = config
                 .getInt(String.format(Constants.PREFS_ICON_COLOR_FIELD_PATTERN, appWidgetId), Color.WHITE);
 
-        // »ñÈ¡·Ö¸îÏßÑÕÉ«
+        // ï¿½ï¿½È¡ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½É«
         int dividerColor = config.getInt(String.format(Constants.PREFS_DIVIDER_COLOR_FIELD_PATTERN, appWidgetId),
                 Constants.DEFAULT_DEVIDER_COLOR);
 
-        // »ñÈ¡Í¸Ã÷±ÈÀý
+        // ï¿½ï¿½È¡Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         int transPref = config.getInt(String.format(Constants.PREFS_ICON_TRANS_FIELD_PATTERN, appWidgetId), 50);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), layoutId);
         updateBackground(context, appWidgetId, config, views, layoutName);
         updateDivider(context, views, layoutName, dividerColor);
-        // ¹¹ÔìËùÓÐ°´Å¥
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð°ï¿½Å¥
         buildButtons(views, context, buttonIds, cls, appWidgetId, layoutName, dividerColor);
-        // ¸üÐÂËùÓÐ°´Å¥
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð°ï¿½Å¥
         updateButtons(views, context, config, layoutName, buttonIds, iconColor, transPref, indColor);
         return views;
     }
 
-    public static int getLayoutId(Context context, String layoutName)
-    {
+    public static int getLayoutId(Context context, String layoutName) {
         int layoutId = R.layout.view_widget;
 
-        if (layoutName.equals(context.getString(R.string.list_pre_bg_custom)))
-        {
+        if (layoutName.equals(context.getString(R.string.list_pre_bg_custom))) {
             layoutId = R.layout.view_widget_custom;
         }
 
-        if (layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow)))
-        {
+        if (layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow))) {
             layoutId = R.layout.view_widget_shadow;
         }
 
-        if (layoutName.equals(context.getString(R.string.list_pre_bg_none)))
-        {
+        if (layoutName.equals(context.getString(R.string.list_pre_bg_none))) {
             layoutId = R.layout.view_widget_nobg;
         }
 
         return layoutId;
     }
 
-    public static Bitmap getBackgroundBitmap(Context context, int appWidgetId, SharedPreferences config)
-    {
-        try
-        {
+    public static Bitmap getBackgroundBitmap(Context context, int appWidgetId, SharedPreferences config) {
+        try {
             return BitmapFactory.decodeStream(context.openFileInput(config.getString(
                     String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, appWidgetId), "")));
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
         }
     }
 
     private static void updateBackground(Context context, Integer widgetId, RemoteViews views, String layoutName,
-            int pBackColor, Bitmap backImg)
-    {
+                                         int pBackColor, Bitmap backImg) {
         if (layoutName.equals(context.getString(R.string.list_pre_bg_custom))
-                || layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow)))
-        {
-            if (backImg == null)
-            {
+                || layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow))) {
+            if (backImg == null) {
                 int backColor = pBackColor == 0 ? Constants.DEFAULT_BACKGROUND_COLOR : pBackColor;
                 views.setImageViewBitmap(R.id.custom_img, Utils.createBitmap(backColor));
-            }
-            else
-            {
+            } else {
                 views.setImageViewBitmap(R.id.custom_img, backImg);
             }
-        }
-        else if ((layoutName.equals(context.getString(R.string.list_pre_bg_default)) || layoutName.equals(context
-                .getString(R.string.list_pre_bg_white))) && VERSION.SDK_INT >= 10)
-        {
+        } else if ((layoutName.equals(context.getString(R.string.list_pre_bg_default)) || layoutName.equals(context
+                .getString(R.string.list_pre_bg_white))) && VERSION.SDK_INT >= 10) {
             views.setInt(R.id.custom_img, "setAlpha", pBackColor);
         }
     }
 
     private static void updateBackground(Context context, Integer appWidgetId, SharedPreferences config,
-            RemoteViews views, String layoutName)
-    {
+                                         RemoteViews views, String layoutName) {
         String backColorKey = String.format(Constants.PREFS_BACK_COLOR_FIELD_PATTERN, appWidgetId);
         String backImgKey = String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, appWidgetId);
 
         if (layoutName.equals(context.getString(R.string.list_pre_bg_custom))
-                || layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow)))
-        {
-            // Èç¹ûÓÃµÄÊÇ±³¾°Í¼Æ¬£¬ÔòÒ²»á±£´æÒ»¸öÄ¬ÈÏµÄ±³¾°ÑÕÉ«²ÎÊý£¬Èç¹ûÓÐ±³¾°Í¼Æ¬²ÎÊýÔòÓÅÏÈÓÃ
-            if (config.contains(backImgKey))
-            {
+                || layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow))) {
+            // ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ç±ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Ò²ï¿½á±£ï¿½ï¿½Ò»ï¿½ï¿½Ä¬ï¿½ÏµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (config.contains(backImgKey)) {
                 Bitmap backBitmap = getBackgroundBitmap(context, appWidgetId, config);
 
-                // ÄÜÕý³£»ñÈ¡Í¼Æ¬
-                if (backBitmap != null)
-                {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Í¼Æ¬
+                if (backBitmap != null) {
                     views.setImageViewBitmap(R.id.custom_img, backBitmap);
-                }
-                else
-                {
+                } else {
                     views.setImageViewBitmap(R.id.custom_img, Utils.createBitmap(Constants.DEFAULT_BACKGROUND_COLOR));
                 }
-            }
-            else
-            {
+            } else {
                 views.setImageViewBitmap(R.id.custom_img,
                         Utils.createBitmap(config.getInt(backColorKey, Constants.DEFAULT_BACKGROUND_COLOR)));
             }
-        }
-        else if ((layoutName.equals(context.getString(R.string.list_pre_bg_default)) || layoutName.equals(context
-                .getString(R.string.list_pre_bg_white))) && VERSION.SDK_INT >= 10)
-        {
+        } else if ((layoutName.equals(context.getString(R.string.list_pre_bg_default)) || layoutName.equals(context
+                .getString(R.string.list_pre_bg_white))) && VERSION.SDK_INT >= 10) {
             views.setInt(R.id.custom_img, "setAlpha", config.getInt(backColorKey, 255));
         }
     }
 
-    private static void updateDivider(Context context, RemoteViews views, String layoutName, int dividerColor)
-    {
+    private static void updateDivider(Context context, RemoteViews views, String layoutName, int dividerColor) {
         if (layoutName.equals(context.getString(R.string.list_pre_bg_custom))
-                || layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow)))
-        {
+                || layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow))) {
             Bitmap dividerImg = Utils.createBitmap(dividerColor);
             views.setImageViewBitmap(R.id.div_1, dividerImg);
             views.setImageViewBitmap(R.id.div_2, dividerImg);
@@ -487,9 +439,7 @@ public class WidgetProviderUtil
             views.setImageViewBitmap(R.id.div_17, dividerImg);
             views.setImageViewBitmap(R.id.div_18, dividerImg);
             views.setImageViewBitmap(R.id.div_19, dividerImg);
-        }
-        else if (layoutName.equals(context.getString(R.string.list_pre_bg_white)))
-        {
+        } else if (layoutName.equals(context.getString(R.string.list_pre_bg_white))) {
             views.setImageViewResource(R.id.custom_img, R.drawable.bg_w);
             views.setImageViewResource(R.id.div_1, R.drawable.divider_w);
             views.setImageViewResource(R.id.div_2, R.drawable.divider_w);
@@ -510,9 +460,7 @@ public class WidgetProviderUtil
             views.setImageViewResource(R.id.div_17, R.drawable.divider_w);
             views.setImageViewResource(R.id.div_18, R.drawable.divider_w);
             views.setImageViewResource(R.id.div_19, R.drawable.divider_w);
-        }
-        else if (layoutName.equals(context.getString(R.string.list_pre_bg)))
-        {
+        } else if (layoutName.equals(context.getString(R.string.list_pre_bg))) {
             views.setImageViewResource(R.id.custom_img, R.drawable.bg);
             views.setImageViewResource(R.id.div_1, R.drawable.divider);
             views.setImageViewResource(R.id.div_2, R.drawable.divider);
@@ -537,24 +485,20 @@ public class WidgetProviderUtil
     }
 
     /**
-     * ¹¹Ôì°´Å¥
-     * 
+     * ï¿½ï¿½ï¿½ì°´Å¥
+     *
      * @param views
      * @param context
      * @param buttonIds
-     * @param cls
-     *            ¿ÉÒÔÎª¿Õ£¬Îª¿ÕÊ±²»¹¹½¨Ã¿¸ö°´Å¥µÄÏìÓ¦ÊÂ¼þ
-     * @param appWidgetId
-     *            ¿ÉÒÔÎª¿Õ£¬Îª¿ÕÊ±²»¹¹½¨Ã¿¸ö°´Å¥µÄÏìÓ¦ÊÂ¼þ
+     * @param cls         ï¿½ï¿½ï¿½ï¿½Îªï¿½Õ£ï¿½Îªï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Â¼ï¿½
+     * @param appWidgetId ï¿½ï¿½ï¿½ï¿½Îªï¿½Õ£ï¿½Îªï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Â¼ï¿½
      * @return
      */
     private static RemoteViews buildButtons(RemoteViews views, Context context, int[] buttonIds, Class<?> cls,
-            Integer appWidgetId, String layoutName, int dividerColor)
-    {
-        switch (buttonIds.length)
-        {
+                                            Integer appWidgetId, String layoutName, int dividerColor) {
+        switch (buttonIds.length) {
             case 1:
-                // Òþ²ØµÚ2-7¸ö°´Å¥
+                // ï¿½ï¿½ï¿½Øµï¿½2-7ï¿½ï¿½ï¿½ï¿½Å¥
                 views.setOnClickPendingIntent(R.id.btn_0,
                         getLaunchPendingIntent(context, appWidgetId, buttonIds[0], cls));
 
@@ -644,12 +588,9 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_18, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_19, View.VISIBLE);
                 }
                 break;
@@ -700,13 +641,10 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_17, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_18, View.VISIBLE);
                     views.setViewVisibility(R.id.div_19, View.VISIBLE);
                 }
@@ -759,14 +697,11 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_16, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_17, View.VISIBLE);
                     views.setViewVisibility(R.id.div_18, View.VISIBLE);
                     views.setViewVisibility(R.id.div_19, View.VISIBLE);
@@ -821,15 +756,12 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_15, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_16, View.GONE);
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_16, View.VISIBLE);
                     views.setViewVisibility(R.id.div_17, View.VISIBLE);
                     views.setViewVisibility(R.id.div_18, View.VISIBLE);
@@ -850,7 +782,7 @@ public class WidgetProviderUtil
                 views.setOnClickPendingIntent(R.id.btn_19,
                         getLaunchPendingIntent(context, appWidgetId, buttonIds[5], cls));
 
-                // Òþ²ØµÚ¶þ¸ö°´Å¥
+                // ï¿½ï¿½ï¿½ØµÚ¶ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
                 views.setViewVisibility(R.id.btn_1, View.GONE);
                 views.setViewVisibility(R.id.btn_2, View.GONE);
                 views.setViewVisibility(R.id.btn_3, View.GONE);
@@ -887,17 +819,14 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_14, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_15, View.GONE);
                     views.setViewVisibility(R.id.div_16, View.GONE);
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
 
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_15, View.VISIBLE);
                     views.setViewVisibility(R.id.div_16, View.VISIBLE);
                     views.setViewVisibility(R.id.div_17, View.VISIBLE);
@@ -956,17 +885,14 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_13, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_14, View.GONE);
                     views.setViewVisibility(R.id.div_15, View.GONE);
                     views.setViewVisibility(R.id.div_16, View.GONE);
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_14, View.VISIBLE);
                     views.setViewVisibility(R.id.div_15, View.VISIBLE);
                     views.setViewVisibility(R.id.div_16, View.VISIBLE);
@@ -1027,8 +953,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_12, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_13, View.GONE);
                     views.setViewVisibility(R.id.div_14, View.GONE);
                     views.setViewVisibility(R.id.div_15, View.GONE);
@@ -1036,9 +961,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_13, View.VISIBLE);
                     views.setViewVisibility(R.id.div_14, View.VISIBLE);
                     views.setViewVisibility(R.id.div_15, View.VISIBLE);
@@ -1101,8 +1024,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_11, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_12, View.GONE);
                     views.setViewVisibility(R.id.div_13, View.GONE);
                     views.setViewVisibility(R.id.div_14, View.GONE);
@@ -1111,9 +1033,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_12, View.VISIBLE);
                     views.setViewVisibility(R.id.div_13, View.VISIBLE);
                     views.setViewVisibility(R.id.div_14, View.VISIBLE);
@@ -1178,8 +1098,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_10, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_11, View.GONE);
                     views.setViewVisibility(R.id.div_12, View.GONE);
                     views.setViewVisibility(R.id.div_13, View.GONE);
@@ -1189,9 +1108,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_11, View.VISIBLE);
                     views.setViewVisibility(R.id.div_12, View.VISIBLE);
                     views.setViewVisibility(R.id.div_13, View.VISIBLE);
@@ -1258,8 +1175,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_9, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_10, View.GONE);
                     views.setViewVisibility(R.id.div_11, View.GONE);
                     views.setViewVisibility(R.id.div_12, View.GONE);
@@ -1270,9 +1186,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_10, View.VISIBLE);
                     views.setViewVisibility(R.id.div_11, View.VISIBLE);
                     views.setViewVisibility(R.id.div_12, View.VISIBLE);
@@ -1341,8 +1255,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_8, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_9, View.GONE);
                     views.setViewVisibility(R.id.div_10, View.GONE);
                     views.setViewVisibility(R.id.div_11, View.GONE);
@@ -1354,9 +1267,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_9, View.VISIBLE);
                     views.setViewVisibility(R.id.div_10, View.VISIBLE);
                     views.setViewVisibility(R.id.div_11, View.VISIBLE);
@@ -1427,8 +1338,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_7, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_8, View.GONE);
                     views.setViewVisibility(R.id.div_9, View.GONE);
                     views.setViewVisibility(R.id.div_10, View.GONE);
@@ -1441,9 +1351,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_8, View.VISIBLE);
                     views.setViewVisibility(R.id.div_9, View.VISIBLE);
                     views.setViewVisibility(R.id.div_10, View.VISIBLE);
@@ -1516,8 +1424,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_6, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_7, View.GONE);
                     views.setViewVisibility(R.id.div_8, View.GONE);
                     views.setViewVisibility(R.id.div_9, View.GONE);
@@ -1531,9 +1438,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_7, View.VISIBLE);
                     views.setViewVisibility(R.id.div_8, View.VISIBLE);
                     views.setViewVisibility(R.id.div_9, View.VISIBLE);
@@ -1608,8 +1513,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_5, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_6, View.GONE);
                     views.setViewVisibility(R.id.div_7, View.GONE);
                     views.setViewVisibility(R.id.div_8, View.GONE);
@@ -1624,9 +1528,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_6, View.VISIBLE);
                     views.setViewVisibility(R.id.div_7, View.VISIBLE);
                     views.setViewVisibility(R.id.div_8, View.VISIBLE);
@@ -1703,8 +1605,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_4, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_5, View.GONE);
                     views.setViewVisibility(R.id.div_6, View.GONE);
                     views.setViewVisibility(R.id.div_7, View.GONE);
@@ -1720,9 +1621,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_5, View.VISIBLE);
                     views.setViewVisibility(R.id.div_6, View.VISIBLE);
                     views.setViewVisibility(R.id.div_7, View.VISIBLE);
@@ -1801,8 +1700,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_3, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_4, View.GONE);
                     views.setViewVisibility(R.id.div_5, View.GONE);
                     views.setViewVisibility(R.id.div_6, View.GONE);
@@ -1819,9 +1717,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_4, View.VISIBLE);
                     views.setViewVisibility(R.id.div_5, View.VISIBLE);
                     views.setViewVisibility(R.id.div_6, View.VISIBLE);
@@ -1902,8 +1798,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_2, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_3, View.GONE);
                     views.setViewVisibility(R.id.div_4, View.GONE);
                     views.setViewVisibility(R.id.div_5, View.GONE);
@@ -1921,9 +1816,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_3, View.VISIBLE);
                     views.setViewVisibility(R.id.div_4, View.VISIBLE);
                     views.setViewVisibility(R.id.div_5, View.VISIBLE);
@@ -2006,8 +1899,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.div_1, View.GONE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_2, View.GONE);
                     views.setViewVisibility(R.id.div_3, View.GONE);
                     views.setViewVisibility(R.id.div_4, View.GONE);
@@ -2026,9 +1918,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_2, View.VISIBLE);
                     views.setViewVisibility(R.id.div_3, View.VISIBLE);
                     views.setViewVisibility(R.id.div_4, View.VISIBLE);
@@ -2112,8 +2002,7 @@ public class WidgetProviderUtil
                 views.setViewVisibility(R.id.btn_19, View.VISIBLE);
 
                 if (((layoutName.equals(context.getString(R.string.list_pre_bg_custom)) || layoutName.equals(context
-                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG))
-                {
+                        .getString(R.string.list_pre_bg_custom_shadow))) && dividerColor == Constants.NOT_SHOW_FLAG)) {
                     views.setViewVisibility(R.id.div_1, View.GONE);
                     views.setViewVisibility(R.id.div_2, View.GONE);
                     views.setViewVisibility(R.id.div_3, View.GONE);
@@ -2133,9 +2022,7 @@ public class WidgetProviderUtil
                     views.setViewVisibility(R.id.div_17, View.GONE);
                     views.setViewVisibility(R.id.div_18, View.GONE);
                     views.setViewVisibility(R.id.div_19, View.GONE);
-                }
-                else
-                {
+                } else {
                     views.setViewVisibility(R.id.div_1, View.VISIBLE);
                     views.setViewVisibility(R.id.div_2, View.VISIBLE);
                     views.setViewVisibility(R.id.div_3, View.VISIBLE);
@@ -2205,147 +2092,140 @@ public class WidgetProviderUtil
         return views;
     }
 
-    private static int getDataConnIcon(Context context)
-    {
+    private static int getDataConnIcon(Context context) {
         int netType = NetUtils.getNetworkType(context);
 
-        if (netType == TelephonyManager.NETWORK_TYPE_EDGE || netType == TelephonyManager.NETWORK_TYPE_GPRS)
-        {
+        if (netType == TelephonyManager.NETWORK_TYPE_EDGE || netType == TelephonyManager.NETWORK_TYPE_GPRS) {
             return R.drawable.icon_edge_on;
-        }
-        else
-        {
+        } else {
             return R.drawable.icon_3g_on;
         }
     }
 
     /**
-     * »ñÈ¡°´Å¥ÅäÖÃµÄ²ÎÊýÖµ
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ÃµÄ²ï¿½ï¿½ï¿½Öµ
+     *
      * @param context
      * @param appWidgetId
      * @return
      */
-    private static int[] getButtonIdsFromStr(Context context, String buttonIdsStr)
-    {
+    private static int[] getButtonIdsFromStr(Context context, String buttonIdsStr) {
         String[] part = buttonIdsStr.split(",");
         int length = part.length;
 
-        switch (length)
-        {
+        switch (length) {
             case 1:
-                return new int[] { Integer.parseInt(part[0]) };
+                return new int[]{Integer.parseInt(part[0])};
             case 2:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]) };
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1])};
             case 3:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]) };
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2])};
             case 4:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
-                        Integer.parseInt(part[3]) };
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                        Integer.parseInt(part[3])};
             case 5:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
-                        Integer.parseInt(part[3]), Integer.parseInt(part[4]) };
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                        Integer.parseInt(part[3]), Integer.parseInt(part[4])};
             case 6:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
-                        Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]) };
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                        Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5])};
             case 7:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
-                        Integer.parseInt(part[6]) };
+                        Integer.parseInt(part[6])};
             case 8:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
-                        Integer.parseInt(part[6]), Integer.parseInt(part[7]) };
+                        Integer.parseInt(part[6]), Integer.parseInt(part[7])};
             case 9:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
-                        Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]) };
+                        Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8])};
             case 10:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
-                        Integer.parseInt(part[9]) };
+                        Integer.parseInt(part[9])};
             case 11:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
-                        Integer.parseInt(part[9]), Integer.parseInt(part[10]) };
+                        Integer.parseInt(part[9]), Integer.parseInt(part[10])};
             case 12:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
-                        Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]) };
+                        Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11])};
             case 13:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
-                        Integer.parseInt(part[12]) };
+                        Integer.parseInt(part[12])};
             case 14:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
-                        Integer.parseInt(part[12]), Integer.parseInt(part[13]) };
+                        Integer.parseInt(part[12]), Integer.parseInt(part[13])};
             case 15:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
-                        Integer.parseInt(part[12]), Integer.parseInt(part[13]), Integer.parseInt(part[14]) };
+                        Integer.parseInt(part[12]), Integer.parseInt(part[13]), Integer.parseInt(part[14])};
             case 16:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
                         Integer.parseInt(part[12]), Integer.parseInt(part[13]), Integer.parseInt(part[14]),
-                        Integer.parseInt(part[15]) };
+                        Integer.parseInt(part[15])};
             case 17:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
                         Integer.parseInt(part[12]), Integer.parseInt(part[13]), Integer.parseInt(part[14]),
-                        Integer.parseInt(part[15]), Integer.parseInt(part[16]) };
+                        Integer.parseInt(part[15]), Integer.parseInt(part[16])};
             case 18:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
                         Integer.parseInt(part[12]), Integer.parseInt(part[13]), Integer.parseInt(part[14]),
-                        Integer.parseInt(part[15]), Integer.parseInt(part[16]), Integer.parseInt(part[17]) };
+                        Integer.parseInt(part[15]), Integer.parseInt(part[16]), Integer.parseInt(part[17])};
             case 19:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
                         Integer.parseInt(part[12]), Integer.parseInt(part[13]), Integer.parseInt(part[14]),
                         Integer.parseInt(part[15]), Integer.parseInt(part[16]), Integer.parseInt(part[17]),
-                        Integer.parseInt(part[18]) };
+                        Integer.parseInt(part[18])};
             case 20:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
                         Integer.parseInt(part[3]), Integer.parseInt(part[4]), Integer.parseInt(part[5]),
                         Integer.parseInt(part[6]), Integer.parseInt(part[7]), Integer.parseInt(part[8]),
                         Integer.parseInt(part[9]), Integer.parseInt(part[10]), Integer.parseInt(part[11]),
                         Integer.parseInt(part[12]), Integer.parseInt(part[13]), Integer.parseInt(part[14]),
                         Integer.parseInt(part[15]), Integer.parseInt(part[16]), Integer.parseInt(part[17]),
-                        Integer.parseInt(part[18]), Integer.parseInt(part[19]) };
+                        Integer.parseInt(part[18]), Integer.parseInt(part[19])};
             default:
-                return new int[] { Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
-                        Integer.parseInt(part[3]), Integer.parseInt(part[4]) };
+                return new int[]{Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]),
+                        Integer.parseInt(part[3]), Integer.parseInt(part[4])};
         }
     }
 
     /**
      * Creates PendingIntent to notify the widget of a button click.
-     * 
+     *
      * @param context
      * @param appWidgetId
      * @return
      */
     protected static PendingIntent getLaunchPendingIntent(Context context, Integer appWidgetId, int buttonId,
-            Class<?> cls)
-    {
+                                                          Class<?> cls) {
         Intent launchIntent = new Intent();
         launchIntent.setData(Uri.withAppendedPath(Uri.parse(URI_SCHEME + "://widget/id/"), String.valueOf(appWidgetId)
                 + "/" + buttonId));
@@ -2358,110 +2238,85 @@ public class WidgetProviderUtil
 
     /**
      * Updates the buttons based on the underlying states of wifi, etc.
-     * µç³ØµÄ×´Ì¬ÔÚBatteryInfoServiceÀï¸üÐÂ
-     * 
-     * @param views
-     *            The RemoteViews to update.
+     * ï¿½ï¿½Øµï¿½×´Ì¬ï¿½ï¿½BatteryInfoServiceï¿½ï¿½ï¿½ï¿½ï¿½
+     *
+     * @param views   The RemoteViews to update.
      * @param context
      */
     private static void updateButtons(RemoteViews views, Context context, SharedPreferences config, String layoutName,
-            int[] buttonIds, int iconColor, int iconTrans, int indColor)
-    {
+                                      int[] buttonIds, int iconColor, int iconTrans, int indColor) {
         int viewId = -1;
 
-        // ¸üÐÂWIFI×´Ì¬
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFI, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½WIFI×´Ì¬
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFI, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_WIFI));
             int state = SwitchUtils.getWifiState(context);
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_WIFI == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_WIFI == null) {
+                    try {
                         BITMAP_WIFI = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIFI), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_wifi_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_WIFI, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_wifi_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_WIFI, views, layoutName, buttonIds, state, indColor);
         }
 
-        // »ñÈ¡APN×´Ì¬
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_EDGE, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½È¡APN×´Ì¬
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_EDGE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_EDGE));
             int state = SwitchUtils.getApnState(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_EDGE == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_EDGE == null) {
+                    try {
                         BITMAP_EDGE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_EDGE), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, getDataConnIcon(context), state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_EDGE, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, getDataConnIcon(context), state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_EDGE, views, layoutName, buttonIds, state, indColor);
         }
 
-        // »ñÈ¡ÁÁ¶È×´Ì¬
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BRIGHTNESS, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½×´Ì¬
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BRIGHTNESS, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BRIGHTNESS));
             boolean needCustomAutoIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_AUTO_BRIGHTNESS));
             int state = SwitchUtils.getBrightness(context);
 
-            // ×Ô¶¯ÁÁ¶È
-            if (state == STATE_OTHER)
-            {
-                if (needCustomAutoIcon)
-                {
-                    if (BITMAP_AUTO_BRIGHT == null)
-                    {
-                        try
-                        {
+            // ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (state == STATE_OTHER) {
+                if (needCustomAutoIcon) {
+                    if (BITMAP_AUTO_BRIGHT == null) {
+                        try {
                             BITMAP_AUTO_BRIGHT = BitmapFactory
                                     .decodeStream(context.openFileInput(config.getString(String.format(
                                             Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_AUTO_BRIGHTNESS), "")));
-                        }
-                        catch (FileNotFoundException e)
-                        {
-                            // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                        } catch (FileNotFoundException e) {
+                            // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                             setIconResource(context, views, viewId, R.drawable.icon_brightness_auto_on, STATE_ENABLED,
                                     iconColor, iconTrans);
                             e.printStackTrace();
@@ -2469,31 +2324,22 @@ public class WidgetProviderUtil
                     }
 
                     setIconResource(context, views, viewId, BITMAP_AUTO_BRIGHT, STATE_ENABLED, iconColor, iconTrans);
-                }
-                else
-                {
+                } else {
                     setIconResource(context, views, viewId, R.drawable.icon_brightness_auto_on, STATE_ENABLED,
                             iconColor, iconTrans);
                 }
 
                 setIndViewResource(context, Constants.BUTTON_BRIGHTNESS, views, layoutName, buttonIds, STATE_ENABLED,
                         indColor);
-            }
-            else
-            {
-                if (needCustomIcon)
-                {
-                    if (BITMAP_BRIGHTNESS == null)
-                    {
-                        try
-                        {
+            } else {
+                if (needCustomIcon) {
+                    if (BITMAP_BRIGHTNESS == null) {
+                        try {
                             BITMAP_BRIGHTNESS = BitmapFactory
                                     .decodeStream(context.openFileInput(config.getString(String.format(
                                             Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BRIGHTNESS), "")));
-                        }
-                        catch (FileNotFoundException e)
-                        {
-                            // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                        } catch (FileNotFoundException e) {
+                            // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                             setIconResource(context, views, viewId, R.drawable.icon_brightness_on, state, iconColor,
                                     iconTrans);
                             e.printStackTrace();
@@ -2501,9 +2347,7 @@ public class WidgetProviderUtil
                     }
 
                     setIconResource(context, views, viewId, BITMAP_BRIGHTNESS, state, iconColor, iconTrans);
-                }
-                else
-                {
+                } else {
                     setIconResource(context, views, viewId, R.drawable.icon_brightness_on, state, iconColor, iconTrans);
                 }
 
@@ -2511,127 +2355,97 @@ public class WidgetProviderUtil
             }
         }
 
-        // »ñÈ¡Í¬²½×´Ì¬
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SYNC, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½È¡Í¬ï¿½ï¿½×´Ì¬
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SYNC, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SYNC));
             int state = SwitchUtils.getSync(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_SYNC == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_SYNC == null) {
+                    try {
                         BITMAP_SYNC = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SYNC), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_sync_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_SYNC, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_sync_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_SYNC, views, layoutName, buttonIds, state, indColor);
         }
 
-        // »ñÈ¡GPS×´Ì¬
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_GPS, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½È¡GPS×´Ì¬
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_GPS, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_GPS));
             int state = SwitchUtils.getGpsState(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_GPS == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_GPS == null) {
+                    try {
                         BITMAP_GPS = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_GPS), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_gps_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_GPS, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_gps_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_GPS, views, layoutName, buttonIds, state, indColor);
         }
 
-        // »ñÈ¡ÖØÁ¦¸ÐÓ¦×´Ì¬
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_GRAVITY, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦×´Ì¬
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_GRAVITY, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_GRAVITY));
             int state = SwitchUtils.getGravityState(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_GRAVITY == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_GRAVITY == null) {
+                    try {
                         BITMAP_GRAVITY = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_GRAVITY), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_gravity_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_GRAVITY, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_gravity_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_GRAVITY, views, layoutName, buttonIds, state, indColor);
         }
 
-        // »ñÈ¡À¶ÑÀ×´Ì¬
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BLUETOOTH, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½×´Ì¬
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BLUETOOTH, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BLUETOOTH));
             int state = SwitchUtils.getBluetoothState(context);
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_BLUETOOTH == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_BLUETOOTH == null) {
+                    try {
                         BITMAP_BLUETOOTH = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BLUETOOTH), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_bluetooth_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2639,34 +2453,26 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_BLUETOOTH, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_bluetooth_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_BLUETOOTH, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ·ÉÐÐÄ£Ê½
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_AIRPLANE, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_AIRPLANE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_AIRPLANE));
             int state = SwitchUtils.getNetworkState(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_AIRPLANE == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_AIRPLANE == null) {
+                    try {
                         BITMAP_AIRPLANE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_AIRPLANE), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_airplane_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2674,84 +2480,65 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_AIRPLANE, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_airplane_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_AIRPLANE, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ÆÁÄ»³¬Ê±
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SCREEN_TIMEOUT, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½Ä»ï¿½ï¿½Ê±
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SCREEN_TIMEOUT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SCREEN_TIMEOUT));
             int state = SwitchUtils.getScreenTimeoutState(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_SCREEN_TIMEOUT == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_SCREEN_TIMEOUT == null) {
+                    try {
                         BITMAP_SCREEN_TIMEOUT = BitmapFactory
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SCREEN_TIMEOUT), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_screen_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_SCREEN_TIMEOUT, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_screen_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_SCREEN_TIMEOUT, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂ¾²Òô°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_VIBRATE, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½Â¾ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_VIBRATE, buttonIds)) != -1) {
             int mode = SwitchUtils.getViberate(context);
             String btn = config.getString(Constants.PREFS_SILENT_BTN, Constants.BTN_VS);
 
-            // Ö»ÓÐ°´Å¥Ñ¡ÔñÁËË«Ä£Ê½ºÍÕñ¶¯Ä£Ê½Ê±²ÅÏÔÊ¾Õñ¶¯Í¼±ê
-            if (mode == AudioManager.RINGER_MODE_VIBRATE && !btn.equals(Constants.BTN_ONLY_SILENT))
-            {
+            // Ö»ï¿½Ð°ï¿½Å¥Ñ¡ï¿½ï¿½ï¿½ï¿½Ë«Ä£Ê½ï¿½ï¿½ï¿½ï¿½Ä£Ê½Ê±ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Í¼ï¿½ï¿½
+            if (mode == AudioManager.RINGER_MODE_VIBRATE && !btn.equals(Constants.BTN_ONLY_SILENT)) {
                 updateVibrate(views, context, config, buttonIds, iconColor, iconTrans, indColor, viewId, STATE_ENABLED);
                 setIndViewResource(context, Constants.BUTTON_VIBRATE, views, layoutName, buttonIds, STATE_ENABLED,
                         indColor);
-            }
-            else if (mode == AudioManager.RINGER_MODE_SILENT && !btn.equals(Constants.BTN_ONLY_VIVERATE))
-            {
+            } else if (mode == AudioManager.RINGER_MODE_SILENT && !btn.equals(Constants.BTN_ONLY_VIVERATE)) {
                 updateSilent(views, context, config, buttonIds, iconColor, iconTrans, indColor, viewId, STATE_ENABLED);
                 setIndViewResource(context, Constants.BUTTON_VIBRATE, views, layoutName, buttonIds, STATE_ENABLED,
                         indColor);
-            }
-            else
-            {
-                // Èç¹û°´Å¥Ö»Ñ¡ÔñÁË¾²Òô£¬ÄÇÃ´ÔÚÄ£Ê½¹Ø±ÕÊ±ÏÔÊ¾¾²Òô°´Å¥
-                if (btn.equals(Constants.BTN_ONLY_SILENT))
-                {
+            } else {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½Å¥Ö»Ñ¡ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½ï¿½Ä£Ê½ï¿½Ø±ï¿½Ê±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
+                if (btn.equals(Constants.BTN_ONLY_SILENT)) {
                     updateSilent(views, context, config, buttonIds, iconColor, iconTrans, indColor, viewId,
                             STATE_DISABLED);
-                }
-                else
-                {
+                } else {
                     updateVibrate(views, context, config, buttonIds, iconColor, iconTrans, indColor, viewId,
                             STATE_DISABLED);
                 }
 
-                // µ±ÁåÉùÕý³£Ê±»Ö¸´ÒôÀÖ£¬·ÀÖ¹ÓÃÎïÀí¼ü½Ó´¥¾²ÒôÄ£Ê½´Ó¶øÎÞ·¨»Ö¸´Ã½ÌåÒôÁ¿
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½Ó¶ï¿½ï¿½Þ·ï¿½ï¿½Ö¸ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 AudioManager audioManager = (AudioManager) context.getApplicationContext().getSystemService(
                         Context.AUDIO_SERVICE);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
@@ -2761,24 +2548,18 @@ public class WidgetProviderUtil
             }
         }
 
-        // ¸üÐÂÃ½ÌåÉ¨Ãè°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SCANMEDIA, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½É¨ï¿½è°´Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SCANMEDIA, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SCANMEDIA));
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_SCANMEDIA == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_SCANMEDIA == null) {
+                    try {
                         BITMAP_SCANMEDIA = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SCANMEDIA), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_media_on, STATE_DISABLED, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2786,9 +2567,7 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_SCANMEDIA, STATE_DISABLED, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_media_on, STATE_DISABLED, iconColor, iconTrans);
             }
 
@@ -2796,25 +2575,19 @@ public class WidgetProviderUtil
                     indColor);
         }
 
-        // ¸üÐÂÍøÂçÇÐ»»°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_NET_SWITCH, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_NET_SWITCH, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_NET_SWITCH));
             int state = SwitchUtils.getNetSwitch(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_NET_SWITCH == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_NET_SWITCH == null) {
+                    try {
                         BITMAP_NET_SWITCH = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_NET_SWITCH), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_netswitch_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2822,68 +2595,52 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_NET_SWITCH, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_netswitch_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_NET_SWITCH, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂ½âËøÄ£Ê½°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_UNLOCK, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_UNLOCK, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_UNLOCK));
             int state = SwitchUtils.getUnlockPattern(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_UNLOCK == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_UNLOCK == null) {
+                    try {
                         BITMAP_UNLOCK = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_UNLOCK), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_unlock_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_UNLOCK, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_unlock_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_UNLOCK, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂÉÁ¹âµÆ°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_FLASHLIGHT, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ°ï¿½Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_FLASHLIGHT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_FLASHLIGHT));
             int state = SwitchUtils.getFlashlight(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_FLASHLIGHT == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_FLASHLIGHT == null) {
+                    try {
                         BITMAP_FLASHLIGHT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_FLASHLIGHT), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_flashlight_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2891,67 +2648,51 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_FLASHLIGHT, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_flashlight_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_FLASHLIGHT, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂ4G¿ª¹Ø
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIMAX, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½4Gï¿½ï¿½ï¿½ï¿½
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIMAX, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_FLASHLIGHT));
             int state = SwitchUtils.getWimaxState(context);
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_WIMAX == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_WIMAX == null) {
+                    try {
                         BITMAP_WIMAX = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIMAX), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_wimax_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_WIMAX, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_wimax_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_WIMAX, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂreboot°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_REBOOT, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½rebootï¿½ï¿½Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_REBOOT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_REBOOT));
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_REBOOT == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_REBOOT == null) {
+                    try {
                         BITMAP_REBOOT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_REBOOT), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_reboot_on, STATE_DISABLED, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2959,68 +2700,52 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_REBOOT, STATE_DISABLED, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_reboot_on, STATE_DISABLED, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_REBOOT, views, layoutName, buttonIds, STATE_DISABLED, indColor);
         }
 
-        // ¸üÐÂSpeakerÄ£Ê½
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SPEAKER, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½SpeakerÄ£Ê½
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_SPEAKER, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SPEAKER));
             int state = SwitchUtils.getSpeakMode(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_SPEAKER == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_SPEAKER == null) {
+                    try {
                         BITMAP_SPEAKER = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SPEAKER), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_speaker_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_SPEAKER, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_speaker_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_SPEAKER, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂ×Ô¶¯ÆÁÄ»Ëø
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_AUTOLOCK, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½Ä»ï¿½ï¿½
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_AUTOLOCK, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_AUTOLOCK));
             int state = SwitchUtils.getAutoLock(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_AUTOLOCK == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_AUTOLOCK == null) {
+                    try {
                         BITMAP_AUTOLOCK = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_AUTOLOCK), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_autolock_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -3028,169 +2753,129 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_AUTOLOCK, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_autolock_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_AUTOLOCK, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂWifiap
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFIAP, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Wifiap
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFIAP, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_WIFIAP));
             int state = SwitchUtils.getWifiApState(context);
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_WIFIAP == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_WIFIAP == null) {
+                    try {
                         BITMAP_WIFIAP = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIFIAP), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_wifite_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_WIFIAP, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_wifite_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_WIFIAP, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂWifiÐÝÃß²ßÂÔ
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFI_SLEEP, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Wifiï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFI_SLEEP, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_WIFI_SLEEP));
             int state = SwitchUtils.getWifiSleepPolicy(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_WIFI_SLEEP == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_WIFI_SLEEP == null) {
+                    try {
                         BITMAP_WIFI_SLEEP = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIFI_SLEEP), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_wifi_sleep, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_WIFI_SLEEP, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_wifi_sleep, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_WIFI_SLEEP, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂUsb tether
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_USBTE, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Usb tether
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_USBTE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_USBTE));
             int state = SwitchUtils.getUsbTetherState(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_USBTE == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_USBTE == null) {
+                    try {
                         BITMAP_USBTE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_USBTE), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_usbte_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_USBTE, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_usbte_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_USBTE, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ¸üÐÂMount
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_MOUNT, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Mount
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_MOUNT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_MOUNT));
             int state = SwitchUtils.getMountState();
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_MOUNT == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_MOUNT == null) {
+                    try {
                         BITMAP_MOUNT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_MOUNT), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_sdcard_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
 
                 setIconResource(context, views, viewId, BITMAP_MOUNT, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_sdcard_on, state, iconColor, iconTrans);
             }
 
             setIndViewResource(context, Constants.BUTTON_MOUNT, views, layoutName, buttonIds, state, indColor);
         }
 
-        // Ëø¶¨ÆÁÄ»
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_LOCK_SCREEN, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_LOCK_SCREEN, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_LOCK_SCREEN));
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_LOCK_SCREEN == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_LOCK_SCREEN == null) {
+                    try {
                         BITMAP_LOCK_SCREEN = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_LOCK_SCREEN), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_lockscreen_on, STATE_DISABLED,
                                 iconColor, iconTrans);
                         e.printStackTrace();
@@ -3198,9 +2883,7 @@ public class WidgetProviderUtil
                 }
 
                 setIconResource(context, views, viewId, BITMAP_LOCK_SCREEN, STATE_DISABLED, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_lockscreen_on, STATE_DISABLED, iconColor,
                         iconTrans);
             }
@@ -3209,31 +2892,24 @@ public class WidgetProviderUtil
                     indColor);
         }
 
-        // ¸üÐÂµç³Ø×´Ì¬°´Å¥ Èç¹û»ñÈ¡²»µ½µç³ØÐÅÏ¢ÊÇ´«ÈëµÄcurrentBatteryLevelÎª-1
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BATTERY, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½Âµï¿½ï¿½×´Ì¬ï¿½ï¿½Å¥ ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Ç´ï¿½ï¿½ï¿½ï¿½currentBatteryLevelÎª-1
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BATTERY, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BATTERY));
             int currentBatteryLevel = config.getInt(Constants.PREFS_BATTERY_LEVEL, -1);
 
-            // ´«ÈënullÊ±²»»áÉèÖÃÍ¼Æ¬µÄÑÕÉ«ÂË¾µ
+            // ï¿½ï¿½ï¿½ï¿½nullÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½É«ï¿½Ë¾ï¿½
             Integer vcolor = iconColor == Constants.NOT_SHOW_FLAG ? null : iconColor;
 
-            if (currentBatteryLevel < 0 || currentBatteryLevel > 100)
-            {
-                if (needCustomIcon)
-                {
-                    if (BITMAP_BATTERY == null)
-                    {
-                        try
-                        {
+            if (currentBatteryLevel < 0 || currentBatteryLevel > 100) {
+                if (needCustomIcon) {
+                    if (BITMAP_BATTERY == null) {
+                        try {
                             BITMAP_BATTERY = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                     String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_LOCK_SCREEN),
                                     "")));
-                        }
-                        catch (FileNotFoundException e)
-                        {
-                            // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                        } catch (FileNotFoundException e) {
+                            // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                             setIconResource(context, views, viewId, R.drawable.batterynumber_blank, STATE_DISABLED,
                                     vcolor, iconTrans);
                             e.printStackTrace();
@@ -3241,30 +2917,21 @@ public class WidgetProviderUtil
                     }
 
                     setIconResource(context, views, viewId, BITMAP_BATTERY, STATE_DISABLED, vcolor, iconTrans);
-                }
-                else
-                {
+                } else {
                     setIconResource(context, views, viewId, R.drawable.batterynumber_blank, STATE_DISABLED, vcolor,
                             iconTrans);
                 }
 
                 setIndViewResource(context, Constants.BUTTON_BATTERY, views, layoutName, buttonIds, STATE_DISABLED,
                         indColor);
-            }
-            else if (currentBatteryLevel == 100)
-            {
-                if (needCustomIcon)
-                {
-                    if (BITMAP_BATTERY == null)
-                    {
-                        try
-                        {
+            } else if (currentBatteryLevel == 100) {
+                if (needCustomIcon) {
+                    if (BITMAP_BATTERY == null) {
+                        try {
                             BITMAP_BATTERY = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                     String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BATTERY), "")));
-                        }
-                        catch (FileNotFoundException e)
-                        {
-                            // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                        } catch (FileNotFoundException e) {
+                            // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                             setIconResource(context, views, viewId, R.drawable.icon_battery_full, STATE_ENABLED,
                                     vcolor, iconTrans);
                             e.printStackTrace();
@@ -3274,30 +2941,21 @@ public class WidgetProviderUtil
                     setIconResource(context, views, viewId,
                             BatteryIndicatorUtils.getIcon(context, BITMAP_BATTERY, currentBatteryLevel), STATE_ENABLED,
                             vcolor, iconTrans);
-                }
-                else
-                {
+                } else {
                     setIconResource(context, views, viewId, R.drawable.icon_battery_full, STATE_ENABLED, vcolor,
                             iconTrans);
                 }
 
                 setIndViewResource(context, Constants.BUTTON_BATTERY, views, layoutName, buttonIds, STATE_ENABLED,
                         indColor);
-            }
-            else
-            {
-                if (needCustomIcon)
-                {
-                    if (BITMAP_BATTERY == null)
-                    {
-                        try
-                        {
+            } else {
+                if (needCustomIcon) {
+                    if (BITMAP_BATTERY == null) {
+                        try {
                             BITMAP_BATTERY = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                     String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BATTERY), "")));
-                        }
-                        catch (FileNotFoundException e)
-                        {
-                            // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                        } catch (FileNotFoundException e) {
+                            // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                             views.setImageViewBitmap(viewId, Utils.setIconColor(context,
                                     BatteryIndicatorUtils.getBitmap(context.getResources(), currentBatteryLevel), 255,
                                     vcolor));
@@ -3308,84 +2966,63 @@ public class WidgetProviderUtil
                     setIconResource(context, views, viewId,
                             BatteryIndicatorUtils.getIcon(context, BITMAP_BATTERY, currentBatteryLevel), STATE_ENABLED,
                             vcolor, iconTrans);
-                }
-                else
-                {
+                } else {
                     views.setImageViewBitmap(viewId, Utils.setIconColor(context,
                             BatteryIndicatorUtils.getBitmap(context.getResources(), currentBatteryLevel), 255, vcolor));
                 }
 
-                if (currentBatteryLevel > 20)
-                {
+                if (currentBatteryLevel > 20) {
                     setIndViewResource(context, Constants.BUTTON_BATTERY, views, layoutName, buttonIds, STATE_ENABLED,
                             indColor);
-                }
-                else
-                {
+                } else {
                     setIndViewResource(context, Constants.BUTTON_BATTERY, views, layoutName, buttonIds,
                             STATE_INTERMEDIATE, indColor);
                 }
             }
         }
 
-        // ¸üÐÂÒôÁ¿°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_VOLUME, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_VOLUME, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_VOLUME));
-            if (needCustomIcon)
-            {
-                if (BITMAP_VOLUME == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_VOLUME == null) {
+                    try {
                         BITMAP_VOLUME = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_VOLUME), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_volume, STATE_DISABLED, iconColor,
                                 iconTrans);
                         e.printStackTrace();
                     }
                 }
                 setIconResource(context, views, viewId, BITMAP_VOLUME, STATE_DISABLED, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_volume, STATE_DISABLED, iconColor, iconTrans);
             }
             setIndViewResource(context, Constants.BUTTON_VOLUME, views, layoutName, buttonIds, STATE_DISABLED, indColor);
         }
 
-        // É±½ø³Ì°´Å¥
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_KILL_PROCESS, buttonIds)) != -1)
-        {
+        // É±ï¿½ï¿½ï¿½Ì°ï¿½Å¥
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_KILL_PROCESS, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_KILL_PROCESS));
-            if (needCustomIcon)
-            {
-                if (BITMAP_KILL_PROCESS == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_KILL_PROCESS == null) {
+                    try {
                         BITMAP_KILL_PROCESS = BitmapFactory
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_KILL_PROCESS), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_killprocess_on, STATE_DISABLED,
                                 iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
                 setIconResource(context, views, viewId, BITMAP_KILL_PROCESS, STATE_DISABLED, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_killprocess_on, STATE_DISABLED, iconColor,
                         iconTrans);
             }
@@ -3393,9 +3030,8 @@ public class WidgetProviderUtil
                     indColor);
         }
 
-        // ÄÚ´æ¿Õ¼ä
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_MEMORY_USAGE, buttonIds)) != -1)
-        {
+        // ï¿½Ú´ï¿½Õ¼ï¿½
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_MEMORY_USAGE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_MEMORY_USAGE));
             MemInfoReader memInfoReader = new MemInfoReader();
@@ -3404,28 +3040,21 @@ public class WidgetProviderUtil
             long total = memInfoReader.getTotalSize();
             float percent = ((float) total - (float) freeSize) / (float) total;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_MEMORY_USAGE == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_MEMORY_USAGE == null) {
+                    try {
                         BITMAP_MEMORY_USAGE = BitmapFactory
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_MEMORY_USAGE), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, Utils.createUsageIcon(context, percent),
                                 STATE_DISABLED, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
                 setIconResource(context, views, viewId, BITMAP_MEMORY_USAGE, STATE_DISABLED, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, Utils.createUsageIcon(context, percent), STATE_DISABLED,
                         iconColor, iconTrans);
             }
@@ -3433,9 +3062,8 @@ public class WidgetProviderUtil
                     indColor);
         }
 
-        // ´æ´¢¿Õ¼ä
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_STORAGE_USAGE, buttonIds)) != -1)
-        {
+        // ï¿½æ´¢ï¿½Õ¼ï¿½
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_STORAGE_USAGE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_STORAGE_USAGE));
             StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
@@ -3443,28 +3071,21 @@ public class WidgetProviderUtil
             long availableBlocks = statFs.getAvailableBlocks();
             float percent = ((float) totalBlocks - (float) availableBlocks) / (float) totalBlocks;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_STORAGE_USAGE == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_STORAGE_USAGE == null) {
+                    try {
                         BITMAP_STORAGE_USAGE = BitmapFactory
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_STORAGE_USAGE), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, Utils.createUsageIcon(context, percent),
                                 STATE_DISABLED, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
                 setIconResource(context, views, viewId, BITMAP_STORAGE_USAGE, STATE_DISABLED, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, Utils.createUsageIcon(context, percent), STATE_DISABLED,
                         iconColor, iconTrans);
             }
@@ -3472,66 +3093,50 @@ public class WidgetProviderUtil
                     indColor);
         }
 
-        // À¶ÑÀte
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BT_TE, buttonIds)) != -1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½te
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_BT_TE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BT_TE));
             int state = SwitchUtils.getBluetoothTe(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_BT_TE == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_BT_TE == null) {
+                    try {
                         BITMAP_BT_TE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BT_TE), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_blutoothte_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
                     }
                 }
                 setIconResource(context, views, viewId, BITMAP_BT_TE, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_blutoothte_on, state, iconColor, iconTrans);
             }
             setIndViewResource(context, Constants.BUTTON_BT_TE, views, layoutName, buttonIds, state, indColor);
         }
 
         // NFC
-        if ((viewId = getImgIdByBtnId(Constants.BUTTON_NFC, buttonIds)) != -1)
-        {
+        if ((viewId = getImgIdByBtnId(Constants.BUTTON_NFC, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_NFC));
             int state = SwitchUtils.getNFC(context) ? STATE_ENABLED : STATE_DISABLED;
 
-            if (needCustomIcon)
-            {
-                if (BITMAP_NFC == null)
-                {
-                    try
-                    {
+            if (needCustomIcon) {
+                if (BITMAP_NFC == null) {
+                    try {
                         BITMAP_NFC = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_NFC), "")));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                    } catch (FileNotFoundException e) {
+                        // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                         setIconResource(context, views, viewId, R.drawable.icon_nfc_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
                 }
                 setIconResource(context, views, viewId, BITMAP_NFC, state, iconColor, iconTrans);
-            }
-            else
-            {
+            } else {
                 setIconResource(context, views, viewId, R.drawable.icon_nfc_on, state, iconColor, iconTrans);
             }
             setIndViewResource(context, Constants.BUTTON_NFC, views, layoutName, buttonIds, state, indColor);
@@ -3539,89 +3144,68 @@ public class WidgetProviderUtil
     }
 
     private static void updateVibrate(RemoteViews views, Context context, SharedPreferences config, int[] buttonIds,
-            int iconColor, int iconTrans, int indColor, int viewId, int state)
-    {
+                                      int iconColor, int iconTrans, int indColor, int viewId, int state) {
         boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                 Constants.ICON_VIBRATE));
 
-        if (needCustomIcon)
-        {
-            if (BITMAP_VIBRATE == null)
-            {
-                try
-                {
+        if (needCustomIcon) {
+            if (BITMAP_VIBRATE == null) {
+                try {
                     BITMAP_VIBRATE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                             String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_VIBRATE), "")));
-                }
-                catch (FileNotFoundException e)
-                {
-                    // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                } catch (FileNotFoundException e) {
+                    // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                     setIconResource(context, views, viewId, R.drawable.icon_vibrate_on, state, iconColor, iconTrans);
                     e.printStackTrace();
                 }
             }
 
             setIconResource(context, views, viewId, BITMAP_VIBRATE, state, iconColor, iconTrans);
-        }
-        else
-        {
+        } else {
             setIconResource(context, views, viewId, R.drawable.icon_vibrate_on, state, iconColor, iconTrans);
         }
     }
 
     private static void updateSilent(RemoteViews views, Context context, SharedPreferences config, int[] buttonIds,
-            int iconColor, int iconTrans, int indColor, int viewId, int state)
-    {
+                                     int iconColor, int iconTrans, int indColor, int viewId, int state) {
         boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                 Constants.ICON_SILENT));
 
-        if (needCustomIcon)
-        {
-            if (BITMAP_SILENT == null)
-            {
-                try
-                {
+        if (needCustomIcon) {
+            if (BITMAP_SILENT == null) {
+                try {
                     BITMAP_SILENT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                             String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SILENT), "")));
-                }
-                catch (FileNotFoundException e)
-                {
-                    // ¿ÉÄÜ´æÔÚÖ»ÓÐÅäÖÃÎÄ¼þ£¬µ«ÊÇÃ»ÓÐÍ¼Æ¬Çé¿ö£¬ÕâÊ±²»Ìæ»»Í¼Æ¬
+                } catch (FileNotFoundException e) {
+                    // ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æ»»Í¼Æ¬
                     setIconResource(context, views, viewId, R.drawable.icon_cilent_on, state, iconColor, iconTrans);
                     e.printStackTrace();
                 }
             }
 
             setIconResource(context, views, viewId, BITMAP_SILENT, state, iconColor, iconTrans);
-        }
-        else
-        {
+        } else {
             setIconResource(context, views, viewId, R.drawable.icon_cilent_on, state, iconColor, iconTrans);
         }
 
     }
 
     /**
-     * ¸ù¾ÝÄ³¸ö°´Å¥IDÕÒµ½¶ÔÓ¦µÄÍ¼±êÎ»ÖÃ
-     * 
+     * ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½Å¥IDï¿½Òµï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Í¼ï¿½ï¿½Î»ï¿½ï¿½
+     *
      * @param btnId
      * @param buttonIds
      * @return
      */
-    public static int getImgIdByBtnId(int btnId, int[] buttonIds)
-    {
+    public static int getImgIdByBtnId(int btnId, int[] buttonIds) {
         int pos = -1;
 
-        // ²éÕÒÖ¸¶¨°´Å¥ÔÚ°´Å¥Ë³ÐòÊý×é(buttonIds[])ÖÐµÄÎ»ÖÃ
-        for (int i = 0; i < buttonIds.length; i++)
-        {
-            if (buttonIds[i] == btnId)
-            {
-                // ´ÓµÚ¶þ¸ö°´Å¥¿ªÊ¼Æ«ÒÆ
-                if (i != 0)
-                {
-                    switch (buttonIds.length)
-                    {
+        // ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Å¥ï¿½Ú°ï¿½Å¥Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(buttonIds[])ï¿½Ðµï¿½Î»ï¿½ï¿½
+        for (int i = 0; i < buttonIds.length; i++) {
+            if (buttonIds[i] == btnId) {
+                // ï¿½ÓµÚ¶ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ê¼Æ«ï¿½ï¿½
+                if (i != 0) {
+                    switch (buttonIds.length) {
                         case 1:
                             pos = i;
                             break;
@@ -3686,17 +3270,14 @@ public class WidgetProviderUtil
                         default:
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     pos = i;
                 }
                 break;
             }
         }
 
-        switch (pos)
-        {
+        switch (pos) {
             case 0:
                 return R.id.img_0;
             case 1:
@@ -3744,27 +3325,22 @@ public class WidgetProviderUtil
     }
 
     /**
-     * ÉèÖÃÃ¿¸ö°´Å¥µÄÖ¸Ê¾Æ÷Í¼±ê
-     * 
+     * ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½Í¼ï¿½ï¿½
+     *
      * @param btnId
      * @param views
      * @param buttonIds
      * @param state
      */
     public static void setIndViewResource(Context context, int btnId, RemoteViews views, String layoutName,
-            int[] buttonIds, int state, int intColor)
-    {
+                                          int[] buttonIds, int state, int intColor) {
         int pos = -1;
 
-        for (int i = 0; i < buttonIds.length; i++)
-        {
-            if (buttonIds[i] == btnId)
-            {
-                // ´ÓµÚ¶þ¸ö°´Å¥¿ªÊ¼Æ«ÒÆ
-                if (i != 0)
-                {
-                    switch (buttonIds.length)
-                    {
+        for (int i = 0; i < buttonIds.length; i++) {
+            if (buttonIds[i] == btnId) {
+                // ï¿½ÓµÚ¶ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ê¼Æ«ï¿½ï¿½
+                if (i != 0) {
+                    switch (buttonIds.length) {
                         case 1:
                             pos = i;
                             break;
@@ -3829,9 +3405,7 @@ public class WidgetProviderUtil
                         default:
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     pos = i;
                 }
                 break;
@@ -3840,13 +3414,10 @@ public class WidgetProviderUtil
 
         if (layoutName.equals(context.getText(R.string.list_pre_bg_custom))
                 || layoutName.equals(context.getText(R.string.list_pre_bg_custom_shadow))
-                || layoutName.equals(context.getText(R.string.list_pre_bg_none)))
-        {
-            // ²»ÏÔÊ¾Ö¸Ê¾Æ÷
-            if (intColor == Constants.NOT_SHOW_FLAG)
-            {
-                switch (pos)
-                {
+                || layoutName.equals(context.getText(R.string.list_pre_bg_none))) {
+            // ï¿½ï¿½ï¿½ï¿½Ê¾Ö¸Ê¾ï¿½ï¿½
+            if (intColor == Constants.NOT_SHOW_FLAG) {
+                switch (pos) {
                     case 0:
                         views.setViewVisibility(R.id.ind_0, View.GONE);
                         break;
@@ -3912,11 +3483,9 @@ public class WidgetProviderUtil
                         break;
                 }
             }
-            // Èç¹ûÊ¹ÓÃÑÕÉ«ÂË¾µ
-            else
-            {
-                switch (pos)
-                {
+            // ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½É«ï¿½Ë¾ï¿½
+            else {
+                switch (pos) {
                     case 0:
                         views.setViewVisibility(R.id.ind_0, View.VISIBLE);
                         views.setImageViewBitmap(R.id.ind_0,
@@ -4022,11 +3591,8 @@ public class WidgetProviderUtil
                         break;
                 }
             }
-        }
-        else
-        {
-            switch (pos)
-            {
+        } else {
+            switch (pos) {
                 case 0:
                     views.setViewVisibility(R.id.ind_0, View.VISIBLE);
                     views.setImageViewResource(R.id.ind_0,
@@ -4135,47 +3701,33 @@ public class WidgetProviderUtil
     }
 
     private static Bitmap getIndImgBitmap(Context context, int state, RemoteViews views, String layoutName,
-            int indColor, int[] buttonIds)
-    {
-        if (layoutName.equals(context.getString(R.string.list_pre_bg_none)))
-        {
-            if (state == STATE_INTERMEDIATE)
-            {
+                                          int indColor, int[] buttonIds) {
+        if (layoutName.equals(context.getString(R.string.list_pre_bg_none))) {
+            if (state == STATE_INTERMEDIATE) {
                 return Utils.setIndColor(context, R.drawable.ind_nobg_on, 170, indColor);
-            }
-            else if (state == STATE_ENABLED)
-            {
+            } else if (state == STATE_ENABLED) {
                 return Utils.setIndColor(context, R.drawable.ind_nobg_on, 255, indColor);
-            }
-            else
-            {
+            } else {
                 return Utils.setIndColor(context, R.drawable.ind_nobg_on, 85, indColor);
             }
-        }
-        else
-        {
+        } else {
             int red = Color.red(indColor);
             int blue = Color.blue(indColor);
             int green = Color.green(indColor);
 
-            if (state == STATE_INTERMEDIATE)
-            {
+            if (state == STATE_INTERMEDIATE) {
                 return Utils.createBitmap(Color.argb(170, red, green, blue));
-            }
-            else if (state == STATE_ENABLED)
-            {
+            } else if (state == STATE_ENABLED) {
                 return Utils.createBitmap(Color.argb(255, red, green, blue));
-            }
-            else
-            {
+            } else {
                 return Utils.createBitmap(Color.argb(85, red, green, blue));
             }
         }
     }
 
     /**
-     * ¸ù¾ÝÎ»ÖÃ£¬×´Ì¬£¬ÑÕÉ«ÕÒµ½×ÊÔ´
-     * 
+     * ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½É«ï¿½Òµï¿½ï¿½ï¿½Ô´
+     *
      * @param pos
      * @param state
      * @param views
@@ -4184,15 +3736,11 @@ public class WidgetProviderUtil
      * @return
      */
     private static int getIndImgSource(Context context, int state, int pos, RemoteViews views, String layoutName,
-            int intColor, int[] buttonIds)
-    {
-        // Èç¹ûÊÇÖ»ÓÐÒ»¸ö°´Å¥£¬ÔòÖ»ÓÐ×´Ì¬µÄ±ä»¯£¬ÇÒÊ¹ÓÃÁ½±ß¶¼ÊÇÔ²½ÇµÄÍ¼Æ¬
-        if (buttonIds.length == 1)
-        {
-            if (state == STATE_INTERMEDIATE)
-            {
-                switch (intColor)
-                {
+                                       int intColor, int[] buttonIds) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½×´Ì¬ï¿½Ä±ä»¯ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ß¶ï¿½ï¿½ï¿½Ô²ï¿½Çµï¿½Í¼Æ¬
+        if (buttonIds.length == 1) {
+            if (state == STATE_INTERMEDIATE) {
+                switch (intColor) {
                     case Constants.IND_COLOR_PINK:
                         return R.drawable.ind_pink_single_mid;
                     case Constants.IND_COLOR_RED:
@@ -4216,11 +3764,8 @@ public class WidgetProviderUtil
                     default:
                         return R.drawable.ind_single_mid;
                 }
-            }
-            else if (state == STATE_ENABLED)
-            {
-                switch (intColor)
-                {
+            } else if (state == STATE_ENABLED) {
+                switch (intColor) {
                     case Constants.IND_COLOR_PINK:
                         return R.drawable.ind_pink_single_on;
                     case Constants.IND_COLOR_RED:
@@ -4244,28 +3789,18 @@ public class WidgetProviderUtil
                     default:
                         return R.drawable.ind_single_on;
                 }
-            }
-            else
-            {
-                if (layoutName.equals(context.getString(R.string.list_pre_bg_white)))
-                {
+            } else {
+                if (layoutName.equals(context.getString(R.string.list_pre_bg_white))) {
                     return R.drawable.ind_single_off_w;
-                }
-                else
-                {
+                } else {
                     return R.drawable.ind_single_off;
                 }
             }
-        }
-        else
-        {
-            // ÓÒ±ßµÄÎ»ÖÃ
-            if (pos == IND_POS_RIGHT)
-            {
-                if (state == STATE_INTERMEDIATE)
-                {
-                    switch (intColor)
-                    {
+        } else {
+            // ï¿½Ò±ßµï¿½Î»ï¿½ï¿½
+            if (pos == IND_POS_RIGHT) {
+                if (state == STATE_INTERMEDIATE) {
+                    switch (intColor) {
                         case Constants.IND_COLOR_PINK:
                             return R.drawable.ind_pink_mid_r;
                         case Constants.IND_COLOR_RED:
@@ -4289,11 +3824,8 @@ public class WidgetProviderUtil
                         default:
                             return R.drawable.ind_mid_r;
                     }
-                }
-                else if (state == STATE_ENABLED)
-                {
-                    switch (intColor)
-                    {
+                } else if (state == STATE_ENABLED) {
+                    switch (intColor) {
                         case Constants.IND_COLOR_PINK:
                             return R.drawable.ind_pink_on_r;
                         case Constants.IND_COLOR_RED:
@@ -4317,26 +3849,18 @@ public class WidgetProviderUtil
                         default:
                             return R.drawable.ind_on_r;
                     }
-                }
-                else
-                {
-                    if (layoutName.equals(context.getString(R.string.list_pre_bg_white)))
-                    {
+                } else {
+                    if (layoutName.equals(context.getString(R.string.list_pre_bg_white))) {
                         return R.drawable.ind_off_r_w;
-                    }
-                    else
-                    {
+                    } else {
                         return R.drawable.ind_off_r;
                     }
                 }
             }
-            // ×ó±ßµÄÎ»ÖÃ
-            else if (pos == IND_POS_LEFT)
-            {
-                if (state == STATE_INTERMEDIATE)
-                {
-                    switch (intColor)
-                    {
+            // ï¿½ï¿½ßµï¿½Î»ï¿½ï¿½
+            else if (pos == IND_POS_LEFT) {
+                if (state == STATE_INTERMEDIATE) {
+                    switch (intColor) {
                         case Constants.IND_COLOR_PINK:
                             return R.drawable.ind_pink_mid_l;
                         case Constants.IND_COLOR_RED:
@@ -4360,11 +3884,8 @@ public class WidgetProviderUtil
                         default:
                             return R.drawable.ind_mid_l;
                     }
-                }
-                else if (state == STATE_ENABLED)
-                {
-                    switch (intColor)
-                    {
+                } else if (state == STATE_ENABLED) {
+                    switch (intColor) {
                         case Constants.IND_COLOR_PINK:
                             return R.drawable.ind_pink_on_l;
                         case Constants.IND_COLOR_RED:
@@ -4388,26 +3909,18 @@ public class WidgetProviderUtil
                         default:
                             return R.drawable.ind_on_l;
                     }
-                }
-                else
-                {
-                    if (layoutName.equals(context.getString(R.string.list_pre_bg_white)))
-                    {
+                } else {
+                    if (layoutName.equals(context.getString(R.string.list_pre_bg_white))) {
                         return R.drawable.ind_off_l_w;
-                    }
-                    else
-                    {
+                    } else {
                         return R.drawable.ind_off_l;
                     }
                 }
             }
-            // ÆäËû£¬ÈçÖÐ¼äÎ»ÖÃ
-            else
-            {
-                if (state == STATE_INTERMEDIATE)
-                {
-                    switch (intColor)
-                    {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Î»ï¿½ï¿½
+            else {
+                if (state == STATE_INTERMEDIATE) {
+                    switch (intColor) {
                         case Constants.IND_COLOR_PINK:
                             return R.drawable.ind_pink_mid_c;
                         case Constants.IND_COLOR_RED:
@@ -4431,11 +3944,8 @@ public class WidgetProviderUtil
                         default:
                             return R.drawable.ind_mid_c;
                     }
-                }
-                else if (state == STATE_ENABLED)
-                {
-                    switch (intColor)
-                    {
+                } else if (state == STATE_ENABLED) {
+                    switch (intColor) {
                         case Constants.IND_COLOR_PINK:
                             return R.drawable.ind_pink_on_c;
                         case Constants.IND_COLOR_RED:
@@ -4459,15 +3969,10 @@ public class WidgetProviderUtil
                         default:
                             return R.drawable.ind_on_c;
                     }
-                }
-                else
-                {
-                    if (layoutName.equals(context.getString(R.string.list_pre_bg_white)))
-                    {
+                } else {
+                    if (layoutName.equals(context.getString(R.string.list_pre_bg_white))) {
                         return R.drawable.ind_off_c_w;
-                    }
-                    else
-                    {
+                    } else {
                         return R.drawable.ind_off_c;
                     }
                 }
@@ -4476,8 +3981,8 @@ public class WidgetProviderUtil
     }
 
     /**
-     * ÉèÖÃÍ¼±ê
-     * 
+     * ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
+     *
      * @param context
      * @param views
      * @param viewId
@@ -4487,48 +3992,38 @@ public class WidgetProviderUtil
      * @param alpha
      */
     private static void setIconResource(Context context, RemoteViews views, int viewId, int source, int state,
-            Integer color, Integer alpha)
-    {
+                                        Integer color, Integer alpha) {
         Drawable drawable = context.getResources().getDrawable(source);
         String theme = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(Constants.PREFS_ICON_THEME, "1");
 
-        if (theme.equals("2"))
-        {
-            try
-            {
+        if (theme.equals("2")) {
+            try {
                 Resources res = context.getPackageManager().getResourcesForApplication(Constants.PKG_THEME_HOLO);
                 String resName = context.getResources().getResourceEntryName(source);
                 drawable = res.getDrawable(res.getIdentifier(resName, "drawable", Constants.PKG_THEME_HOLO));
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         Integer vcolor = ((color == null || color == Constants.NOT_SHOW_FLAG) ? null : color);
 
-        // ×´Ì¬ÎªonÊ±Ö±½ÓÉèÖÃÍ¼±ê,ÓÐÑÕÉ«µÄ»°ÉèÖÃÑÕÉ«
-        if (state == STATE_ENABLED)
-        {
-            // ******ÕâÀïÒ»¶¨ÒªÉèÖÃÍ¸Ã÷¶ÈÎª255£¬·ñÔòÈç¹ûÖ®Ç°±»ÉèÖÃÁËÍ¸Ã÷£¬ÇÒ´«Èënull»áµ¼ÖÂÖ»¸Ä±äÑÕÉ«£¬Í¸Ã÷¶È²»±ä
+        // ×´Ì¬ÎªonÊ±Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½É«ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+        if (state == STATE_ENABLED) {
+            // ******ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½Îª255ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½Ò´ï¿½ï¿½ï¿½nullï¿½áµ¼ï¿½ï¿½Ö»ï¿½Ä±ï¿½ï¿½ï¿½É«ï¿½ï¿½Í¸ï¿½ï¿½ï¿½È²ï¿½ï¿½ï¿½
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, drawable, 255, vcolor));
-        }
-        else if (state == STATE_DISABLED)
-        {
-            // ·ñÔòÍ¬Ê±ÉèÖÃÑÕÉ«ºÍÍ¸Ã÷¶È
+        } else if (state == STATE_DISABLED) {
+            // ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, drawable, alpha, vcolor));
-        }
-        else
-        {
+        } else {
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, drawable, (255 + alpha) / 2, vcolor));
         }
     }
 
     /**
-     * ÉèÖÃÍ¼±ê
-     * 
+     * ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
+     *
      * @param context
      * @param views
      * @param viewId
@@ -4538,31 +4033,23 @@ public class WidgetProviderUtil
      * @param alpha
      */
     private static void setIconResource(Context context, RemoteViews views, int viewId, Bitmap bitmap, int state,
-            Integer color, Integer alpha)
-    {
+                                        Integer color, Integer alpha) {
         Integer vcolor = (color == Constants.NOT_SHOW_FLAG ? null : color);
 
-        // ×´Ì¬ÎªonÊ±Ö±½ÓÉèÖÃÍ¼±ê,ÓÐÑÕÉ«µÄ»°ÉèÖÃÑÕÉ«
-        if (state == STATE_ENABLED)
-        {
-            // ******ÕâÀïÒ»¶¨ÒªÉèÖÃÍ¸Ã÷¶ÈÎª255£¬·ñÔòÈç¹ûÖ®Ç°±»ÉèÖÃÁËÍ¸Ã÷£¬ÇÒ´«Èënull»áµ¼ÖÂÖ»¸Ä±äÑÕÉ«£¬Í¸Ã÷¶È²»±ä
+        // ×´Ì¬ÎªonÊ±Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½É«ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+        if (state == STATE_ENABLED) {
+            // ******ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½Îª255ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½Ò´ï¿½ï¿½ï¿½nullï¿½áµ¼ï¿½ï¿½Ö»ï¿½Ä±ï¿½ï¿½ï¿½É«ï¿½ï¿½Í¸ï¿½ï¿½ï¿½È²ï¿½ï¿½ï¿½
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, bitmap, 255, vcolor));
-        }
-        else if (state == STATE_INTERMEDIATE)
-        {
+        } else if (state == STATE_INTERMEDIATE) {
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, bitmap, (255 + alpha) / 2, vcolor));
-        }
-        else
-        {
-            // ·ñÔòÍ¬Ê±ÉèÖÃÑÕÉ«ºÍÍ¸Ã÷¶È
+        } else {
+            // ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, bitmap, alpha, vcolor));
         }
     }
 
-    public static void freeMemory(int iconId)
-    {
-        switch (iconId)
-        {
+    public static void freeMemory(int iconId) {
+        switch (iconId) {
             case Constants.ICON_AIRPLANE:
                 WidgetProviderUtil.BITMAP_AIRPLANE = null;
                 break;
@@ -4650,9 +4137,8 @@ public class WidgetProviderUtil
      * @param context
      * @return key:widgetid value:size
      */
-    public static SparseIntArray getAllWidget(Context context, boolean containsNotification)
-    {
-        // »ñÈ¡µ±Ç°ÒÑ¾­´´½¨µÄ²¿¼þ
+    public static SparseIntArray getAllWidget(Context context, boolean containsNotification) {
+        // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
         String pkgName = WidgetProviderX4.class.getPackage().getName();
 
         final int[] widgetIdsX3 = AppWidgetManager.getInstance(context).getAppWidgetIds(
@@ -4670,72 +4156,54 @@ public class WidgetProviderUtil
         // key:widgetid value:size
         final SparseIntArray map = new SparseIntArray();
 
-        if (widgetIdsX1.length > 0)
-        {
-            for (int i = 0; i < widgetIdsX1.length; i++)
-            {
-                // ÅÐ¶ÏÊÇ·ñÓÐÕâ¸öWidgetIdµÄÏà¹ØÅäÖÃ£¬Èç¹ûÃ»ÓÐ¾ÍÈÏÎªÕâ¸öWidgetÃ»ÓÐ´´½¨ÔÚLauncherÉÏ
-                // ½â¾ö´´½¨widgetÊ±°´Home¼üÍË³ö£¬µ¼ÖÂÄÚ´æ´æÔÚWidgetµÄÎÊÌâ
-                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX1[i])))
-                {
+        if (widgetIdsX1.length > 0) {
+            for (int i = 0; i < widgetIdsX1.length; i++) {
+                // ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½WidgetIdï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ð¾ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½WidgetÃ»ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½Launcherï¿½ï¿½
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½widgetÊ±ï¿½ï¿½Homeï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½Widgetï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX1[i]))) {
                     map.put(widgetIdsX1[i], 1);
                 }
             }
         }
 
-        if (widgetIdsX2.length > 0)
-        {
-            for (int i = 0; i < widgetIdsX2.length; i++)
-            {
-                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX2[i])))
-                {
+        if (widgetIdsX2.length > 0) {
+            for (int i = 0; i < widgetIdsX2.length; i++) {
+                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX2[i]))) {
                     map.put(widgetIdsX2[i], 2);
                 }
             }
         }
 
-        if (widgetIdsX3.length > 0)
-        {
-            for (int i = 0; i < widgetIdsX3.length; i++)
-            {
-                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX3[i])))
-                {
+        if (widgetIdsX3.length > 0) {
+            for (int i = 0; i < widgetIdsX3.length; i++) {
+                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX3[i]))) {
                     map.put(widgetIdsX3[i], 3);
                 }
             }
         }
 
-        if (widgetIdsX4.length > 0)
-        {
-            for (int i = 0; i < widgetIdsX4.length; i++)
-            {
-                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX4[i])))
-                {
+        if (widgetIdsX4.length > 0) {
+            for (int i = 0; i < widgetIdsX4.length; i++) {
+                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX4[i]))) {
                     map.put(widgetIdsX4[i], 4);
                 }
             }
         }
 
-        if (widgetIdsX5.length > 0)
-        {
-            for (int i = 0; i < widgetIdsX5.length; i++)
-            {
-                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX5[i])))
-                {
+        if (widgetIdsX5.length > 0) {
+            for (int i = 0; i < widgetIdsX5.length; i++) {
+                if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX5[i]))) {
                     map.put(widgetIdsX5[i], 5);
                 }
             }
         }
 
-        // ¼ÓÈëÍ¨ÖªÀ¸ÖÐµÄ²¿¼þ,Í¨ÖªÀ¸²¿¼þµÄsizeÍ³Ò»Îª 0
-        if (containsNotification)
-        {
+        // ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½ï¿½ÐµÄ²ï¿½ï¿½ï¿½,Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sizeÍ³Ò»Îª 0
+        if (containsNotification) {
             String[] notificationWidgetIds = config.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "").split(",");
 
-            for (int i = 0; i < notificationWidgetIds.length; i++)
-            {
-                if (!notificationWidgetIds[i].equals(""))
-                {
+            for (int i = 0; i < notificationWidgetIds.length; i++) {
+                if (!notificationWidgetIds[i].equals("")) {
                     map.put(Integer.parseInt(notificationWidgetIds[i]), 0);
                 }
             }

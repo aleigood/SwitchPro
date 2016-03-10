@@ -9,26 +9,22 @@ import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 
-public class NetStateListener extends PhoneStateListener
-{
+public class NetStateListener extends PhoneStateListener {
     private Context context;
 
-    public NetStateListener(Context context)
-    {
+    public NetStateListener(Context context) {
         this.context = context;
     }
 
     @Override
-    public void onDataConnectionStateChanged(int state)
-    {
+    public void onDataConnectionStateChanged(int state) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // Èç¹ûÃ»»ñÈ¡µ½²ÎÊý¾ÍÈÏÎªÊÇÒÑ¾­´ò¿ªµÄ£¬²»×ö²Ù×÷
+        // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ò¿ªµÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         boolean oldState = config.getBoolean(Constants.PREF_NET_STATE, true);
 
-        // Èç¹û²»ÊÇÊÇ´Ó±¾Èí¼þ´¥·¢£¬ÇÒµ±Ç°ÊÇ¿ª×ÅµÄ£¬ÇÒÖ®Ç°´æ´¢µÄ×´Ì¬ÊÇ¹Ø±ÕµÄ
-        if (!WidgetProviderUtil.dataConnectionFlag && NetUtils.getMobileNetworkState(context) && !oldState)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´Ó±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¿ï¿½ï¿½ÅµÄ£ï¿½ï¿½ï¿½Ö®Ç°ï¿½æ´¢ï¿½ï¿½×´Ì¬ï¿½Ç¹Ø±Õµï¿½
+        if (!WidgetProviderUtil.dataConnectionFlag && NetUtils.getMobileNetworkState(context) && !oldState) {
             NetUtils.setMobileNetworkState(context, false);
         }
 
@@ -37,9 +33,8 @@ public class NetStateListener extends PhoneStateListener
     }
 
     @Override
-    public void onServiceStateChanged(ServiceState serviceState)
-    {
-        // Í¨Öªwidget¸üÐÂ
+    public void onServiceStateChanged(ServiceState serviceState) {
+        // Í¨Öªwidgetï¿½ï¿½ï¿½ï¿½
         Utils.updateWidget(context);
         super.onServiceStateChanged(serviceState);
     }

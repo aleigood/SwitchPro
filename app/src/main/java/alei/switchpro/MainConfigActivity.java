@@ -22,8 +22,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
-public class MainConfigActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener
-{
+public class MainConfigActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
     private AboutDlg aboutDlg;
     private ConfigModifyPref modifyWidgetPre;
     private MenuModifyPref modifyMenuPre;
@@ -36,8 +35,7 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
     private ListPreference notificationIconColor;
 
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         addPreferencesFromResource(R.xml.pref_main);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
@@ -46,10 +44,9 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
     }
 
     /**
-     * ÒòÎªÔÚonCreateºó»áµ÷ÓÃonResumeËùÒÔÖ±½ÓÔÚonResumeÖÐ³õÊ¼»¯
+     * ï¿½ï¿½Îªï¿½ï¿½onCreateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½onResumeï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½onResumeï¿½Ð³ï¿½Ê¼ï¿½ï¿½
      */
-    private void initUI()
-    {
+    private void initUI() {
         aboutDlg = (AboutDlg) findPreference("about");
         modifyWidgetPre = (ConfigModifyPref) findPreference("widget_modify");
         modifyMenuPre = (MenuModifyPref) findPreference("menu_modify");
@@ -68,10 +65,8 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
     }
 
     @Override
-    protected void onPause()
-    {
-        if (modifyWidgetPre.getAlertDlg() != null)
-        {
+    protected void onPause() {
+        if (modifyWidgetPre.getAlertDlg() != null) {
             modifyWidgetPre.getAlertDlg().dismiss();
         }
 
@@ -79,93 +74,68 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference)
-    {
-        if (preference == saveCfg)
-        {
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == saveCfg) {
             new AlertDialog.Builder(this).setTitle(getString(R.string.save_cfg))
                     .setMessage(getString(R.string.continue_confirm))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface d, int w)
-                        {
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface d, int w) {
                             boolean b1 = TaskUtil.saveTaskConf(dbOper);
                             boolean b2 = XmlUtil.writeGlobalXml(MainConfigActivity.this, "global");
                             boolean b3 = XmlUtil.writeProcessExcludeToXml(dbOper);
 
-                            if (b1 && b2 && b3)
-                            {
+                            if (b1 && b2 && b3) {
                                 Toast.makeText(MainConfigActivity.this, R.string.backup_succ, Toast.LENGTH_LONG).show();
-                            }
-                            else
-                            {
+                            } else {
                                 Toast.makeText(MainConfigActivity.this, R.string.backup_error, Toast.LENGTH_LONG)
                                         .show();
                             }
                         }
                     }).setNegativeButton(android.R.string.cancel, null).show();
-        }
-        else if (preference == loadCfg)
-        {
+        } else if (preference == loadCfg) {
             new AlertDialog.Builder(this).setTitle(getString(R.string.load_cfg))
                     .setMessage(getString(R.string.continue_confirm))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface d, int w)
-                        {
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface d, int w) {
                             boolean b1 = TaskUtil.loadTask(dbOper);
                             boolean b2 = XmlUtil.parseGlobalCfg(MainConfigActivity.this, "global");
                             boolean b3 = XmlUtil.parseProcessExcludeCfg(dbOper);
 
-                            if (b1 || b2 || b3)
-                            {
+                            if (b1 || b2 || b3) {
                                 Toast.makeText(MainConfigActivity.this, R.string.restore_succ, Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            else
-                            {
+                            } else {
                                 Toast.makeText(MainConfigActivity.this, R.string.restore_error, Toast.LENGTH_LONG)
                                         .show();
                             }
                         }
                     }).setNegativeButton(android.R.string.cancel, null).show();
-        }
-        else if (preference == addNotification)
-        {
-            if (VERSION.SDK_INT < 11)
-            {
+        } else if (preference == addNotification) {
+            if (VERSION.SDK_INT < 11) {
                 (new AlertDialog.Builder(this)).setTitle(R.string.notify_add_err_title)
                         .setMessage(R.string.notify_add_err).setNegativeButton(android.R.string.ok, null).create()
                         .show();
-            }
-            else
-            {
+            } else {
                 Intent intent = new Intent(this, WidgetConfigActivityNotify.class);
                 startActivity(intent);
             }
-        }
-        else if (preference == clearNotification)
-        {
+        } else if (preference == clearNotification) {
             new AlertDialog.Builder(this).setTitle(getString(R.string.notification_remove))
                     .setMessage(getString(R.string.continue_confirm))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface d, int w)
-                        {
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface d, int w) {
                             SharedPreferences sp = PreferenceManager
                                     .getDefaultSharedPreferences(MainConfigActivity.this);
-                            // É¾³ýÏàÓ¦²ÎÊý
+                            // É¾ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
                             String[] notificationWidgetIds = sp.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "")
                                     .split(",");
 
-                            for (int i = 0; i < notificationWidgetIds.length; i++)
-                            {
-                                if (!notificationWidgetIds[i].equals(""))
-                                {
+                            for (int i = 0; i < notificationWidgetIds.length; i++) {
+                                if (!notificationWidgetIds[i].equals("")) {
                                     int widgetId = Integer.parseInt(notificationWidgetIds[i]);
                                     String fileName = sp.getString(
                                             String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId), "");
-                                    // É¾³ý±³¾°Í¼Æ¬ÎÄ¼þ
+                                    // É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½Ä¼ï¿½
                                     deleteFile(fileName);
 
                                     sp.edit()
@@ -196,34 +166,23 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
-    {
-        if (key.equals(Constants.PREFS_SHOW_NOTIFY_ICON) || key.equals(Constants.PREFS_NOTIFY_PRIORITY))
-        {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(Constants.PREFS_SHOW_NOTIFY_ICON) || key.equals(Constants.PREFS_NOTIFY_PRIORITY)) {
             Utils.updateAllNotification(this);
-        }
-        else if (key.equals(Constants.PREFS_ICON_THEME))
-        {
+        } else if (key.equals(Constants.PREFS_ICON_THEME)) {
             String value = sharedPreferences.getString(key, "1");
 
-            if (value.equals("2"))
-            {
-                if (!Utils.isAppExist(this, Constants.PKG_THEME_HOLO))
-                {
+            if (value.equals("2")) {
+                if (!Utils.isAppExist(this, Constants.PKG_THEME_HOLO)) {
                     (new AlertDialog.Builder(MainConfigActivity.this))
                             .setTitle(R.string.ico_theme)
-                            .setNeutralButton(R.string.download, new OnClickListener()
-                            {
-                                public void onClick(DialogInterface dialog, int which)
-                                {
+                            .setNeutralButton(R.string.download, new OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent();
 
-                                    if (Utils.isAppExist(MainConfigActivity.this, "com.android.vending"))
-                                    {
+                                    if (Utils.isAppExist(MainConfigActivity.this, "com.android.vending")) {
                                         intent.setData(Uri.parse("market://details?id=" + Constants.PKG_THEME_HOLO));
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         intent.setData(Uri.parse("https://play.google.com/store/apps/details?id="
                                                 + Constants.PKG_THEME_HOLO));
                                     }
@@ -236,24 +195,17 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
                 }
 
                 iconTheme.setSummary("Holo");
-            }
-            else
-            {
+            } else {
                 iconTheme.setSummary("Default");
             }
 
             Utils.updateWidget(this);
-        }
-        else if (key.equals(Constants.PREFS_NOTIFY_ICON_COLOR))
-        {
+        } else if (key.equals(Constants.PREFS_NOTIFY_ICON_COLOR)) {
             String value = sharedPreferences.getString(key, "1");
 
-            if (value.equals("1"))
-            {
+            if (value.equals("1")) {
                 notificationIconColor.setSummary("White");
-            }
-            else
-            {
+            } else {
                 notificationIconColor.setSummary("Holo style");
             }
 

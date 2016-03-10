@@ -1,7 +1,5 @@
 package alei.switchpro.bt;
 
-import java.lang.reflect.Method;
-
 import alei.switchpro.Constants;
 import alei.switchpro.R;
 import alei.switchpro.WidgetProviderUtil;
@@ -16,35 +14,33 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.widget.Toast;
 
-public class BluetoothUtils
-{
+import java.lang.reflect.Method;
+
+public class BluetoothUtils {
     public static final int STATE_OFF = 10;
     public static final int STATE_TURNING_ON = 11;
     public static final int STATE_ON = 12;
     public static final int STATE_TURNING_OFF = 13;
 
-    // µÚÒ»ÖÖ·½·¨£¬Ê¹ÓÃ·þÎñ»ñÈ¡Bluetooth Adapter
+    // ï¿½ï¿½Ò»ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã·ï¿½ï¿½ï¿½ï¿½È¡Bluetooth Adapter
     private static Object device;
     private static Method disableMethod;
     private static Method enableMethod;
     private static Method isEnabledMethod;
     private static Method getStateMethod;
 
-    // µÚ¶þÖÖ·½·¨£¬Ö±½ÓÍ¨¹ý·´Éä»ñÈ¡Bluetooth Adapter
+    // ï¿½Ú¶ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Bluetooth Adapter
     private static Object device1;
     private static Method disableMethod1;
     private static Method enableMethod1;
     private static Method isEnabledMethod1;
     private static Method getStateMethod1;
 
-    private static void initialize(Context paramContext)
-    {
-        try
-        {
+    private static void initialize(Context paramContext) {
+        try {
             device = paramContext.getSystemService("bluetooth");
 
-            if (device != null)
-            {
+            if (device != null) {
                 Class<?> localClass = device.getClass();
                 enableMethod = localClass.getMethod("enable", new Class[0]);
                 enableMethod.setAccessible(true);
@@ -55,14 +51,11 @@ public class BluetoothUtils
                 getStateMethod = localClass.getMethod("getState", new Class[0]);
                 getStateMethod.setAccessible(true);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try
-        {
+        try {
             Class<?> localClass = ClassLoader.getSystemClassLoader().loadClass("android.bluetooth.BluetoothAdapter");
             Method localMethod = localClass.getMethod("getDefaultAdapter", new Class[0]);
             Object[] arrayOfObject = new Object[0];
@@ -71,74 +64,51 @@ public class BluetoothUtils
             disableMethod1 = localClass.getMethod("disable", new Class[0]);
             isEnabledMethod1 = localClass.getMethod("isEnabled", new Class[0]);
             getStateMethod1 = localClass.getMethod("getState", new Class[0]);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean isBluetoothEnabled(Context context)
-    {
-        try
-        {
-            return ((Boolean) isEnabledMethod.invoke(device, new Object[] {})).booleanValue();
-        }
-        catch (Exception e)
-        {
-            // ±£Ö¤µÚÒ»ÖÖ·½·¨ÎÞ·¨Ö´ÐÐÊ±»òÅ×ÁËÒì³££¬µÚ¶þÖÖ·½·¨¿ÉÒÔÖ´ÐÐ
-            try
-            {
-                return ((Boolean) isEnabledMethod1.invoke(device1, new Object[] {})).booleanValue();
-            }
-            catch (Exception e2)
-            {
+    public static boolean isBluetoothEnabled(Context context) {
+        try {
+            return ((Boolean) isEnabledMethod.invoke(device, new Object[]{})).booleanValue();
+        } catch (Exception e) {
+            // ï¿½ï¿½Ö¤ï¿½ï¿½Ò»ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Þ·ï¿½Ö´ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+            try {
+                return ((Boolean) isEnabledMethod1.invoke(device1, new Object[]{})).booleanValue();
+            } catch (Exception e2) {
                 String bluetoothString = Settings.Secure.getString(context.getContentResolver(),
                         Settings.Secure.BLUETOOTH_ON);
 
                 // "0" means closed
-                if (bluetoothString.equals("0"))
-                {
+                if (bluetoothString.equals("0")) {
                     return false;
-                }
-                else
-                {
+                } else {
                     return true;
                 }
             }
         }
     }
 
-    public static int getBluetoothState(Context context)
-    {
+    public static int getBluetoothState(Context context) {
         int state = STATE_OFF;
 
-        try
-        {
-            state = ((Integer) getStateMethod.invoke(device, new Object[] {})).intValue();
-        }
-        catch (Exception e)
-        {
-            // ±£Ö¤µÚÒ»ÖÖ·½·¨ÎÞ·¨Ö´ÐÐÊ±»òÅ×ÁËÒì³££¬µÚ¶þÖÖ·½·¨¿ÉÒÔÖ´ÐÐ
-            try
-            {
-                state = ((Integer) getStateMethod1.invoke(device1, new Object[] {})).intValue();
-            }
-            catch (Exception e2)
-            {
-                if (isBluetoothEnabled(context))
-                {
+        try {
+            state = ((Integer) getStateMethod.invoke(device, new Object[]{})).intValue();
+        } catch (Exception e) {
+            // ï¿½ï¿½Ö¤ï¿½ï¿½Ò»ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Þ·ï¿½Ö´ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+            try {
+                state = ((Integer) getStateMethod1.invoke(device1, new Object[]{})).intValue();
+            } catch (Exception e2) {
+                if (isBluetoothEnabled(context)) {
                     state = STATE_ON;
-                }
-                else
-                {
+                } else {
                     state = STATE_OFF;
                 }
             }
         }
 
-        switch (state)
-        {
+        switch (state) {
             case STATE_OFF:
                 return WidgetProviderUtil.STATE_DISABLED;
             case STATE_ON:
@@ -152,140 +122,106 @@ public class BluetoothUtils
         }
     }
 
-    public static void toggleBluetooth(Context context)
-    {
+    public static void toggleBluetooth(Context context) {
         initialize(context);
 
-        // Èç¹ûÒª´ò¿ªÀ¶ÑÀ
-        if (!isBluetoothEnabled(context))
-        {
+        // ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (!isBluetoothEnabled(context)) {
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-            if (config.getBoolean(Constants.PREFS_BLUETOOTH_DISCOVER, false))
-            {
+            if (config.getBoolean(Constants.PREFS_BLUETOOTH_DISCOVER, false)) {
                 Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                 discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, discoverableIntent, 0);
 
-                try
-                {
+                try {
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     pendingIntent.send();
-                }
-                catch (CanceledException e)
-                {
+                } catch (CanceledException e) {
                     e.printStackTrace();
                 }
-            }
-            else
-            {
+            } else {
                 enable(context);
 
-                // Èç¹ûÅäÖÃÁËÐèÒª´ò¿ªÅäÖÃ½çÃæ£¬ÔÚ´ò¿ªºóµ¯³ö½çÃæ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½æ£¬ï¿½Ú´ò¿ªºóµ¯³ï¿½ï¿½ï¿½ï¿½ï¿½
                 boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_BLUETOOTH, false);
 
-                if (openAction)
-                {
+                if (openAction) {
                     Intent intent = new Intent("android.intent.action.MAIN");
                     intent.setClassName("com.android.settings", "com.android.settings.bluetooth.BluetoothSettings");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-                    try
-                    {
+                    try {
                         pendingIntent.send();
-                    }
-                    catch (CanceledException e)
-                    {
+                    } catch (CanceledException e) {
                         e.printStackTrace();
                     }
                 }
 
                 Toast.makeText(context, R.string.update_buetooth, Toast.LENGTH_LONG).show();
             }
-        }
-        else
-        {
+        } else {
             disable(context);
         }
 
     }
 
-    public static void disable(Context context)
-    {
-        // ÅÐ¶ÏÊÇ·ñÒÑ¾­ÕýÈ·Ö´ÐÐÁË
+    public static void disable(Context context) {
+        // ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½È·Ö´ï¿½ï¿½ï¿½ï¿½
         boolean result = false;
 
-        try
-        {
-            disableMethod.invoke(device, new Object[] {});
+        try {
+            disableMethod.invoke(device, new Object[]{});
             result = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
         }
 
-        // ±£Ö¤µÚÒ»ÖÖ·½·¨ÎÞ·¨Ö´ÐÐÊ±»òÅ×ÁËÒì³££¬µÚ¶þÖÖ·½·¨¿ÉÒÔÖ´ÐÐ
-        try
-        {
-            disableMethod1.invoke(device1, new Object[] {});
+        // ï¿½ï¿½Ö¤ï¿½ï¿½Ò»ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Þ·ï¿½Ö´ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+        try {
+            disableMethod1.invoke(device1, new Object[]{});
             result = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
         }
 
-        // Èç¹ûÁ½ÖÖ·½·¨¶¼²»ÐÐ
-        if (!result)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (!result) {
             switchBT(context);
         }
     }
 
-    public static void enable(Context context)
-    {
-        // ÅÐ¶ÏÊÇ·ñÒÑ¾­ÕýÈ·Ö´ÐÐÁË
+    public static void enable(Context context) {
+        // ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½È·Ö´ï¿½ï¿½ï¿½ï¿½
         boolean result = false;
 
-        try
-        {
-            enableMethod.invoke(device, new Object[] {});
+        try {
+            enableMethod.invoke(device, new Object[]{});
             result = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
         }
 
-        // ±£Ö¤µÚÒ»ÖÖ·½·¨ÎÞ·¨Ö´ÐÐÊ±»òÅ×ÁËÒì³££¬µÚ¶þÖÖ·½·¨¿ÉÒÔÖ´ÐÐ
-        try
-        {
-            enableMethod1.invoke(device1, new Object[] {});
+        // ï¿½ï¿½Ö¤ï¿½ï¿½Ò»ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Þ·ï¿½Ö´ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
+        try {
+            enableMethod1.invoke(device1, new Object[]{});
             result = true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
         }
 
-        if (!result)
-        {
+        if (!result) {
             switchBT(context);
         }
     }
 
-    private static void switchBT(Context context)
-    {
+    private static void switchBT(Context context) {
         Intent launchIntent = new Intent();
         launchIntent.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
         launchIntent.addCategory(Intent.CATEGORY_ALTERNATIVE);
         launchIntent.setData(Uri.parse("custom:" + 4));
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, launchIntent, 0);
 
-        try
-        {
+        try {
             pi.send();
-        }
-        catch (CanceledException e1)
-        {
+        } catch (CanceledException e1) {
             e1.printStackTrace();
         }
     }

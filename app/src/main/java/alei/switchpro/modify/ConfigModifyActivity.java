@@ -14,36 +14,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-public class ConfigModifyActivity extends WidgetConfigBaseActivity
-{
+public class ConfigModifyActivity extends WidgetConfigBaseActivity {
     private String btnIds;
     private int size;
 
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Intent launchIntent = getIntent();
         widgetId = launchIntent.getIntExtra("widgetId", 0);
         size = launchIntent.getIntExtra("size", 0);
 
-        // Í¨ÖªÀ¸ÖÐµÄ²¿¼þsizeÊÇ0
-        if (widgetId == 0 || size < 0 || size > 5)
-        {
+        // Í¨Öªï¿½ï¿½ï¿½ÐµÄ²ï¿½ï¿½ï¿½sizeï¿½ï¿½0
+        if (widgetId == 0 || size < 0 || size > 5) {
             return;
         }
 
-        // ³õÊ¼»¯½çÃæ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         setContentView(R.layout.activity_widget_conf);
         addPreferencesFromResource(R.xml.pref_widget_conf);
 
-        // »ñÈ¡µ±Ç°²¿¼þµÄÅäÖÃ
+        // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
-        // »ñÈ¡°´Å¥µÄË³Ðò
+        // ï¿½ï¿½È¡ï¿½ï¿½Å¥ï¿½ï¿½Ë³ï¿½ï¿½
         btnIds = config.getString(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetId), DEFAULT_BUTTON_IDS);
-        // µ÷ÓÃ¸¸Àà·½·¨£¬³õÊ¼»¯½çÃæºÍ³õÊ¼Öµ
-        if (config.contains(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId)))
-        {
+        // ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½à·½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½Ê¼Öµ
+        if (config.contains(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId))) {
             backBitmap = WidgetProviderUtil.getBackgroundBitmap(this, widgetId, config);
         }
 
@@ -51,44 +47,37 @@ public class ConfigModifyActivity extends WidgetConfigBaseActivity
         setTitle(R.string.modify_widget);
     }
 
-    protected void updateWidget(int appWidgetId)
-    {
+    protected void updateWidget(int appWidgetId) {
         Intent launchIntent = new Intent();
         launchIntent.setClassName(this, "alei.switchpro.WidgetProviderX" + size);
         launchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        // Í¨¹ýÉèÖÃ²»Í¬µÄDataÀ´±ê¼ÇÃ¿¸öIntent¶¼ÊÇÎ¨Ò»µÄ£¬²»»á±»Ïà»¥¸²¸Ç
+        // Í¨ï¿½ï¿½ï¿½ï¿½ï¿½Ã²ï¿½Í¬ï¿½ï¿½Dataï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½Intentï¿½ï¿½ï¿½ï¿½Î¨Ò»ï¿½Ä£ï¿½ï¿½ï¿½ï¿½á±»ï¿½à»¥ï¿½ï¿½ï¿½ï¿½
         launchIntent.setData(Uri.withAppendedPath(Uri.parse(WidgetProviderUtil.URI_SCHEME + "://widget/id/"),
                 String.valueOf(appWidgetId)));
         PendingIntent newIntent = PendingIntent.getBroadcast(this, 0, launchIntent, 0);
 
-        try
-        {
+        try {
             newIntent.send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * »ñÈ¡×îºóÒ»´ÎÅäÖÃµÄ°´Å¥Ë³Ðò£¬Èç¹ûÃ»ÓÐµÄ»°·µ»ØÒ»¸öÄ¬ÈÏË³Ðò£¬×ÓÀàÒª¸²¸Ç
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ°ï¿½Å¥Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ÐµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä¬ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+     *
      * @return
      */
-    protected String getLastBtnOrder()
-    {
+    protected String getLastBtnOrder() {
         return btnIds;
     }
 
     @Override
-    protected int getWidgetSize()
-    {
+    protected int getWidgetSize() {
         return size;
     }
 
-    protected void saveBtnAction()
-    {
+    protected void saveBtnAction() {
         super.saveBtnAction();
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         saveCfgToSD(config, true,
@@ -97,22 +86,17 @@ public class ConfigModifyActivity extends WidgetConfigBaseActivity
         String[] notificationWidgetIds = config.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "").split(",");
         boolean isExist = false;
 
-        for (int i = 0; i < notificationWidgetIds.length; i++)
-        {
-            if (!notificationWidgetIds[i].equals("") && widgetId == Integer.parseInt(notificationWidgetIds[i]))
-            {
+        for (int i = 0; i < notificationWidgetIds.length; i++) {
+            if (!notificationWidgetIds[i].equals("") && widgetId == Integer.parseInt(notificationWidgetIds[i])) {
                 isExist = true;
                 break;
             }
         }
 
-        if (!isExist)
-        {
-            // ×ª½»¸øÏàÓ¦µÄwidget½øÐÐ¸üÐÂ
+        if (!isExist) {
+            // ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½widgetï¿½ï¿½ï¿½Ð¸ï¿½ï¿½ï¿½
             updateWidget(widgetId);
-        }
-        else
-        {
+        } else {
             Utils.updateNotification(this, widgetId);
         }
     }

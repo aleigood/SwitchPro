@@ -1,7 +1,5 @@
 package alei.switchpro.task;
 
-import java.util.List;
-
 import alei.switchpro.DatabaseOper;
 import alei.switchpro.MyApplication;
 import alei.switchpro.SwitchUtils;
@@ -14,12 +12,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcel;
 
+import java.util.List;
+
 /**
  * Glue class: connects AlarmAlert IntentReceiver to AlarmAlert activity. Passes
  * through Alarm ID.
  */
-public class TaskReceiver extends BroadcastReceiver
-{
+public class TaskReceiver extends BroadcastReceiver {
     /**
      * If the alarm is older than STALE_WINDOW seconds, ignore. It is probably
      * the result of a time or timezone change
@@ -27,8 +26,7 @@ public class TaskReceiver extends BroadcastReceiver
     private final static int STALE_WINDOW = 60 * 30;
 
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         DatabaseOper dbOper = MyApplication.getInstance().getDataOper();
         Task alarm = null;
         // Grab the alarm from the intent. Since the remote AlarmManagerService
@@ -37,16 +35,14 @@ public class TaskReceiver extends BroadcastReceiver
         // To avoid this, do the marshalling ourselves.
         final byte[] data = intent.getByteArrayExtra(TaskUtil.ALARM_RAW_DATA);
 
-        if (data != null)
-        {
+        if (data != null) {
             Parcel in = Parcel.obtain();
             in.unmarshall(data, 0, data.length);
             in.setDataPosition(0);
             alarm = Task.CREATOR.createFromParcel(in);
         }
 
-        if (alarm == null)
-        {
+        if (alarm == null) {
             return;
         }
 
@@ -54,52 +50,42 @@ public class TaskReceiver extends BroadcastReceiver
         // information in bug reports.
         long now = System.currentTimeMillis();
 
-        // ¸Õ´¥·¢ÈÎÎñÊ±¼ä¾Í¹ýÆÚÁË£¬ÉèÖÃÄ¬ÈÏµÄÑÓ³ÙÎª30Ãë£¬Èç¹û»¹ÊÇ¹ýÆÚËµÃ÷Ê±¼ä»òÊ±Çø±»¸ÄÁË
+        // ï¿½Õ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Í¹ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ïµï¿½ï¿½Ó³ï¿½Îª30ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹ï¿½ï¿½ï¿½Ëµï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         List<Toggle> switches = TaskUtil.getSwitchesByTaskId(dbOper, alarm.id);
 
-        for (int i = 0; i < switches.size(); i++)
-        {
+        for (int i = 0; i < switches.size(); i++) {
             Toggle toggle = (Toggle) switches.get(i);
 
-            switch (toggle.switchId)
-            {
+            switch (toggle.switchId) {
                 case Toggle.SWITCH_RINGTONE:
 
                     Uri defaultAlert = RingtoneManager.getActualDefaultRingtoneUri(context,
                             RingtoneManager.TYPE_RINGTONE);
                     Uri ringtone = null;
 
-                    if (alarm.type == 0)
-                    {
-                        if (alarm.startTime + STALE_WINDOW * 1000 < now)
-                        {
+                    if (alarm.type == 0) {
+                        if (alarm.startTime + STALE_WINDOW * 1000 < now) {
                             return;
                         }
 
-                        if (toggle.param1 != null && toggle.param1.length() != 0)
-                        {
+                        if (toggle.param1 != null && toggle.param1.length() != 0) {
                             ringtone = Uri.parse(toggle.param1);
                         }
 
-                        // ´ËÊ±±£´æµ±Ç°µÄÁåÉùÉèÖÃ£¬ÒÔ±ã»Ö¸´
+                        // ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æµ±Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½Ô±ï¿½Ö¸ï¿½
                         TaskUtil.updateSwitch(dbOper, toggle.taskId, toggle.switchId, toggle.param1,
                                 defaultAlert.toString());
-                    }
-                    else
-                    {
-                        if (alarm.endTime + STALE_WINDOW * 1000 < now)
-                        {
+                    } else {
+                        if (alarm.endTime + STALE_WINDOW * 1000 < now) {
                             return;
                         }
 
-                        if (toggle.param2 != null && toggle.param2.length() != 0)
-                        {
+                        if (toggle.param2 != null && toggle.param2.length() != 0) {
                             ringtone = Uri.parse(toggle.param2);
                         }
                     }
 
-                    if (ringtone == null)
-                    {
+                    if (ringtone == null) {
                         ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                     }
 
@@ -108,19 +94,14 @@ public class TaskReceiver extends BroadcastReceiver
                 case Toggle.SWITCH_RADIO:
 
                     boolean radioState = SwitchUtils.getNetworkState(context);
-                    if (alarm.type == 0)
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¿ªÆôµÄ
-                        if ((toggle.param1.equals("0") && radioState) || (toggle.param1.equals("1") && !radioState))
-                        {
+                    if (alarm.type == 0) {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½
+                        if ((toggle.param1.equals("0") && radioState) || (toggle.param1.equals("1") && !radioState)) {
                             SwitchUtils.toggleNetwork(context);
                         }
-                    }
-                    else
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¹Ø±ÕµÄ»òÕßÒª¿ªÆôµÄ£¬ÇÒÒÑ¾­¿ªÆôÁË
-                        if ((toggle.param1.equals("0") && !radioState) || (toggle.param1.equals("1") && radioState))
-                        {
+                    } else {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¹Ø±ÕµÄ»ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                        if ((toggle.param1.equals("0") && !radioState) || (toggle.param1.equals("1") && radioState)) {
                             SwitchUtils.toggleNetwork(context);
                         }
                     }
@@ -129,21 +110,16 @@ public class TaskReceiver extends BroadcastReceiver
                 case Toggle.SWITCH_WIFI:
 
                     int wifiState = SwitchUtils.getWifiState(context);
-                    if (alarm.type == 0)
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¿ªÆôµÄ
+                    if (alarm.type == 0) {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½
                         if ((toggle.param1.equals("0") && wifiState == WidgetProviderUtil.STATE_ENABLED)
-                                || (toggle.param1.equals("1") && wifiState == WidgetProviderUtil.STATE_DISABLED))
-                        {
+                                || (toggle.param1.equals("1") && wifiState == WidgetProviderUtil.STATE_DISABLED)) {
                             SwitchUtils.toggleWifi(context);
                         }
-                    }
-                    else
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¹Ø±ÕµÄ
+                    } else {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¹Ø±Õµï¿½
                         if ((toggle.param1.equals("0") && wifiState == WidgetProviderUtil.STATE_DISABLED)
-                                || (toggle.param1.equals("1") && wifiState == WidgetProviderUtil.STATE_ENABLED))
-                        {
+                                || (toggle.param1.equals("1") && wifiState == WidgetProviderUtil.STATE_ENABLED)) {
                             SwitchUtils.toggleWifi(context);
                         }
                     }
@@ -151,19 +127,14 @@ public class TaskReceiver extends BroadcastReceiver
                 case Toggle.SWITCH_DATA_CONN:
 
                     boolean dataState = SwitchUtils.getApnState(context);
-                    if (alarm.type == 0)
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¿ªÆôµÄ
-                        if ((toggle.param1.equals("0") && dataState) || (toggle.param1.equals("1") && !dataState))
-                        {
+                    if (alarm.type == 0) {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½
+                        if ((toggle.param1.equals("0") && dataState) || (toggle.param1.equals("1") && !dataState)) {
                             SwitchUtils.toggleApn(context);
                         }
-                    }
-                    else
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¹Ø±ÕµÄ
-                        if ((toggle.param1.equals("0") && !dataState) || (toggle.param1.equals("1") && dataState))
-                        {
+                    } else {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¹Ø±Õµï¿½
+                        if ((toggle.param1.equals("0") && !dataState) || (toggle.param1.equals("1") && dataState)) {
                             SwitchUtils.toggleApn(context);
                         }
                     }
@@ -171,19 +142,14 @@ public class TaskReceiver extends BroadcastReceiver
                 case Toggle.SWITCH_SYNC:
 
                     boolean syncState = SwitchUtils.getSync(context);
-                    if (alarm.type == 0)
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¿ªÆôµÄ
-                        if ((toggle.param1.equals("0") && syncState) || (toggle.param1.equals("1") && !syncState))
-                        {
+                    if (alarm.type == 0) {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½
+                        if ((toggle.param1.equals("0") && syncState) || (toggle.param1.equals("1") && !syncState)) {
                             SwitchUtils.toggleSync(context);
                         }
-                    }
-                    else
-                    {
-                        // ÊÇÒª¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÊÇ¹Ø±ÕµÄ
-                        if ((toggle.param1.equals("0") && !syncState) || (toggle.param1.equals("1") && syncState))
-                        {
+                    } else {
+                        // ï¿½ï¿½Òªï¿½Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ç¹Ø±Õµï¿½
+                        if ((toggle.param1.equals("0") && !syncState) || (toggle.param1.equals("1") && syncState)) {
                             SwitchUtils.toggleSync(context);
                         }
                     }
@@ -192,22 +158,16 @@ public class TaskReceiver extends BroadcastReceiver
 
                     AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-                    // Èç¹ûÊÇ¿ªÊ¼ÈÎÎñ
-                    if (alarm.type == 0)
-                    {
-                        // Èç¹ûÊÇ¾²Òô£¬ÇÒµ±Ç°ÊÇÕý³£Ä£Ê½
-                        if ((toggle.param1.equals("0") && audioManager.getMode() == AudioManager.MODE_NORMAL))
-                        {
+                    // ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+                    if (alarm.type == 0) {
+                        // ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+                        if ((toggle.param1.equals("0") && audioManager.getMode() == AudioManager.MODE_NORMAL)) {
                             audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                        }
-                        else if ((toggle.param1.equals("1") && audioManager.getMode() == AudioManager.MODE_NORMAL))
-                        {
+                        } else if ((toggle.param1.equals("1") && audioManager.getMode() == AudioManager.MODE_NORMAL)) {
                             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                         }
-                    }
-                    else
-                    {
-                        // Èç¹ûÊÇ½áÊøÈÎÎñ¾ÍÖ±½Ó»Ö¸´NormalÄ£Ê½
+                    } else {
+                        // ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó»Ö¸ï¿½NormalÄ£Ê½
                         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     }
                     break;
@@ -216,17 +176,14 @@ public class TaskReceiver extends BroadcastReceiver
                     AudioManager mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 
-                    if (alarm.type == 0)
-                    {
+                    if (alarm.type == 0) {
                         int currentVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
                         mAudioManager.setStreamVolume(AudioManager.STREAM_RING,
                                 (int) ((Float.parseFloat(toggle.param1) / 100f) * (float) max),
                                 AudioManager.FLAG_SHOW_UI);
-                        // ±£´æµ±Ç°µÄÒôÁ¿£¬ÒÔ±ã»Ö¸´
+                        // ï¿½ï¿½ï¿½æµ±Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½Ö¸ï¿½
                         TaskUtil.updateSwitch(dbOper, toggle.taskId, toggle.switchId, toggle.param1, currentVolume + "");
-                    }
-                    else
-                    {
+                    } else {
                         mAudioManager.setStreamVolume(AudioManager.STREAM_RING, Integer.parseInt(toggle.param2),
                                 AudioManager.FLAG_SHOW_UI);
                     }
@@ -237,13 +194,10 @@ public class TaskReceiver extends BroadcastReceiver
             }
         }
 
-        // Èç¹û²»ÊÇÖØ¸´µÄÈÎÎñ£¬ÇÒ½áÊøÈÎÎñÒÑ¾­´¥·¢£¬ÔòÈÃÈÎÎñÊ§Ð§
-        if (!alarm.daysOfWeek.isRepeatSet() && alarm.type == 1)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§Ð§
+        if (!alarm.daysOfWeek.isRepeatSet() && alarm.type == 1) {
             TaskUtil.enableAlarm(dbOper, alarm.id, false);
-        }
-        else
-        {
+        } else {
             // Enable the next alert if there is one. The above call to
             // enableAlarm will call setNextAlert so avoid calling it twice.
             TaskUtil.setNextAlert(dbOper);

@@ -1,9 +1,5 @@
 package alei.switchpro.brightness;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import alei.switchpro.Constants;
 import alei.switchpro.Utils;
 import android.app.Activity;
@@ -13,9 +9,12 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.WindowManager.LayoutParams;
 
-public class BrightnessActivity extends Activity
-{
-    // ÁÁ¶È,½çÃæÉÏÄÜµ÷ÕûµÄ×îµÍÁÁ¶ÈÎª30
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class BrightnessActivity extends Activity {
+    // ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª30
     public static final int BRIGHT_LEVEL_0 = 0;
     public static final int BRIGHT_LEVEL_10 = 25;
     public static final int BRIGHT_LEVEL_20 = 51;
@@ -33,11 +32,10 @@ public class BrightnessActivity extends Activity
     public static final String BRIGHT_MODE = "screen_brightness_mode";
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // »ñÈ¡ÁÁ¶È¼¶±ðÅäÖÃ
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         List<Integer> lastLevel = LevelPreference.getLevelRealList(config.getString(Constants.PREFS_BRIGHT_LEVEL,
                 LevelPreference.DEFAULT_LEVEL));
@@ -47,160 +45,106 @@ public class BrightnessActivity extends Activity
         int mode = Settings.System.getInt(getContentResolver(), BRIGHT_MODE, 1);
         int curLevel = 0;
 
-        if (mode == BRIGHT_MODE_AUTO)
-        {
+        if (mode == BRIGHT_MODE_AUTO) {
             curLevel = -1;
-        }
-        else
-        {
-            if (brightness == BRIGHT_LEVEL_0)
-            {
+        } else {
+            if (brightness == BRIGHT_LEVEL_0) {
                 curLevel = 0;
             }
-            if (brightness > BRIGHT_LEVEL_0 && brightness <= BRIGHT_LEVEL_10)
-            {
+            if (brightness > BRIGHT_LEVEL_0 && brightness <= BRIGHT_LEVEL_10) {
                 curLevel = 10;
-            }
-            else if (brightness > BRIGHT_LEVEL_10 && brightness <= BRIGHT_LEVEL_20)
-            {
+            } else if (brightness > BRIGHT_LEVEL_10 && brightness <= BRIGHT_LEVEL_20) {
                 curLevel = 20;
-            }
-            else if (brightness > BRIGHT_LEVEL_20 && brightness <= BRIGHT_LEVEL_30)
-            {
+            } else if (brightness > BRIGHT_LEVEL_20 && brightness <= BRIGHT_LEVEL_30) {
                 curLevel = 30;
-            }
-            else if (brightness > BRIGHT_LEVEL_30 && brightness <= BRIGHT_LEVEL_40)
-            {
+            } else if (brightness > BRIGHT_LEVEL_30 && brightness <= BRIGHT_LEVEL_40) {
                 curLevel = 40;
-            }
-            else if (brightness > BRIGHT_LEVEL_40 && brightness <= BRIGHT_LEVEL_50)
-            {
+            } else if (brightness > BRIGHT_LEVEL_40 && brightness <= BRIGHT_LEVEL_50) {
                 curLevel = 50;
-            }
-            else if (brightness > BRIGHT_LEVEL_50 && brightness <= BRIGHT_LEVEL_60)
-            {
+            } else if (brightness > BRIGHT_LEVEL_50 && brightness <= BRIGHT_LEVEL_60) {
                 curLevel = 60;
-            }
-            else if (brightness > BRIGHT_LEVEL_60 && brightness <= BRIGHT_LEVEL_70)
-            {
+            } else if (brightness > BRIGHT_LEVEL_60 && brightness <= BRIGHT_LEVEL_70) {
                 curLevel = 70;
-            }
-            else if (brightness > BRIGHT_LEVEL_70 && brightness <= BRIGHT_LEVEL_80)
-            {
+            } else if (brightness > BRIGHT_LEVEL_70 && brightness <= BRIGHT_LEVEL_80) {
                 curLevel = 80;
-            }
-            else if (brightness > BRIGHT_LEVEL_80 && brightness <= BRIGHT_LEVEL_90)
-            {
+            } else if (brightness > BRIGHT_LEVEL_80 && brightness <= BRIGHT_LEVEL_90) {
                 curLevel = 90;
-            }
-            else if (brightness > BRIGHT_LEVEL_90 && brightness <= BRIGHT_LEVEL_100)
-            {
+            } else if (brightness > BRIGHT_LEVEL_90 && brightness <= BRIGHT_LEVEL_100) {
                 curLevel = 100;
             }
         }
 
         int nextLevel = 0;
 
-        if (lastLevel.contains(curLevel))
-        {
+        if (lastLevel.contains(curLevel)) {
             int index = lastLevel.indexOf(curLevel);
 
-            if (index + 1 <= lastLevel.size() - 1)
-            {
+            if (index + 1 <= lastLevel.size() - 1) {
                 nextLevel = lastLevel.get(index + 1);
-            }
-            else
-            {
+            } else {
                 nextLevel = lastLevel.get(0);
             }
-        }
-        else
-        {
+        } else {
             nextLevel = lastLevel.get(0);
         }
 
-        // Èç¹ûÖµÎª-1£¬ÒªÉèÖÃ³É×Ô¶¯µ÷Õû
-        if (nextLevel == -1)
-        {
+        // ï¿½ï¿½ï¿½ÖµÎª-1ï¿½ï¿½Òªï¿½ï¿½ï¿½Ã³ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (nextLevel == -1) {
             Settings.System.putInt(getContentResolver(), BRIGHT_MODE, BRIGHT_MODE_AUTO);
-        }
-        else
-        {
-            // Èç¹ûµ±Ç°ÊÇ×Ô¶¯µ÷ÕûµÄÓ¦ÏÈ¹Ø±Õ
-            if (mode == BRIGHT_MODE_AUTO)
-            {
+        } else {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½È¹Ø±ï¿½
+            if (mode == BRIGHT_MODE_AUTO) {
                 Settings.System.putInt(getContentResolver(), BRIGHT_MODE, BRIGHT_MODE_MANUAL);
             }
 
             int setVal = BRIGHT_LEVEL_0;
 
-            if (nextLevel == 10)
-            {
+            if (nextLevel == 10) {
                 setVal = BRIGHT_LEVEL_10;
-            }
-            else if (nextLevel == 20)
-            {
+            } else if (nextLevel == 20) {
                 setVal = BRIGHT_LEVEL_20;
-            }
-            else if (nextLevel == 30)
-            {
+            } else if (nextLevel == 30) {
                 setVal = BRIGHT_LEVEL_30;
-            }
-            else if (nextLevel == 40)
-            {
+            } else if (nextLevel == 40) {
                 setVal = BRIGHT_LEVEL_40;
-            }
-            else if (nextLevel == 50)
-            {
+            } else if (nextLevel == 50) {
                 setVal = BRIGHT_LEVEL_50;
-            }
-            else if (nextLevel == 60)
-            {
+            } else if (nextLevel == 60) {
                 setVal = BRIGHT_LEVEL_60;
-            }
-            else if (nextLevel == 70)
-            {
+            } else if (nextLevel == 70) {
                 setVal = BRIGHT_LEVEL_70;
-            }
-            else if (nextLevel == 80)
-            {
+            } else if (nextLevel == 80) {
                 setVal = BRIGHT_LEVEL_80;
-            }
-            else if (nextLevel == 90)
-            {
+            } else if (nextLevel == 90) {
                 setVal = BRIGHT_LEVEL_90;
-            }
-            else if (nextLevel == 100)
-            {
+            } else if (nextLevel == 100) {
                 setVal = BRIGHT_LEVEL_100;
             }
 
-            // ÉèÖÃÏµÍ³µÄÁÁ¶È(0-255)
+            // ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(0-255)
             android.provider.Settings.System.putInt(getContentResolver(),
                     android.provider.Settings.System.SCREEN_BRIGHTNESS, setVal);
 
-            // ÉèÖÃLayoutµÄÁÁ¶È
+            // ï¿½ï¿½ï¿½ï¿½Layoutï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             LayoutParams attributes = getWindow().getAttributes();
             float tmp = Float.valueOf(nextLevel) / 100f;
-            // ÕâÀïµÄ×îÐ¡Öµ²»ÄÜÎª0£¬·ñÔò»á³öÏÖËøÆÁ
-            // ÔÚgalaxy nexusÖÐ0.04fÓëÏµÍ³×îµÍÁÁ¶È²î²»¶à£¬²»»á³öÏÖÃ÷ÏÔµÄÁÁ¶ÈÌø¶¯µÄÏÖÏó
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡Öµï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½galaxy nexusï¿½ï¿½0.04fï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È²î²»ï¿½à£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             attributes.screenBrightness = tmp == 0 ? 0.04f : tmp;
             getWindow().setAttributes(attributes);
         }
 
-        // 3. ÐèÒªÉèÖÃÑÓ³Ù¹Ø±Õ´°Ìå,ÒòÎªÌõ¼þÁÁ¶ÈÓÐÑÓ³Ù
+        // 3. ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ó³Ù¹Ø±Õ´ï¿½ï¿½ï¿½,ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½
         Timer timer = new Timer();
         timer.schedule(new NewTask(), 500);
 
-        // Í¨Öªwidget°´Å¥½øÐÐ¸üÐÂ
+        // Í¨Öªwidgetï¿½ï¿½Å¥ï¿½ï¿½ï¿½Ð¸ï¿½ï¿½ï¿½
         Utils.updateWidget(this);
     }
 
-    class NewTask extends TimerTask
-    {
+    class NewTask extends TimerTask {
         @Override
-        public void run()
-        {
+        public void run() {
             this.cancel();
             finish();
         }

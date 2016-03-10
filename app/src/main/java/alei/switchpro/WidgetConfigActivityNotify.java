@@ -7,53 +7,44 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-public class WidgetConfigActivityNotify extends WidgetConfigBaseActivity
-{
+public class WidgetConfigActivityNotify extends WidgetConfigBaseActivity {
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_widget_conf);
         addPreferencesFromResource(R.xml.pref_widget_conf);
         createAction((int) System.currentTimeMillis() / 1000);
     }
 
-    protected void updateWidget(int appWidgetId)
-    {
+    protected void updateWidget(int appWidgetId) {
     }
 
     /**
-     * »ñÈ¡×îºóÒ»´ÎÅäÖÃµÄ°´Å¥Ë³Ðò£¬Èç¹ûÃ»ÓÐµÄ»°·µ»ØÒ»¸öÄ¬ÈÏË³Ðò£¬×ÓÀàÒª¸²¸Ç
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ°ï¿½Å¥Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ÐµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä¬ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+     *
      * @return
      */
-    protected String getLastBtnOrder()
-    {
+    protected String getLastBtnOrder() {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         String btnOrder = config.getString(Constants.PREFS_LAST_BUTTONS_ORDER, "0,2,3,4,6,25,1,7");
         return btnOrder;
     }
 
     @Override
-    protected int getWidgetSize()
-    {
+    protected int getWidgetSize() {
         return 4;
     }
 
-    protected void saveBtnAction()
-    {
+    protected void saveBtnAction() {
         super.saveBtnAction();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sp.contains(Constants.PREFS_IN_NOTIFICATION_BAR))
-        {
+        if (sp.contains(Constants.PREFS_IN_NOTIFICATION_BAR)) {
             sp.edit()
                     .putString(Constants.PREFS_IN_NOTIFICATION_BAR,
                             sp.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "") + "," + widgetId)
                     .putString(Constants.PREFS_LASE_NOTIFY_WIDGET, "" + widgetId).commit();
-        }
-        else
-        {
+        } else {
             sp.edit().putString(Constants.PREFS_IN_NOTIFICATION_BAR, "" + widgetId)
                     .putString(Constants.PREFS_LASE_NOTIFY_WIDGET, "" + widgetId).commit();
         }

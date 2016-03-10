@@ -1,8 +1,5 @@
 package alei.switchpro.modify;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import alei.switchpro.R;
 import alei.switchpro.WidgetProviderUtil;
 import android.app.Activity;
@@ -16,50 +13,33 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
-public class ConfigModifyAdapter extends BaseAdapter
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class ConfigModifyAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private final ArrayList<ListItem> mItems = new ArrayList<ListItem>();
     private Context context;
 
-    /**
-     * Specific item in our list.
-     */
-    public class ListItem
-    {
-        public int widgetId;
-        public RemoteViews widgetView;
-
-        public ListItem(int widgetId, RemoteViews widgetView, Context context)
-        {
-            this.widgetId = widgetId;
-            this.widgetView = widgetView;
-        }
-    }
-
-    public ConfigModifyAdapter(Activity activity, SparseIntArray map)
-    {
+    public ConfigModifyAdapter(Activity activity, SparseIntArray map) {
         super();
         context = activity;
         mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        for (int i = 0; i < map.size(); i++)
-        {
+        for (int i = 0; i < map.size(); i++) {
             Integer widgetId = map.keyAt(i);
             RemoteViews remoteView = WidgetProviderUtil.buildAndUpdateButtons(activity, widgetId,
                     PreferenceManager.getDefaultSharedPreferences(activity), null);
 
-            if (remoteView != null)
-            {
+            if (remoteView != null) {
                 ListItem item = new ListItem(widgetId, remoteView, activity);
                 mItems.add(item);
             }
         }
     }
 
-    // ·µ»ØÃ¿Ò»¸öÑ¡ÏîµÄview
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    // ï¿½ï¿½ï¿½ï¿½Ã¿Ò»ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½view
+    public View getView(int position, View convertView, ViewGroup parent) {
         final ListItem item = (ListItem) getItem(position);
         convertView = mInflater.inflate(R.layout.item_widget, parent, false);
 
@@ -149,26 +129,35 @@ public class ConfigModifyAdapter extends BaseAdapter
         return convertView;
     }
 
-    // ·µ»ØÌõÄ¿µÄ¸öÊý
-    public int getCount()
-    {
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ä¸ï¿½ï¿½ï¿½
+    public int getCount() {
         return mItems.size();
     }
 
-    // ¸ù¾ÝÌõÄ¿µÄÎ»ÖÃ»ñÈ¡ÌõÄ¿µÄÄÚÈÝ
-    public Object getItem(int position)
-    {
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Î»ï¿½Ã»ï¿½È¡ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Object getItem(int position) {
         return mItems.get(position);
     }
 
-    // »ñÈ¡Ä³Ò»Î»ÖÃµÄId
-    public long getItemId(int position)
-    {
+    // ï¿½ï¿½È¡Ä³Ò»Î»ï¿½Ãµï¿½Id
+    public long getItemId(int position) {
         return position;
     }
 
-    public List<ListItem> getItems()
-    {
+    public List<ListItem> getItems() {
         return mItems;
+    }
+
+    /**
+     * Specific item in our list.
+     */
+    public class ListItem {
+        public int widgetId;
+        public RemoteViews widgetView;
+
+        public ListItem(int widgetId, RemoteViews widgetView, Context context) {
+            this.widgetId = widgetId;
+            this.widgetView = widgetView;
+        }
     }
 }

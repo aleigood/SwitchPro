@@ -32,8 +32,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class IconCustomPreference extends Preference
-{
+public class IconCustomPreference extends Preference {
     private WidgetConfigBaseActivity parent;
     private ImageView preview_img;
     private int lastColor;
@@ -41,33 +40,29 @@ public class IconCustomPreference extends Preference
     private SeekBar seekBar;
     private Dialog dlg;
 
-    public IconCustomPreference(Context context, AttributeSet attrs, int defStyle)
-    {
+    public IconCustomPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    public IconCustomPreference(Context context, AttributeSet attrs)
-    {
+    public IconCustomPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public IconCustomPreference(Context context)
-    {
+    public IconCustomPreference(Context context) {
         super(context);
         init(context);
     }
 
-    private void init(Context context)
-    {
+    private void init(Context context) {
         this.parent = (WidgetConfigBaseActivity) context;
-        // ÊÔÍ¼È¥»ñÈ¡Õâ¸öWidgetÒÑ¾­´æÔÚµÄÑÕÉ«ÅäÖÃ£¬Èç¹ûÕÒ²»µ½¾Í·µ»Ø×îºóÒ»´ÎµÄÅäÖÃ£¨ÐÞ¸ÄWidgetÊ±Ê¹ÓÃ£©
+        // ï¿½ï¿½Í¼È¥ï¿½ï¿½È¡ï¿½ï¿½ï¿½Widgetï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Îµï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½Þ¸ï¿½WidgetÊ±Ê¹ï¿½Ã£ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
         lastColor = config.getInt(String.format(Constants.PREFS_ICON_COLOR_FIELD_PATTERN, this.parent.getWidgetId()),
                 config.getInt(Constants.PREFS_LAST_ICON_COLOR, Color.WHITE));
 
-        // Ä¬ÈÏµÄÍ¸Ã÷¶ÈÎª120
+        // Ä¬ï¿½Ïµï¿½Í¸ï¿½ï¿½ï¿½ï¿½Îª120
         lastTrans = config.getInt(String.format(Constants.PREFS_ICON_TRANS_FIELD_PATTERN, this.parent.getWidgetId()),
                 config.getInt(Constants.PREFS_LAST_ICON_TRANS, 120));
 
@@ -75,63 +70,56 @@ public class IconCustomPreference extends Preference
     }
 
     @Override
-    public boolean isPersistent()
-    {
+    public boolean isPersistent() {
         return false;
     }
 
     @Override
-    protected void onBindView(View view)
-    {
+    protected void onBindView(View view) {
         super.onBindView(view);
         preview_img = (ImageView) view.findViewById(R.id.pref_current_img);
         updateView();
     }
 
     @Override
-    protected void onClick()
-    {
+    protected void onClick() {
         super.onClick();
         dlg = createDialog();
         dlg.show();
     }
 
-    private Dialog createDialog()
-    {
+    private Dialog createDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
         builder.setTitle(R.string.icon_color);
 
-        // µã»÷ÖÐ¼äÔ²µãÊÇ´¥·¢
-        OnColorChangedListener listener = new OnColorChangedListener()
-        {
-            public void colorChanged(int color)
-            {
+        // ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Ô²ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½
+        OnColorChangedListener listener = new OnColorChangedListener() {
+            public void colorChanged(int color) {
                 applyAction(color);
             }
         };
 
-        // Ö÷ÒªÊÇÉèÖÃ µ÷É«°åµÄ²¼¾Ö
+        // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½É«ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
         LinearLayout colorLayout = new LinearLayout(getContext());
         colorLayout.setPadding(0, 0, 0, 10);
         colorLayout.setOrientation(LinearLayout.VERTICAL);
 
-        // ÉèÖÃ¶Ô»°¿òµÄ±³¾°Í¼Æ¬
+        // ï¿½ï¿½ï¿½Ã¶Ô»ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½Í¼Æ¬
         Bitmap bitmap = BitmapFactory.decodeResource(parent.getResources(), R.drawable.trans_bg);
         BitmapDrawable drawable = new BitmapDrawable(bitmap);
         drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
         drawable.setDither(true);
         colorLayout.setBackgroundDrawable(drawable);
 
-        // ÎÞ±³¾°Ê±¿ÉÑ¡Ôñ°ëÍ¸Ã÷Ñ¡Ôñ£¬ËùÒÔ°ë¾¶ÒªÐ¡
+        // ï¿½Þ±ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Í¸ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½Ô°ë¾¶ÒªÐ¡
         Display display = parent.getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
 
-        if (display.getWidth() > display.getHeight())
-        {
+        if (display.getWidth() > display.getHeight()) {
             width = display.getHeight();
         }
 
-        // Ìí¼ÓÑÕÉ«Ãæ°å
+        // ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½
         int x = ((width - width / 3) / 2);
         final ColorPickerView mCPView = new ColorPickerView(getContext(), listener,
                 lastColor == Constants.NOT_SHOW_FLAG ? Color.WHITE : lastColor, x, false);
@@ -141,7 +129,7 @@ public class IconCustomPreference extends Preference
         mCPView.setLayoutParams(params1);
         colorLayout.addView(mCPView);
 
-        // Ìí¼ÓÒ»¸öÒþ²ØµÄ±à¼­¿ò£¬ÎªÁË¿ÉÒÔ´ò¿ª¼üÅÌ£¬·ñÔòÎÞ·¨ÏÔÊ¾Èí¼üÅÌ
+        // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄ±à¼­ï¿½ï¿½Îªï¿½Ë¿ï¿½ï¿½Ô´ò¿ª¼ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½
         EditText hideEdit = new EditText(parent);
         hideEdit.setVisibility(View.GONE);
         colorLayout.addView(hideEdit);
@@ -161,21 +149,17 @@ public class IconCustomPreference extends Preference
 
         seekBar = new SeekBar(getContext());
         seekBar.setPadding(18, 5, 18, 5);
-        // ÉèÖÃ³õÊ¼Öµ
+        // ï¿½ï¿½ï¿½Ã³ï¿½Ê¼Öµ
         seekBar.setMax(255);
         seekBar.setProgress(lastTrans);
-        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
-        {
-            public void onStopTrackingTouch(SeekBar seekBar)
-            {
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
-            public void onStartTrackingTouch(SeekBar seekBar)
-            {
+            public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-            {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txtView.setText(parent.getString(R.string.the_transparency_when_disabled) + ":");
             }
         });
@@ -195,26 +179,20 @@ public class IconCustomPreference extends Preference
         scrollView.setBackgroundColor(0XFFF5F5F5);
         builder.setView(scrollView);
 
-        // ³õÊ¼»¯°´Å¥ÊÂ¼þ
-        builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Å¥ï¿½Â¼ï¿½
+        builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 applyAction(mCPView.getColor());
             }
         });
-        builder.setNeutralButton(parent.getResources().getString(R.string.no_color), new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
+        builder.setNeutralButton(parent.getResources().getString(R.string.no_color), new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 applyAction(Constants.NOT_SHOW_FLAG);
                 parent.updatePreView();
             }
         });
-        builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
+        builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 dlg.dismiss();
             }
         });
@@ -225,41 +203,31 @@ public class IconCustomPreference extends Preference
         editText.setText((Integer.toHexString(lastColor == Constants.NOT_SHOW_FLAG ? Color.WHITE : lastColor) + "")
                 .toUpperCase());
 
-        mCPView.setOnColorChangingListener(new ColorPickerView.onColorChangingListener()
-        {
-            public void onChange(int color)
-            {
+        mCPView.setOnColorChangingListener(new ColorPickerView.onColorChangingListener() {
+            public void onChange(int color) {
                 editText.setText((Integer.toHexString(color) + "").toUpperCase());
             }
         });
 
-        // ÔÚÊäÈë¿òÊäÈëÑÕÉ«Ê±¶¯Ì¬¸Ä±äÑ¡ÔñÆ÷ÑÕÉ«
-        editText.addTextChangedListener(new TextWatcher()
-        {
-            public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
-            {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«Ê±ï¿½ï¿½Ì¬ï¿½Ä±ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+        editText.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                 setColor();
             }
 
-            public void beforeTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
-            {
+            public void beforeTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                 setColor();
             }
 
-            public void afterTextChanged(Editable paramEditable)
-            {
+            public void afterTextChanged(Editable paramEditable) {
                 setColor();
             }
 
-            private void setColor()
-            {
-                try
-                {
+            private void setColor() {
+                try {
                     int color = Color.parseColor("#" + editText.getText().toString());
                     mCPView.setColor(Utils.setAlpha(color, false));
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                 }
             }
         });
@@ -268,8 +236,7 @@ public class IconCustomPreference extends Preference
         return dialog;
     }
 
-    private void applyAction(int currentColor)
-    {
+    private void applyAction(int currentColor) {
         lastColor = currentColor;
         lastTrans = seekBar.getProgress();
         updateView();
@@ -277,40 +244,32 @@ public class IconCustomPreference extends Preference
         parent.updatePreView();
     }
 
-    public void updateView()
-    {
-        if (lastColor == Constants.NOT_SHOW_FLAG)
-        {
+    public void updateView() {
+        if (lastColor == Constants.NOT_SHOW_FLAG) {
             if (preview_img != null)
                 preview_img.setBackgroundColor(Color.TRANSPARENT);
             setSummary(parent.getResources().getString(R.string.no_color));
-        }
-        else
-        {
+        } else {
             if (preview_img != null)
                 preview_img.setBackgroundColor(lastColor);
             setSummary("#" + (Integer.toHexString(lastColor)).toUpperCase());
         }
     }
 
-    public int getLastColor()
-    {
+    public int getLastColor() {
         return lastColor;
     }
 
-    public void setLastColor(int lastColor)
-    {
+    public void setLastColor(int lastColor) {
         this.lastColor = lastColor;
         updateView();
     }
 
-    public int getLastTrans()
-    {
+    public int getLastTrans() {
         return lastTrans;
     }
 
-    public void setLastTrans(int lastTrans)
-    {
+    public void setLastTrans(int lastTrans) {
         this.lastTrans = lastTrans;
         updateView();
     }

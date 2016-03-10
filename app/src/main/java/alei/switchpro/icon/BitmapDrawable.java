@@ -5,56 +5,45 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 
-public class BitmapDrawable extends Drawable
-{
+public class BitmapDrawable extends Drawable {
     private Bitmap mBitmap;
 
-    BitmapDrawable(Bitmap paramBitmap)
-    {
+    BitmapDrawable(Bitmap paramBitmap) {
         this.mBitmap = paramBitmap;
     }
 
-    public void draw(Canvas paramCanvas)
-    {
+    public void draw(Canvas paramCanvas) {
         Bitmap localBitmap = this.mBitmap;
         paramCanvas.drawBitmap(localBitmap, 0.0F, 0.0F, null);
     }
 
-    public Bitmap getBitmap()
-    {
+    public Bitmap getBitmap() {
         return this.mBitmap;
     }
 
-    public int getIntrinsicHeight()
-    {
+    public int getIntrinsicHeight() {
         return this.mBitmap.getHeight();
     }
 
-    public int getIntrinsicWidth()
-    {
+    public int getIntrinsicWidth() {
         return this.mBitmap.getWidth();
     }
 
-    public int getMinimumHeight()
-    {
+    public int getMinimumHeight() {
         return this.mBitmap.getHeight();
     }
 
-    public int getMinimumWidth()
-    {
+    public int getMinimumWidth() {
         return this.mBitmap.getWidth();
     }
 
-    public int getOpacity()
-    {
+    public int getOpacity() {
         return -1;
     }
 
-    public void setAlpha(int paramInt)
-    {
+    public void setAlpha(int paramInt) {
     }
 
-    public void setColorFilter(ColorFilter paramColorFilter)
-    {
+    public void setColorFilter(ColorFilter paramColorFilter) {
     }
 }

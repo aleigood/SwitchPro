@@ -1,7 +1,5 @@
 package alei.switchpro.net;
 
-import java.lang.reflect.Method;
-
 import alei.switchpro.Constants;
 import alei.switchpro.R;
 import alei.switchpro.SwitchUtils;
@@ -17,96 +15,75 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
+
 /**
  * @author Alei
- * 
  */
-public class NetUtils
-{
+public class NetUtils {
 
-    public static void setMobileNetworkState(Context context, boolean state)
-    {
+    public static void setMobileNetworkState(Context context, boolean state) {
         TelephonyManager sTelephonyManager = (TelephonyManager) context.getSystemService("phone");
 
-        try
-        {
-            Method method = sTelephonyManager.getClass().getDeclaredMethod("getITelephony", new Class[] {});
+        try {
+            Method method = sTelephonyManager.getClass().getDeclaredMethod("getITelephony", new Class[]{});
             method.setAccessible(true);
-            Object obj = method.invoke(sTelephonyManager, new Object[] {});
+            Object obj = method.invoke(sTelephonyManager, new Object[]{});
 
-            if (state)
-            {
-                // invokeºó·µ»ØITelephony
-                Method tmp = obj.getClass().getMethod("enableDataConnectivity", new Class[] {});
-                tmp.invoke(obj, new Object[] {});
-            }
-            else
-            {
-                // invokeºó·µ»ØITelephony
-                Method tmp = obj.getClass().getMethod("disableDataConnectivity", new Class[] {});
-                tmp.invoke(obj, new Object[] {});
+            if (state) {
+                // invokeï¿½ó·µ»ï¿½ITelephony
+                Method tmp = obj.getClass().getMethod("enableDataConnectivity", new Class[]{});
+                tmp.invoke(obj, new Object[]{});
+            } else {
+                // invokeï¿½ó·µ»ï¿½ITelephony
+                Method tmp = obj.getClass().getMethod("disableDataConnectivity", new Class[]{});
+                tmp.invoke(obj, new Object[]{});
             }
 
-            // ´æ´¢µ±Ç°µÄ×´Ì¬£¬ÒÔ±ãÔÚÖØÆôÒÔºó»Ö¸´×´Ì¬
+            // ï¿½æ´¢ï¿½ï¿½Ç°ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½Ö¸ï¿½×´Ì¬
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor configEditor = config.edit();
             configEditor.putBoolean(Constants.PREF_NET_STATE, state);
             configEditor.commit();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void toggleMobileNetwork9(Context context)
-    {
+    public static void toggleMobileNetwork9(Context context) {
         ConnectivityManager sConnectivityManager = (ConnectivityManager) context.getSystemService("connectivity");
 
-        // Èç¹ûÓÃÕâ¸ö¿ª¹ØÇÐ»»£¬ÏÈ´ò¿ªAPN(sdk17 ¶ÁÈ¡apn»á±¨´í)
-        if (VERSION.SDK_INT < 17 && !ApnUtils.getApnState(context))
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½È´ï¿½APN(sdk17 ï¿½ï¿½È¡apnï¿½á±¨ï¿½ï¿½)
+        if (VERSION.SDK_INT < 17 && !ApnUtils.getApnState(context)) {
             ApnUtils.setApnState(context, true);
         }
 
-        try
-        {
+        try {
             Method setMethod = ConnectivityManager.class.getMethod("setMobileDataEnabled",
-                    new Class[] { boolean.class });
+                    new Class[]{boolean.class});
 
-            if (getMobileNetworkState(context))
-            {
-                setMethod.invoke(sConnectivityManager, new Object[] { false });
+            if (getMobileNetworkState(context)) {
+                setMethod.invoke(sConnectivityManager, new Object[]{false});
+            } else {
+                setMethod.invoke(sConnectivityManager, new Object[]{true});
             }
-            else
-            {
-                setMethod.invoke(sConnectivityManager, new Object[] { true });
-            }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void toggleMobileNetwork(Context context)
-    {
-        // Èç¹ûÓÃÕâ¸ö¿ª¹ØÇÐ»»£¬ÏÈ´ò¿ªAPN
-        if (!ApnUtils.getApnState(context))
-        {
+    public static void toggleMobileNetwork(Context context) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½È´ï¿½APN
+        if (!ApnUtils.getApnState(context)) {
             ApnUtils.setApnState(context, true);
         }
 
         boolean state = getMobileNetworkState(context);
 
-        if (state)
-        {
+        if (state) {
             setMobileNetworkState(context, false);
-        }
-        else
-        {
-            if (SwitchUtils.getWifiState(context) == WidgetProviderUtil.STATE_ENABLED)
-            {
+        } else {
+            if (SwitchUtils.getWifiState(context) == WidgetProviderUtil.STATE_ENABLED) {
                 Toast.makeText(context, R.string.update_data_conn_err, Toast.LENGTH_LONG).show();
                 Utils.updateWidget(context);
                 return;
@@ -118,37 +95,26 @@ public class NetUtils
         Toast.makeText(context, R.string.update_data, Toast.LENGTH_LONG).show();
     }
 
-    public static boolean getMobileNetworkState(Context context)
-    {
+    public static boolean getMobileNetworkState(Context context) {
         ConnectivityManager sConnectivityManager = (ConnectivityManager) context.getSystemService("connectivity");
 
-        if (VERSION.SDK_INT <= 9)
-        {
+        if (VERSION.SDK_INT <= 9) {
             NetworkInfo info = sConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if (info == null)
-            {
+            if (info == null) {
                 return false;
             }
 
-            if (info.getState() == NetworkInfo.State.DISCONNECTED)
-            {
+            if (info.getState() == NetworkInfo.State.DISCONNECTED) {
                 return false;
-            }
-            else if (info.getState() == NetworkInfo.State.CONNECTED)
-            {
+            } else if (info.getState() == NetworkInfo.State.CONNECTED) {
                 return true;
             }
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 Method getMethod = ConnectivityManager.class.getMethod("getMobileDataEnabled");
-                return (Boolean) getMethod.invoke(sConnectivityManager, new Object[] {});
-            }
-            catch (Exception e)
-            {
+                return (Boolean) getMethod.invoke(sConnectivityManager, new Object[]{});
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -156,103 +122,78 @@ public class NetUtils
         return false;
     }
 
-    public static void initNetworkState(Context context)
-    {
-        // ´æ´¢µ±Ç°µÄ×´Ì¬£¬ÒÔ±ãÔÚÖØÆôÒÔºó»Ö¸´×´Ì¬
+    public static void initNetworkState(Context context) {
+        // ï¿½æ´¢ï¿½ï¿½Ç°ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½Ö¸ï¿½×´Ì¬
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (config.contains(Constants.PREF_NET_STATE))
-        {
-            // Èç¹ûÃ»»ñÈ¡µ½²ÎÊý¾ÍÈÏÎªÊÇÒÑ¾­´ò¿ªµÄ£¬²»×ö²Ù×÷
+        if (config.contains(Constants.PREF_NET_STATE)) {
+            // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ò¿ªµÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             boolean state = config.getBoolean(Constants.PREF_NET_STATE, true);
 
-            // Èç¹ûÖ®Ç°ÊÇ¹Ø±ÕµÄ,ÄÇÔÚÖØÆôºó¹Ø±ÕÒÆ¶¯ÍøÂç
-            if (!state)
-            {
+            // ï¿½ï¿½ï¿½Ö®Ç°ï¿½Ç¹Ø±Õµï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (!state) {
                 NetUtils.setMobileNetworkState(context, false);
             }
         }
     }
 
-    public static void setSignalState(Context context, boolean state)
-    {
+    public static void setSignalState(Context context, boolean state) {
         TelephonyManager sTelephonyManager = (TelephonyManager) context.getSystemService("phone");
         ConnectivityManager sConnectivityManager = (ConnectivityManager) context.getSystemService("connectivity");
 
-        try
-        {
-            if (VERSION.SDK_INT <= 9)
-            {
-                Method method = sTelephonyManager.getClass().getDeclaredMethod("getITelephony", new Class[] {});
+        try {
+            if (VERSION.SDK_INT <= 9) {
+                Method method = sTelephonyManager.getClass().getDeclaredMethod("getITelephony", new Class[]{});
                 method.setAccessible(true);
-                Object obj = method.invoke(sTelephonyManager, new Object[] {});
-                Method tmp = obj.getClass().getMethod("setRadio", new Class[] { boolean.class });
+                Object obj = method.invoke(sTelephonyManager, new Object[]{});
+                Method tmp = obj.getClass().getMethod("setRadio", new Class[]{boolean.class});
 
-                if (state)
-                {
-                    tmp.invoke(obj, new Object[] { true });
+                if (state) {
+                    tmp.invoke(obj, new Object[]{true});
+                } else {
+                    tmp.invoke(obj, new Object[]{false});
                 }
-                else
-                {
-                    tmp.invoke(obj, new Object[] { false });
+            } else {
+                Method setMethod = ConnectivityManager.class.getMethod("setRadio", new Class[]{int.class,
+                        boolean.class});
+
+                if (state) {
+                    setMethod.invoke(sConnectivityManager, new Object[]{0, true});
+                } else {
+                    setMethod.invoke(sConnectivityManager, new Object[]{0, false});
                 }
             }
-            else
-            {
-                Method setMethod = ConnectivityManager.class.getMethod("setRadio", new Class[] { int.class,
-                        boolean.class });
-
-                if (state)
-                {
-                    setMethod.invoke(sConnectivityManager, new Object[] { 0, true });
-                }
-                else
-                {
-                    setMethod.invoke(sConnectivityManager, new Object[] { 0, false });
-                }
-            }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean getSignalState(Context context)
-    {
+    public static boolean getSignalState(Context context) {
         TelephonyManager sTelephonyManager = (TelephonyManager) context.getSystemService("phone");
 
-        try
-        {
-            Method method = sTelephonyManager.getClass().getDeclaredMethod("getITelephony", new Class[] {});
+        try {
+            Method method = sTelephonyManager.getClass().getDeclaredMethod("getITelephony", new Class[]{});
             method.setAccessible(true);
-            Object obj = method.invoke(sTelephonyManager, new Object[] {});
-            Method tmp = obj.getClass().getMethod("isRadioOn", new Class[] {});
+            Object obj = method.invoke(sTelephonyManager, new Object[]{});
+            Method tmp = obj.getClass().getMethod("isRadioOn", new Class[]{});
 
-            return ((Boolean) tmp.invoke(obj, new Object[] {})).booleanValue();
-        }
-        catch (Exception e)
-        {
+            return ((Boolean) tmp.invoke(obj, new Object[]{})).booleanValue();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return false;
     }
 
-    public static void toggleSignal(Context context)
-    {
-        if (getSignalState(context))
-        {
+    public static void toggleSignal(Context context) {
+        if (getSignalState(context)) {
             setSignalState(context, false);
-        }
-        else
-        {
+        } else {
             setSignalState(context, true);
         }
     }
 
-    public static int getNetworkType(Context context)
-    {
+    public static int getNetworkType(Context context) {
         TelephonyManager sTelephonyManager = (TelephonyManager) context.getSystemService("phone");
         return sTelephonyManager.getNetworkType();
     }

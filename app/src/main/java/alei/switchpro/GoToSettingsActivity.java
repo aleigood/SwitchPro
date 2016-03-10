@@ -9,61 +9,50 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class GoToSettingsActivity extends Activity
-{
+public class GoToSettingsActivity extends Activity {
     private String title;
     private String content;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title = getIntent().getStringExtra("title");
         content = getIntent().getStringExtra("content");
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         showDialog(0);
     }
 
     @Override
-    protected Dialog onCreateDialog(int id)
-    {
+    protected Dialog onCreateDialog(int id) {
         AlertDialog dlg = new AlertDialog.Builder(this).setTitle(title).setMessage(content)
-                .setNeutralButton("Go To", new OnClickListener()
-                {
+                .setNeutralButton("Go To", new OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(GoToSettingsActivity.this, ToggleConfigActivity.class);
                         startActivity(intent);
                     }
-                }).setNegativeButton(android.R.string.cancel, new OnClickListener()
-                {
+                }).setNegativeButton(android.R.string.cancel, new OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
 
                     }
                 }).create();
-        dlg.setOnDismissListener(new OnDismissListener()
-        {
+        dlg.setOnDismissListener(new OnDismissListener() {
             @Override
-            public void onDismiss(DialogInterface dialog)
-            {
+            public void onDismiss(DialogInterface dialog) {
                 finish();
             }
         });
         return dlg;
     }
 
-    // Ò»¶¨ÒªÔÚpauseµÄÊ±ºò½áÊø±¾activity
+    // Ò»ï¿½ï¿½Òªï¿½ï¿½pauseï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½activity
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         dismissDialog(0);
         finish();

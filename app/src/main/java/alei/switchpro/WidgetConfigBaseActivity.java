@@ -1,9 +1,5 @@
 package alei.switchpro;
 
-import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.List;
-
 import alei.switchpro.color.BackCustomPreference;
 import alei.switchpro.color.DividerCustomPreference;
 import alei.switchpro.color.IconCustomPreference;
@@ -43,94 +39,76 @@ import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-public abstract class WidgetConfigBaseActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener
-{
+import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.List;
+
+public abstract class WidgetConfigBaseActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
     public static final String DEFAULT_BUTTON_IDS = "0,2,3,4,6";
     public static final int PREVIEW_ICON_COLOR = 0xFF4D4D4D;
-
+    // ï¿½ï¿½ï¿½Ð¿Ø¼ï¿½ï¿½ï¿½key
+    private static final String KEY_LAYOUT = "list_layout";
+    private static final String KEY_IND_COLOR_PICKER = "ind_color";
+    private static final String KEY_ICON_COLOR_PICKER = "icon_color";
+    private static final String KEY_BACK_COLOR_PICKER = "back_color";
+    private static final String KEY_DIVIDER_COLOR_PICKER = "divider_color";
+    private final float ALPHA_VALUE = 0.8F;
     public String btnIds = DEFAULT_BUTTON_IDS;
-
-    // ÏÂÀ­Ñ¡Ôñ¿ò¿Ø¼þ
+    // ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ø¼ï¿½
     public LinearLayout preView;
     public IndCustomPreference indColorPicker;
     public IconCustomPreference iconColorPicker;
     public BackCustomPreference backColorPicker;
     public DividerCustomPreference dividerColorPicker;
     public ListPreference listLayout;
-
-    // ËùÓÐ¿Ø¼þµÄkey
-    private static final String KEY_LAYOUT = "list_layout";
-    private static final String KEY_IND_COLOR_PICKER = "ind_color";
-    private static final String KEY_ICON_COLOR_PICKER = "icon_color";
-    private static final String KEY_BACK_COLOR_PICKER = "back_color";
-    private static final String KEY_DIVIDER_COLOR_PICKER = "divider_color";
-
     public String layoutDefault;
     public String layoutWhite;
     public String layoutCustom;
     public String layoutCustomShadow;
     public String layoutNoBack;
-
-    protected int widgetId;
-
     public Bitmap backBitmap;
-
+    protected int widgetId;
     private ImageView mDragImage;
-
     private LayoutParams mWindowParams;
-
     private WindowManager mWindowManager;
-
     private int mDragPointX;
-
     private int mDragPointY;
-
     private int mXOffset;
-
     private int mYOffset;
-
-    private final float ALPHA_VALUE = 0.8F;
-
     private int mMoveX;
 
     private int mMoveY;
 
-    protected void createAction(int appWidgetId)
-    {
+    protected void createAction(int appWidgetId) {
         widgetId = appWidgetId;
-        // ³õÊ¼»¯ÅäÖÃ½çÃæ¿Ø¼þ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½Ø¼ï¿½
         initUI();
-        // ³õÊ¼»¯½çÃæÊý¾Ý
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         initUIData();
-        // ³õÊ¼»¯°´Å¥ÏìÓ¦ÊÂ¼þ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ó¦ï¿½Â¼ï¿½
         initBtnAction();
-        // ³õÊ¼»¯Ô¤ÀÀ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½Ô¤ï¿½ï¿½
         updatePreView();
     }
 
-    protected void createAction(int appWidgetId, XmlEntity entity)
-    {
+    protected void createAction(int appWidgetId, XmlEntity entity) {
         widgetId = appWidgetId;
-        // ³õÊ¼»¯ÅäÖÃ½çÃæ¿Ø¼þ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½Ø¼ï¿½
         initUI();
-        // ³õÊ¼»¯½çÃæÊý¾Ý
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         initUIData(entity);
-        // ³õÊ¼»¯°´Å¥ÏìÓ¦ÊÂ¼þ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ó¦ï¿½Â¼ï¿½
         initBtnAction();
-        // ³õÊ¼»¯Ô¤ÀÀ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½Ô¤ï¿½ï¿½
         updatePreView();
     }
 
-    private void initBtnAction()
-    {
+    private void initBtnAction() {
         Button cancelButton = (Button) findViewById(R.id.button_cancel);
-        cancelButton.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View paramView)
-            {
-                // ÓÐwidgetId¾Í·µ»ØÈ¡Ïû½á¹û£¬Ã»ÓÐÖ±½Ó½áÊø
-                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID)
-                {
+        cancelButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View paramView) {
+                // ï¿½ï¿½widgetIdï¿½Í·ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ö±ï¿½Ó½ï¿½ï¿½ï¿½
+                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                     Intent resultValue = new Intent();
                     resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
                     setResult(RESULT_CANCELED, resultValue);
@@ -140,49 +118,37 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             }
         });
         Button loadButton = (Button) findViewById(R.id.load_conf);
-        loadButton.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View paramView)
-            {
+        loadButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View paramView) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(WidgetConfigBaseActivity.this);
                 builder.setTitle(R.string.load_conf);
                 List<XmlEntity> savedCfgList = XmlUtil.parseWidgetCfg("data");
 
                 final LoadConfigAdapter adapter = new LoadConfigAdapter(WidgetConfigBaseActivity.this, savedCfgList);
 
-                if (savedCfgList.size() != 0)
-                {
-                    builder.setAdapter(adapter, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface arg0, int arg1)
-                        {
+                if (savedCfgList.size() != 0) {
+                    builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
                             ListItem item = (ListItem) adapter.getItem(arg1);
                             initUIData(item.entity);
                             updatePreView();
                         }
                     });
 
-                    builder.setNeutralButton(R.string.clear_conf, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            if (XmlUtil.deleteFile("data"))
-                            {
+                    builder.setNeutralButton(R.string.clear_conf, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (XmlUtil.deleteFile("data")) {
                                 Toast.makeText(WidgetConfigBaseActivity.this, R.string.clear_conf_succ,
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-                }
-                else
-                {
+                } else {
                     builder.setMessage(R.string.no_saved_conf);
                 }
 
-                builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                    {
+                builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     }
                 });
 
@@ -190,14 +156,11 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             }
         });
 
-        // È·¶¨°´Å¥
+        // È·ï¿½ï¿½ï¿½ï¿½Å¥
         Button saveButton = (Button) findViewById(R.id.button_apply);
-        saveButton.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View paramView)
-            {
-                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID)
-                {
+        saveButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View paramView) {
+                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                     saveBtnAction();
                 }
 
@@ -207,93 +170,84 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * È·¶¨°´Å¥ÊÂ¼þ
+     * È·ï¿½ï¿½ï¿½ï¿½Å¥ï¿½Â¼ï¿½
      */
-    protected void saveBtnAction()
-    {
-        // °ÑÃ¿¸öWidgetId¶ÔÓ¦µÄ°´Å¥ÅäÖÃ´æÈë¹²Ïí²ÎÊý
+    protected void saveBtnAction() {
+        // ï¿½ï¿½Ã¿ï¿½ï¿½WidgetIdï¿½ï¿½Ó¦ï¿½Ä°ï¿½Å¥ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ë¹²ï¿½ï¿½ï¿½ï¿½ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor configEditor = config.edit();
 
-        // °´Å¥Ë³Ðò×éÖ¯³É×Ö·û´®´æÈë
+        // ï¿½ï¿½Å¥Ë³ï¿½ï¿½ï¿½ï¿½Ö¯ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         configEditor.putString(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetId), btnIds);
 
-        // Ê¹ÓÃµÄ²¼¾ÖµÄÃû³Æ,²»ÄÜÖ±½ÓÓÃ×ÊÔ´id,·ñÔòÔÚÉý¼¶Ê±ÓÐÎÊÌâ
+        // Ê¹ï¿½ÃµÄ²ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´id,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         configEditor.putString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, widgetId), listLayout.getValue());
 
-        // »ñÈ¡Í¼±êÅäÖÃµÄÑÕÉ«
+        // ï¿½ï¿½È¡Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
         configEditor.putInt(String.format(Constants.PREFS_ICON_COLOR_FIELD_PATTERN, widgetId),
                 iconColorPicker.getLastColor());
         configEditor.putInt(String.format(Constants.PREFS_ICON_TRANS_FIELD_PATTERN, widgetId),
                 iconColorPicker.getLastTrans());
 
-        // »ñÈ¡Ö¸Ê¾Æ÷ÅäÖÃµÄÑÕÉ«
+        // ï¿½ï¿½È¡Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
         configEditor.putInt(String.format(Constants.PREFS_IND_COLOR_FIELD_PATTERN, widgetId),
                 indColorPicker.getLastColor());
 
-        // »ñÈ¡±³¾°ÅäÖÃµÄÑÕÉ«
-        if (backBitmap != null)
-        {
-            try
-            {
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
+        if (backBitmap != null) {
+            try {
                 String fileName = widgetId + "_back.png";
                 FileOutputStream fileOutputStream = openFileOutput(fileName, 0);
                 backBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
                 fileOutputStream.close();
                 configEditor.putString(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId), fileName);
 
-                // ¸üÐÂÕû¸öÁÐ±í£¬Ä¿Ç°Ã»ÓÐ¸üºÃµÄ¸üÐÂ·½·¨
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Ä¿Ç°Ã»ï¿½Ð¸ï¿½ï¿½ÃµÄ¸ï¿½ï¿½Â·ï¿½ï¿½ï¿½
                 getListView().invalidateViews();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             configEditor.putInt(String.format(Constants.PREFS_BACK_COLOR_FIELD_PATTERN, widgetId),
                     backColorPicker.getLastColor());
 
-            // É¾³ý±³¾°Í¼Æ¬µÄÅäÖÃºÍÍ¼Æ¬ÎÄ¼þ
-            if (config.contains(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId)))
-            {
+            // É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãºï¿½Í¼Æ¬ï¿½Ä¼ï¿½
+            if (config.contains(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId))) {
                 String fileName = config.getString(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId),
                         "");
                 configEditor.remove(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId));
 
-                // É¾³ý±³¾°Í¼Æ¬ÎÄ¼þ
+                // É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½Ä¼ï¿½
                 deleteFile(fileName);
             }
         }
 
-        // »ñÈ¡·Ö¸ôÏßµÄÑÕÉ«
+        // ï¿½ï¿½È¡ï¿½Ö¸ï¿½ï¿½ßµï¿½ï¿½ï¿½É«
         configEditor.putInt(String.format(Constants.PREFS_DIVIDER_COLOR_FIELD_PATTERN, widgetId),
                 dividerColorPicker.getLastColor());
 
-        // ±£´æ×îºóÒ»´ÎÅäÖÃ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         configEditor.putString(Constants.PREFS_LAST_BUTTONS_ORDER, btnIds);
         configEditor.putString(Constants.PREFS_LAST_BACKGROUND, listLayout.getValue());
         configEditor.putInt(Constants.PREFS_LAST_ICON_COLOR, iconColorPicker.getLastColor());
         configEditor.putInt(Constants.PREFS_LAST_ICON_TRANS, iconColorPicker.getLastTrans());
         configEditor.putInt(Constants.PREFS_LAST_IND_COLOR, indColorPicker.getLastColor());
         configEditor.putInt(Constants.PREFS_LAST_DIVIDER_COLOR, dividerColorPicker.getLastColor());
-        // ²»¹ÜÓÐÃ»ÓÐÊ¹ÓÃ±³¾°Í¼Æ¬¶¼±£´æ±³¾°ÑÕÉ«
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ê¹ï¿½Ã±ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½æ±³ï¿½ï¿½ï¿½ï¿½É«
         configEditor.putInt(Constants.PREFS_LAST_BACK_COLOR, backColorPicker.getLastColor());
 
         configEditor.commit();
     }
 
     /**
-     * ±£´æÅäÖÃµ½SD¿¨ÉÏ£¬Ã¿´Îµã»÷È·¶¨Ê±´¥·¢£¬ÎÞÂÛÊÇÐÂ½¨»¹ÊÇÐÞ¸Ä
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½SDï¿½ï¿½ï¿½Ï£ï¿½Ã¿ï¿½Îµï¿½ï¿½È·ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
+     *
      * @param config
      * @param widgetId
      * @param isModify
      * @param oldIds
      */
-    protected void saveCfgToSD(SharedPreferences config, boolean isModify, String oldIds)
-    {
+    protected void saveCfgToSD(SharedPreferences config, boolean isModify, String oldIds) {
         String newIds = btnIds;
 
         XmlEntity entity = new XmlEntity();
@@ -310,17 +264,14 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         boolean hasSameConf = theSameEntity == null ? false : true;
         boolean saveSuccess = false;
 
-        // Èç¹ûÊÇÐÂ½¨µÄWidget,ÓÃÊÇ·ñÒÑ¾­´æÔÚÕâ¸öwidgetµÄÅäÖÃÀ´ÅÐ¶Ï
-        if (!isModify)
-        {
-            // Èç¹ûÊÇµÚÒ»´Î´´½¨widget»òÕß´´½¨ÁËÒ»¸ö²»Í¬µÄWidget
-            if (list.size() == 0 || !hasSameConf)
-            {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½Widget,ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½widgetï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+        if (!isModify) {
+            // ï¿½ï¿½ï¿½ï¿½Çµï¿½Ò»ï¿½Î´ï¿½ï¿½ï¿½widgetï¿½ï¿½ï¿½ß´ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½Widget
+            if (list.size() == 0 || !hasSameConf) {
                 list.add(entity);
             }
-            // Èç¹û´´½¨ÁËÒ»¸öÏàÍ¬µÄwidget(»òÕßÖ»ÊÇË³²»Í¬)£¬Ôò¸²¸ÇÒÑ¾­´æÔÚµÄÅäÖÃ£¨°üÀ¨°´Å¥µÄË³Ðò£©
-            else
-            {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½widget(ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ë³ï¿½ï¿½Í¬)ï¿½ï¿½ï¿½ò¸²¸ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ë³ï¿½ï¿½
+            else {
                 theSameEntity.setBtnIds(newIds);
                 theSameEntity.setIconColor(iconColorPicker.getLastColor());
                 theSameEntity.setIconTrans(iconColorPicker.getLastTrans());
@@ -330,13 +281,11 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
                 theSameEntity.setDividerColor(dividerColorPicker.getLastColor());
             }
         }
-        // Èç¹ûÊÇÐÞ¸Ä½çÃæÊ±£¬ÕÒµ½Ô­À´±£´æµÄÅäÖÃ²¢ÐÞ¸Ä
-        else
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Òµï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã²ï¿½ï¿½Þ¸ï¿½
+        else {
             XmlEntity tmpEntity = getSameConf(list, oldIds);
 
-            if (tmpEntity == null)
-            {
+            if (tmpEntity == null) {
                 tmpEntity = new XmlEntity();
                 list.add(tmpEntity);
             }
@@ -350,32 +299,27 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             tmpEntity.setDividerColor(dividerColorPicker.getLastColor());
         }
 
-        // ±£´æµ½"data"ÎÄ¼þÖÐ
+        // ï¿½ï¿½ï¿½æµ½"data"ï¿½Ä¼ï¿½ï¿½ï¿½
         saveSuccess = XmlUtil.writeWidgetXml(list, "data");
 
-        if (!saveSuccess)
-        {
+        if (!saveSuccess) {
             Toast.makeText(this, R.string.save_conf_error, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private XmlEntity getSameConf(List<XmlEntity> savedList, String btnIds)
-    {
-        if (savedList == null)
-        {
+    private XmlEntity getSameConf(List<XmlEntity> savedList, String btnIds) {
+        if (savedList == null) {
             return null;
         }
 
-        for (XmlEntity xmlEntity : savedList)
-        {
+        for (XmlEntity xmlEntity : savedList) {
             String savedIds = xmlEntity.getBtnIds();
             String[] part = savedIds.split(",");
             String[] part2 = btnIds.split(",");
             List<String> partList = Arrays.asList(part);
             List<String> part2List = Arrays.asList(part2);
 
-            if (part.length == part2.length && partList.containsAll(part2List))
-            {
+            if (part.length == part2.length && partList.containsAll(part2List)) {
                 return xmlEntity;
             }
         }
@@ -386,12 +330,11 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     protected abstract void updateWidget(int appWidgetId);
 
     /**
-     * ³õÊ¼»¯ÅäÖÃ½çÃæµÄÊý¾Ý
-     * 
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     *
      * @param appWidgetId
      */
-    protected void initUI()
-    {
+    protected void initUI() {
         layoutDefault = getResources().getString(R.string.list_pre_bg_default);
         layoutWhite = getResources().getString(R.string.list_pre_bg_white);
         layoutCustom = getResources().getString(R.string.list_pre_bg_custom);
@@ -403,48 +346,35 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         listLayout.setEntries(buildBackgroundEntries());
         listLayout.setEntryValues(buildBackgroundEntries());
 
-        // ³õÊ¼»¯ÑÕÉ«Ñ¡ÔñÆ÷
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½É«Ñ¡ï¿½ï¿½ï¿½ï¿½
         backColorPicker = (BackCustomPreference) findPreference(KEY_BACK_COLOR_PICKER);
         indColorPicker = (IndCustomPreference) findPreference(KEY_IND_COLOR_PICKER);
         iconColorPicker = (IconCustomPreference) findPreference(KEY_ICON_COLOR_PICKER);
         dividerColorPicker = (DividerCustomPreference) findPreference(KEY_DIVIDER_COLOR_PICKER);
 
-        OnClickListener btnOnClickListener = new OnClickListener()
-        {
-            public void onClick(View paramView)
-            {
+        OnClickListener btnOnClickListener = new OnClickListener() {
+            public void onClick(View paramView) {
                 int btnId = (Integer) paramView.getTag();
                 boolean isExist = false;
                 String[] ids = btnIds.split(",");
 
-                for (int i = 0; i < ids.length; i++)
-                {
-                    if (!ids[i].equals("") && btnId == Integer.parseInt(ids[i]))
-                    {
+                for (int i = 0; i < ids.length; i++) {
+                    if (!ids[i].equals("") && btnId == Integer.parseInt(ids[i])) {
                         isExist = true;
                         break;
                     }
                 }
 
-                if (isExist)
-                {
+                if (isExist) {
                     Toast.makeText(WidgetConfigBaseActivity.this, R.string.button_already_exists, Toast.LENGTH_SHORT)
                             .show();
-                }
-                else
-                {
-                    if (ids.length == 20)
-                    {
+                } else {
+                    if (ids.length == 20) {
                         Toast.makeText(WidgetConfigBaseActivity.this, R.string.button_max, Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        if (ids.length == 1 && ids[0].equals(""))
-                        {
+                    } else {
+                        if (ids.length == 1 && ids[0].equals("")) {
                             btnIds += btnId;
-                        }
-                        else
-                        {
+                        } else {
                             btnIds += "," + btnId;
                         }
 
@@ -604,19 +534,18 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         btNfc.setTag(Constants.BUTTON_NFC);
         btNfc.setOnClickListener(btnOnClickListener);
 
-        // ×¢²áÑ¡Ïî±ä»¯¼àÌýÆ÷
+        // ×¢ï¿½ï¿½Ñ¡ï¿½ï¿½ä»¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
-     * »ñÈ¡×îºóÒ»´ÎÅäÖÃµÄ°´Å¥Ë³Ðò£¬Èç¹ûÃ»ÓÐµÄ»°·µ»ØÒ»¸öÄ¬ÈÏË³Ðò£¬×ÓÀàÒª¸²¸Ç
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ°ï¿½Å¥Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ÐµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä¬ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+     *
      * @return
      */
     protected abstract String getLastBtnOrder();
 
-    public void initUIData(XmlEntity entity)
-    {
+    public void initUIData(XmlEntity entity) {
         btnIds = entity.getBtnIds();
         String layoutName = entity.getLayoutName();
 
@@ -630,34 +559,29 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         dividerColorPicker.setLastColor(entity.getDividerColor());
 
         PreferenceScreen cate = (PreferenceScreen) findPreference("background_category");
-        // ³õÊ¼»¯Íê³É×îºóÅÐ¶ÏÈç¹ûÎÞ±³¾°£¬ÒªÉ¾³ýÑ¡Ïî
-        if (layoutName.equals(layoutNoBack))
-        {
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Þ±ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÉ¾ï¿½ï¿½Ñ¡ï¿½ï¿½
+        if (layoutName.equals(layoutNoBack)) {
             cate.removePreference(backColorPicker);
             cate.removePreference(dividerColorPicker);
-        }
-        else if (layoutName.equals(layoutDefault) || layoutName.equals(layoutWhite))
-        {
+        } else if (layoutName.equals(layoutDefault) || layoutName.equals(layoutWhite)) {
             cate.removePreference(dividerColorPicker);
         }
     }
 
-    private void initUIData()
-    {
+    private void initUIData() {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // »ñÈ¡µ±Ç°widgetµÄ±³¾°£¬Èç¹û»ñÈ¡²»µ½¾ÍÊ¹ÓÃ×îºóÒ»´Î±³¾°
+        // ï¿½ï¿½È¡ï¿½ï¿½Ç°widgetï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î±ï¿½ï¿½ï¿½
         String layoutName = config.getString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, widgetId), null);
 
-        if (layoutName == null)
-        {
+        if (layoutName == null) {
             layoutName = config.getString(Constants.PREFS_LAST_BACKGROUND, layoutDefault);
         }
 
         listLayout.setValue(layoutName);
         listLayout.setSummary(layoutName);
 
-        // ×îºóÒ»´ÎÅäÖÃµÄ°´Å¥Ë³Ðò
+        // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ°ï¿½Å¥Ë³ï¿½ï¿½
         btnIds = getLastBtnOrder();
         backColorPicker.updateView();
         indColorPicker.updateView();
@@ -665,56 +589,45 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         dividerColorPicker.updateView();
 
         PreferenceScreen cate = (PreferenceScreen) findPreference("background_category");
-        // ³õÊ¼»¯Íê³É×îºóÅÐ¶ÏÈç¹ûÎÞ±³¾°£¬ÒªÉ¾³ýÑ¡Ïî
-        if (layoutName.equals(layoutNoBack))
-        {
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Þ±ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÉ¾ï¿½ï¿½Ñ¡ï¿½ï¿½
+        if (layoutName.equals(layoutNoBack)) {
             cate.removePreference(backColorPicker);
             cate.removePreference(dividerColorPicker);
-        }
-        else if (layoutName.equals(layoutDefault) || layoutName.equals(layoutWhite))
-        {
+        } else if (layoutName.equals(layoutDefault) || layoutName.equals(layoutWhite)) {
             cate.removePreference(dividerColorPicker);
         }
     }
 
-    private String[] buildBackgroundEntries()
-    {
-        return new String[] { getResources().getString(R.string.list_pre_bg_default),
+    private String[] buildBackgroundEntries() {
+        return new String[]{getResources().getString(R.string.list_pre_bg_default),
                 getResources().getString(R.string.list_pre_bg_white),
                 getResources().getString(R.string.list_pre_bg_custom),
                 getResources().getString(R.string.list_pre_bg_custom_shadow),
-                getResources().getString(R.string.list_pre_bg_none) };
+                getResources().getString(R.string.list_pre_bg_none)};
     }
 
     /**
-     * µ±±ä»»Ñ¡ÏîÊ±Òª¶¯Ì¬¸üÐÂÆäËû¿Ø¼þÖÐ¿ÉÑ¡µÄÌõÄ¿
-     * 
+     * ï¿½ï¿½ï¿½ä»»Ñ¡ï¿½ï¿½Ê±Òªï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½Ð¿ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ä¿
+     *
      * @param btnName
      * @return
      */
-    public void onSharedPreferenceChanged(SharedPreferences preferences, String key)
-    {
-        if (key.equals(KEY_LAYOUT))
-        {
+    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+        if (key.equals(KEY_LAYOUT)) {
             String layoutName = preferences.getString(key, "");
             listLayout.setSummary(preferences.getString(key, ""));
             PreferenceScreen cate = (PreferenceScreen) findPreference("background_category");
 
-            if (layoutName.equals(layoutCustom) || layoutName.equals(layoutCustomShadow))
-            {
+            if (layoutName.equals(layoutCustom) || layoutName.equals(layoutCustomShadow)) {
                 indColorPicker.updateView();
                 cate.addPreference(backColorPicker);
                 backColorPicker.updateView();
                 cate.addPreference(dividerColorPicker);
-            }
-            else if (layoutName.equals(layoutNoBack))
-            {
+            } else if (layoutName.equals(layoutNoBack)) {
                 indColorPicker.updateView();
                 cate.removePreference(backColorPicker);
                 cate.removePreference(dividerColorPicker);
-            }
-            else
-            {
+            } else {
                 indColorPicker.updateView();
                 cate.addPreference(backColorPicker);
                 backColorPicker.updateView();
@@ -722,12 +635,11 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             }
         }
 
-        // ¸üÐÂÔ¤ÀÀ
+        // ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½
         updatePreView();
     }
 
-    public void updatePreView()
-    {
+    public void updatePreView() {
         preView.removeAllViews();
         RemoteViews remoteView = WidgetProviderUtil.buildAndUpdateButtons(this, widgetId, btnIds,
                 listLayout.getValue(), iconColorPicker.getLastColor(), iconColorPicker.getLastTrans(),
@@ -745,24 +657,20 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data == null)
-        {
+        if (data == null) {
             return;
         }
 
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case 1:
                 int size = getWidgetSize();
                 int y = 0;
 
-                // ×î´ó´óÐ¡129600ÏñËØ
-                switch (size)
-                {
+                // ï¿½ï¿½ï¿½ï¿½Ð¡129600ï¿½ï¿½ï¿½ï¿½
+                switch (size) {
                     case 1:
                         y = 360;
                         break;
@@ -798,8 +706,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             case 2:
                 Bundle extras = data.getExtras();
 
-                if (extras != null)
-                {
+                if (extras != null) {
                     backBitmap = extras.getParcelable("data");
                     backColorPicker.updateView();
                     updatePreView();
@@ -812,22 +719,17 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
     protected abstract int getWidgetSize();
 
-    public int getWidgetId()
-    {
+    public int getWidgetId() {
         return widgetId;
     }
 
-    private void setBtnOnClickListener(final View views)
-    {
+    private void setBtnOnClickListener(final View views) {
         final String[] btnId = btnIds.split(",");
-        for (int i = 0; i < btnId.length; i++)
-        {
+        for (int i = 0; i < btnId.length; i++) {
             int pos = -1;
-            // ´ÓµÚ¶þ¸ö°´Å¥¿ªÊ¼Æ«ÒÆ
-            if (i != 0)
-            {
-                switch (btnId.length)
-                {
+            // ï¿½ÓµÚ¶ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Ê¼Æ«ï¿½ï¿½
+            if (i != 0) {
+                switch (btnId.length) {
                     case 2:
                         pos = i + 18;
                         break;
@@ -889,24 +791,17 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
                     default:
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 pos = i;
             }
 
             final View tmp = views.findViewById(getResources().getIdentifier("btn_" + pos, "id", getPackageName()));
             tmp.setTag(btnId[i]);
-            tmp.setOnTouchListener(new OnTouchListener()
-            {
-                public boolean onTouch(View v, final MotionEvent event)
-                {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN)
-                    {
-                        v.setOnLongClickListener(new OnLongClickListener()
-                        {
-                            public boolean onLongClick(View v)
-                            {
+            tmp.setOnTouchListener(new OnTouchListener() {
+                public boolean onTouch(View v, final MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        v.setOnLongClickListener(new OnLongClickListener() {
+                            public boolean onLongClick(View v) {
                                 int[] location = new int[2];
                                 v.getLocationOnScreen(location);
                                 mDragPointX = location[0];
@@ -917,16 +812,14 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
                                 v.setDrawingCacheEnabled(true);
                                 startDrag(v, Bitmap.createBitmap(v.getDrawingCache()));
 
-                                // ³¤°´ºóÁ¢¼´¸üÐÂ»áÈ¡Ïû³¤°´Õð¶¯Ð§¹û
+                                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½
                                 updatePreView();
                                 return true;
                             }
                         });
 
-                        v.setOnClickListener(new OnClickListener()
-                        {
-                            public void onClick(View paramView)
-                            {
+                        v.setOnClickListener(new OnClickListener() {
+                            public void onClick(View paramView) {
                                 delBtn(paramView, btnId);
                             }
                         });
@@ -937,21 +830,15 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         }
     }
 
-    private void delBtn(View view, String[] btnId)
-    {
+    private void delBtn(View view, String[] btnId) {
         String newIds = "";
 
-        for (int i = 0; i < btnId.length; i++)
-        {
-            // ÒªÓÃtoString()·½·¨£¬·ñÔòÎÞÐ§
-            if (!view.getTag().toString().equals(btnId[i]))
-            {
-                if (newIds.equals(""))
-                {
+        for (int i = 0; i < btnId.length; i++) {
+            // Òªï¿½ï¿½toString()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
+            if (!view.getTag().toString().equals(btnId[i])) {
+                if (newIds.equals("")) {
                     newIds += btnId[i];
-                }
-                else
-                {
+                } else {
                     newIds += "," + btnId[i];
                 }
             }
@@ -962,19 +849,17 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * ×¼±¸ÍÏ¶¯£¬³õÊ¼»¯ÍÏ¶¯ÏîµÄÍ¼Ïñ
+     * ×¼ï¿½ï¿½ï¿½Ï¶ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ï¶ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
      */
-    private void startDrag(View v, Bitmap bm)
-    {
-        // ÊÍ·ÅÓ°Ïñ£¬ÔÚ×¼±¸Ó°ÏñµÄÊ±ºò£¬·ÀÖ¹Ó°ÏñÃ»ÊÍ·Å£¬Ã¿´Î¶¼Ö´ÐÐÒ»ÏÂ
-        if (mDragImage != null)
-        {
+    private void startDrag(View v, Bitmap bm) {
+        // ï¿½Í·ï¿½Ó°ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½Ó°ï¿½ï¿½ï¿½Ê±ï¿½ò£¬·ï¿½Ö¹Ó°ï¿½ï¿½Ã»ï¿½Í·Å£ï¿½Ã¿ï¿½Î¶ï¿½Ö´ï¿½ï¿½Ò»ï¿½ï¿½
+        if (mDragImage != null) {
             mWindowManager.removeView(mDragImage);
             mDragImage = null;
         }
 
         mWindowParams = new WindowManager.LayoutParams();
-        // ´ÓÉÏµ½ÏÂ¼ÆËãy·½ÏòÉÏµÄÏà¶ÔÎ»ÖÃ£¬
+        // ï¿½ï¿½ï¿½Ïµï¿½ï¿½Â¼ï¿½ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
         mWindowParams.x = mDragPointX;
         mWindowParams.y = mDragPointY;
@@ -982,14 +867,14 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         mWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         mWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        // ÏÂÃæÕâÐ©²ÎÊýÄÜ¹»°ïÖú×¼È·¶¨Î»µ½Ñ¡ÖÐÏîµã»÷Î»ÖÃ£¬ÕÕ³­¼´¿É
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©ï¿½ï¿½ï¿½ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½ï¿½ï¿½×¼È·ï¿½ï¿½Î»ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½Õ³ï¿½ï¿½ï¿½ï¿½ï¿½
         mWindowParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         mWindowParams.format = PixelFormat.TRANSLUCENT;
         mWindowParams.windowAnimations = 0;
 
-        // °ÑÓ°ÏñImagViewÌí¼Óµ½µ±Ç°ÊÓÍ¼ÖÐ
+        // ï¿½ï¿½Ó°ï¿½ï¿½ImagViewï¿½ï¿½Óµï¿½ï¿½ï¿½Ç°ï¿½ï¿½Í¼ï¿½ï¿½
         mDragImage = new ImageView(this);
         mDragImage.setImageBitmap(bm);
         mDragImage.setPadding(0, 0, 0, 0);
@@ -998,26 +883,23 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         mWindowManager = (WindowManager) getSystemService("window");
         mWindowManager.addView(mDragImage, mWindowParams);
 
-        // Õð¶¯
+        // ï¿½ï¿½
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         vibrator.vibrate(25);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev)
-    {
-        if (mDragImage != null)
-        {
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (mDragImage != null) {
             int action = ev.getAction();
 
-            switch (action)
-            {
+            switch (action) {
                 case MotionEvent.ACTION_UP:
-                    // ÊÍ·ÅÍÏ¶¯Ó°Ïñ
+                    // ï¿½Í·ï¿½ï¿½Ï¶ï¿½Ó°ï¿½ï¿½
                     onDrop();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    // ÍÏ¶¯Ó°Ïñ
+                    // ï¿½Ï¶ï¿½Ó°ï¿½ï¿½
                     onMove((int) ev.getRawX(), (int) ev.getRawY());
                     break;
                 default:
@@ -1030,16 +912,14 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * ÍÏ¶¯Ö´ÐÐ£¬ÔÚMove·½·¨ÖÐÖ´ÐÐ
+     * ï¿½Ï¶ï¿½Ö´ï¿½Ð£ï¿½ï¿½ï¿½Moveï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
      */
-    public void onMove(final int x, final int y)
-    {
-        if (mDragImage != null)
-        {
-            // ÉèÖÃÒ»µãµãµÄÍ¸Ã÷¶È
+    public void onMove(final int x, final int y) {
+        if (mDragImage != null) {
+            // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½
             mWindowParams.alpha = ALPHA_VALUE;
 
-            // ¸üÐÂ×ø±êÎ»ÖÃ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
             int[] location = new int[2];
             preView.getLocationOnScreen(location);
             int maxHeight = location[1] + preView.getHeight() - mDragImage.getHeight();
@@ -1047,29 +927,24 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
             mWindowParams.y = tmp > maxHeight ? maxHeight : tmp;
             mWindowParams.x = x - mXOffset;
-            // ¸üÐÂ½çÃæ
+            // ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½
             mWindowManager.updateViewLayout(mDragImage, mWindowParams);
         }
 
         mMoveX = x;
         mMoveY = y;
 
-        preView.postDelayed(new Runnable()
-        {
-            public void run()
-            {
-                if (x == mMoveX && y == mMoveY)
-                {
+        preView.postDelayed(new Runnable() {
+            public void run() {
+                if (x == mMoveX && y == mMoveY) {
                     onStop(x, y);
                 }
             }
         }, 250);
     }
 
-    private void onStop(int x, int y)
-    {
-        if (mDragImage == null)
-        {
+    private void onStop(int x, int y) {
+        if (mDragImage == null) {
             return;
         }
 
@@ -1077,25 +952,18 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         String[] srcBtnId = btnIds.split(",");
         String dragId = mDragImage.getTag().toString();
 
-        // ÏÈÕÒµ½Õâ¸ö°´Å¥µÄÎ»ÖÃ£¬ÓÃÓÚÅÐ¶ÏÊÇÍùÇ°ÒÆ¶¯»¹ÊÇÍùºóÒÆ¶¯
+        // ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
         int pos = 0;
 
-        // Èç¹ûÓÐÏÈÉ¾³ý
-        for (int i = 0; i < srcBtnId.length; i++)
-        {
-            // ÒªÓÃtoString()·½·¨£¬·ñÔòÎÞÐ§
-            if (dragId.equals(srcBtnId[i]))
-            {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½
+        for (int i = 0; i < srcBtnId.length; i++) {
+            // Òªï¿½ï¿½toString()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
+            if (dragId.equals(srcBtnId[i])) {
                 pos = i;
-            }
-            else
-            {
-                if (tmpIds.equals(""))
-                {
+            } else {
+                if (tmpIds.equals("")) {
                     tmpIds += srcBtnId[i];
-                }
-                else
-                {
+                } else {
                     tmpIds += "," + srcBtnId[i];
                 }
             }
@@ -1103,61 +971,42 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
         final String[] btnId = tmpIds.split(",");
 
-        // ÕÒµ½ÒªÌæ»»µÄ°´Å¥µÄid
-        for (int i = 0; i < btnId.length; i++)
-        {
+        // ï¿½Òµï¿½Òªï¿½æ»»ï¿½Ä°ï¿½Å¥ï¿½ï¿½id
+        for (int i = 0; i < btnId.length; i++) {
             View childView = preView.findViewWithTag(btnId[i]);
 
-            if (childView == null || childView.getTag() == null)
-            {
+            if (childView == null || childView.getTag() == null) {
                 return;
             }
 
             String childId = childView.getTag().toString();
 
-            // ÔÚÒªÌæ»»µÄ°´Å¥µÄ×ø±ê·¶Î§ÄÚ¶øÇÒ²»ÊÇ×ÔÉí
-            if (x < childView.getRight() && x > childView.getLeft() && !dragId.equals(childId))
-            {
+            // ï¿½ï¿½Òªï¿½æ»»ï¿½Ä°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ê·¶Î§ï¿½Ú¶ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (x < childView.getRight() && x > childView.getLeft() && !dragId.equals(childId)) {
                 String newIds = "";
 
-                for (int j = 0; j < btnId.length; j++)
-                {
-                    // Èç¹ûÊÇÒªÌæ»»µÄ°´Å¥
-                    if (childId.equals(btnId[j]))
-                    {
-                        if (newIds.equals(""))
-                        {
-                            // ÍùÇ°ÃæÒÆ¶¯
-                            if (j < pos)
-                            {
+                for (int j = 0; j < btnId.length; j++) {
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½æ»»ï¿½Ä°ï¿½Å¥
+                    if (childId.equals(btnId[j])) {
+                        if (newIds.equals("")) {
+                            // ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Æ¶ï¿½
+                            if (j < pos) {
                                 newIds += dragId + "," + btnId[j];
-                            }
-                            else
-                            {
+                            } else {
                                 newIds += btnId[j] + "," + dragId;
                             }
-                        }
-                        else
-                        {
-                            // ÍùÇ°ÃæÒÆ¶¯
-                            if (j < pos)
-                            {
+                        } else {
+                            // ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Æ¶ï¿½
+                            if (j < pos) {
                                 newIds += "," + dragId + "," + btnId[j];
-                            }
-                            else
-                            {
+                            } else {
                                 newIds += "," + btnId[j] + "," + dragId;
                             }
                         }
-                    }
-                    else
-                    {
-                        if (newIds.equals(""))
-                        {
+                    } else {
+                        if (newIds.equals("")) {
                             newIds += btnId[j];
-                        }
-                        else
-                        {
+                        } else {
                             newIds += "," + btnId[j];
                         }
                     }
@@ -1171,12 +1020,10 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * Í£Ö¹ÍÏ¶¯
+     * Í£Ö¹ï¿½Ï¶ï¿½
      */
-    public void onDrop()
-    {
-        if (mDragImage != null)
-        {
+    public void onDrop() {
+        if (mDragImage != null) {
             mWindowManager.removeView(mDragImage);
             mDragImage = null;
         }

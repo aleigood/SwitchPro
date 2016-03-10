@@ -6,42 +6,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 
-public class NFCUtil
-{
-    public static void toggleNFC(Context context)
-    {
+public class NFCUtil {
+    public static void toggleNFC(Context context) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setClassName("com.android.settings", "com.android.settings.Settings$WirelessSettingsActivity");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        try
-        {
-            // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+        try {
+            // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             pendingIntent.send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean getNFC(Context context)
-    {
-        try
-        {
+    public static boolean getNFC(Context context) {
+        try {
             NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
 
-            if (nfcAdapter == null)
-            {
+            if (nfcAdapter == null) {
                 return false;
             }
 
             return nfcAdapter.isEnabled();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

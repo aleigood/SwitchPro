@@ -1,7 +1,6 @@
 package alei.switchpro.load;
 
-public class XmlEntity
-{
+public class XmlEntity {
     private String btnIds;
     private String layoutName;
     private int iconColor;
@@ -10,79 +9,64 @@ public class XmlEntity
     private int backColor;
     private int dividerColor;
 
-    public String getBtnIds()
-    {
+    public String getBtnIds() {
         return btnIds;
     }
 
-    public void setBtnIds(String btnIds)
-    {
+    public void setBtnIds(String btnIds) {
         this.btnIds = btnIds;
     }
 
-    public String getLayoutName()
-    {
+    public String getLayoutName() {
         return layoutName;
     }
 
-    public void setLayoutName(String layoutName)
-    {
+    public void setLayoutName(String layoutName) {
         this.layoutName = layoutName;
     }
 
-    public int getIconColor()
-    {
+    public int getIconColor() {
         return iconColor;
     }
 
-    public void setIconColor(int iconColor)
-    {
+    public void setIconColor(int iconColor) {
         this.iconColor = iconColor;
     }
 
-    public int getIndColor()
-    {
+    public int getIndColor() {
         return indColor;
     }
 
-    public void setIndColor(int indColor)
-    {
+    public void setIndColor(int indColor) {
         this.indColor = indColor;
     }
 
-    public int getIconTrans()
-    {
+    public int getIconTrans() {
         return iconTrans;
     }
 
-    public void setIconTrans(int iconTrans)
-    {
+    public void setIconTrans(int iconTrans) {
         this.iconTrans = iconTrans;
     }
 
-    public int getBackColor()
-    {
+    public int getBackColor() {
         return backColor;
     }
 
-    public void setBackColor(int backColor)
-    {
+    public void setBackColor(int backColor) {
         this.backColor = backColor;
     }
 
-    public void setDividerColor(int dividerColor)
-    {
-        this.dividerColor = dividerColor;
-    }
-
-    public int getDividerColor()
-    {
+    public int getDividerColor() {
         return dividerColor;
     }
 
+    public void setDividerColor(int dividerColor) {
+        this.dividerColor = dividerColor;
+    }
+
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((btnIds == null) ? 0 : btnIds.hashCode());
@@ -90,8 +74,7 @@ public class XmlEntity
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -99,12 +82,10 @@ public class XmlEntity
         if (getClass() != obj.getClass())
             return false;
         XmlEntity other = (XmlEntity) obj;
-        if (btnIds == null)
-        {
+        if (btnIds == null) {
             if (other.btnIds != null)
                 return false;
-        }
-        else if (!btnIds.equals(other.btnIds))
+        } else if (!btnIds.equals(other.btnIds))
             return false;
         return true;
     }

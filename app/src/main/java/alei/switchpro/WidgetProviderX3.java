@@ -5,40 +5,34 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 
-public class WidgetProviderX3 extends AppWidgetProvider
-{
+public class WidgetProviderX3 extends AppWidgetProvider {
     /**
-     * É¾³ýÃ¿¸öwidget¶ÔÓ¦µÄ²ÎÊý
+     * É¾ï¿½ï¿½Ã¿ï¿½ï¿½widgetï¿½ï¿½Ó¦ï¿½Ä²ï¿½ï¿½ï¿½
      */
     @Override
-    public void onDeleted(Context context, int[] appWidgetIds)
-    {
+    public void onDeleted(Context context, int[] appWidgetIds) {
         WidgetProviderUtil.onDeleted(context, appWidgetIds);
         super.onDeleted(context, appWidgetIds);
     }
 
     @Override
-    public void onEnabled(Context context)
-    {
+    public void onEnabled(Context context) {
         super.onEnabled(context);
     }
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
-    {
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     /**
-     * ½ÓÊÕ°´Å¥ÊÂ¼þºÍÆäËûÉèÖÃ×´Ì¬±ä¸üµÄÊÂ¼þ
-     * 
+     * ï¿½ï¿½ï¿½Õ°ï¿½Å¥ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
+     *
      * @param context
-     * @param intent
-     *            Indicates the pressed button.
+     * @param intent  Indicates the pressed button.
      */
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         WidgetProviderUtil.updateAction(context, intent, WidgetProviderX3.class);
         super.onReceive(context, intent);
     }

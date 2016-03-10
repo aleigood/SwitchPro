@@ -29,107 +29,94 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-public class IndCustomPreference extends Preference
-{
+public class IndCustomPreference extends Preference {
     private WidgetConfigBaseActivity parent;
     private ImageView preview_img;
     private int lastColor;
     private Dialog dlg;
 
-    public IndCustomPreference(Context context, AttributeSet attrs, int defStyle)
-    {
+    public IndCustomPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    public IndCustomPreference(Context context, AttributeSet attrs)
-    {
+    public IndCustomPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public IndCustomPreference(Context context)
-    {
+    public IndCustomPreference(Context context) {
         super(context);
         init(context);
     }
 
-    public void init(Context context)
-    {
+    public void init(Context context) {
         parent = (WidgetConfigBaseActivity) context;
 
-        // ×îºóÒ»´ÎÑÕÉ«
+        // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½É«
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
-        // ÊÔÍ¼È¥»ñÈ¡Õâ¸öWidgetÒÑ¾­´æÔÚµÄÑÕÉ«ÅäÖÃ£¬Èç¹ûÕÒ²»µ½¾Í·µ»Ø×îºóÒ»´ÎµÄÅäÖÃ
+        // ï¿½ï¿½Í¼È¥ï¿½ï¿½È¡ï¿½ï¿½ï¿½Widgetï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½
         lastColor = config.getInt(String.format(Constants.PREFS_IND_COLOR_FIELD_PATTERN, this.parent.getWidgetId()),
                 config.getInt(Constants.PREFS_LAST_IND_COLOR, Constants.IND_COLOR_DEFAULT));
         updateView();
     }
 
     @Override
-    public boolean isPersistent()
-    {
+    public boolean isPersistent() {
         return false;
     }
 
     @Override
-    protected void onBindView(View view)
-    {
+    protected void onBindView(View view) {
         super.onBindView(view);
         preview_img = (ImageView) view.findViewById(R.id.pref_current_img);
         updateView();
     }
 
     @Override
-    protected void onClick()
-    {
+    protected void onClick() {
         super.onClick();
         dlg = createDialog();
         dlg.show();
     }
 
-    private Dialog createDialog()
-    {
+    private Dialog createDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
         builder.setTitle(R.string.indicator_color);
         String layoutName = parent.listLayout.getValue();
         AlertDialog dialog;
 
         if (layoutName.equals(this.parent.layoutCustom) || layoutName.equals(this.parent.layoutCustomShadow)
-                || layoutName.equals(this.parent.layoutNoBack))
-        {
-            OnColorChangedListener listener = new OnColorChangedListener()
-            {
-                public void colorChanged(int color)
-                {
+                || layoutName.equals(this.parent.layoutNoBack)) {
+            OnColorChangedListener listener = new OnColorChangedListener() {
+                public void colorChanged(int color) {
                     applyAction(color);
                 }
             };
 
-            // Ö÷ÒªÊÇÉèÖÃ µ÷É«°åµÄ²¼¾Ö
+            // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½É«ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
             LinearLayout layout = new LinearLayout(getContext());
             layout.setPadding(0, 0, 0, 0);
             layout.setOrientation(LinearLayout.VERTICAL);
 
-            // ÉèÖÃ¶Ô»°¿òµÄ±³¾°Í¼Æ¬
+            // ï¿½ï¿½ï¿½Ã¶Ô»ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½Í¼Æ¬
             Bitmap bitmap = BitmapFactory.decodeResource(parent.getResources(), R.drawable.trans_bg);
             BitmapDrawable drawable = new BitmapDrawable(bitmap);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             drawable.setDither(true);
             layout.setBackgroundDrawable(drawable);
 
-            // Ìí¼ÓÒ»¸öÒþ²ØµÄ±à¼­¿ò£¬ÎªÁË¿ÉÒÔ´ò¿ª¼üÅÌ£¬·ñÔòÎÞ·¨ÏÔÊ¾Èí¼üÅÌ
+            // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄ±à¼­ï¿½ï¿½Îªï¿½Ë¿ï¿½ï¿½Ô´ò¿ª¼ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½
             EditText hideEdit = new EditText(parent);
             hideEdit.setVisibility(View.GONE);
             layout.addView(hideEdit);
             layout.setId(android.R.id.widget_frame);
 
             Display display = parent.getWindowManager().getDefaultDisplay();
-            // ·ÀÖ¹ºáÆÁµÄÊ±ºòÏÔÊ¾¹ý´ó
+            // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
             int width = display.getWidth();
 
-            if (display.getWidth() > display.getHeight())
-            {
+            if (display.getWidth() > display.getHeight()) {
                 width = display.getHeight();
             }
 
@@ -150,28 +137,22 @@ public class IndCustomPreference extends Preference
             hsv.setMinimumWidth(width);
             builder.setView(hsv);
 
-            builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener()
-            {
-                public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                {
+            builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener() {
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     applyAction(mCPView.getColor());
                 }
             });
-            builder.setNeutralButton(parent.getResources().getString(R.string.hide), new OnClickListener()
-            {
-                // Èç¹ûÒªÒþ²ØÖ¸Ê¾Æ÷£¬ÉèÖÃÑÕÉ«ÎªConstants.NOT_SHOW_FLAG£¬Õâ¸öÖµÊÇ°²È«µÄ£¬ÒòÎªÕâÊÇ¸öÍ¸Ã÷ÑÕÉ«£¬ÔÚ½çÃæÉÏÊÇÎÞ·¨»ñµÃÕâ¸öÑÕÉ«µÄ
-                public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                {
-                    // ±£´æ×îºóÒ»´ÎÅäÖÃµÄÑÕÉ«
+            builder.setNeutralButton(parent.getResources().getString(R.string.hide), new OnClickListener() {
+                // ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ÎªConstants.NOT_SHOW_FLAGï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ç°ï¿½È«ï¿½Ä£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ç¸ï¿½Í¸ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
                     PreferenceManager.getDefaultSharedPreferences(parent).edit()
                             .putInt(Constants.PREFS_LAST_IND_COLOR, Constants.NOT_SHOW_FLAG).commit();
                     applyAction(Constants.NOT_SHOW_FLAG);
                 }
             });
-            builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener()
-            {
-                public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                {
+            builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener() {
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     dlg.dismiss();
                 }
             });
@@ -182,56 +163,42 @@ public class IndCustomPreference extends Preference
             editText.setText((Integer.toHexString(lastColor == Constants.NOT_SHOW_FLAG ? Color.WHITE : lastColor) + "")
                     .toUpperCase());
 
-            mCPView.setOnColorChangingListener(new ColorPickerView.onColorChangingListener()
-            {
-                public void onChange(int color)
-                {
+            mCPView.setOnColorChangingListener(new ColorPickerView.onColorChangingListener() {
+                public void onChange(int color) {
                     editText.setText((Integer.toHexString(color) + "").toUpperCase());
                 }
             });
 
-            // ÔÚÊäÈë¿òÊäÈëÑÕÉ«Ê±¶¯Ì¬¸Ä±äÑ¡ÔñÆ÷ÑÕÉ«
-            editText.addTextChangedListener(new TextWatcher()
-            {
-                public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
-                {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«Ê±ï¿½ï¿½Ì¬ï¿½Ä±ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+            editText.addTextChangedListener(new TextWatcher() {
+                public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                     setColor();
                 }
 
                 public void beforeTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2,
-                        int paramInt3)
-                {
+                                              int paramInt3) {
                     setColor();
                 }
 
-                public void afterTextChanged(Editable paramEditable)
-                {
+                public void afterTextChanged(Editable paramEditable) {
                     setColor();
                 }
 
-                private void setColor()
-                {
-                    try
-                    {
+                private void setColor() {
+                    try {
                         int color = Color.parseColor("#" + editText.getText().toString());
                         mCPView.setColor(Utils.setAlpha(color, false));
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                     }
                 }
             });
 
             dialog.setCustomTitle(dlgView);
-        }
-        else
-        {
+        } else {
             ColorAdapter mAdapter = new ColorAdapter(parent);
-            builder.setAdapter(mAdapter, new OnClickListener()
-            {
-                public void onClick(DialogInterface arg0, int imgId)
-                {
-                    // ±£´æ×îºóÒ»´ÎÅäÖÃµÄÍ¼Æ¬
+            builder.setAdapter(mAdapter, new OnClickListener() {
+                public void onClick(DialogInterface arg0, int imgId) {
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Í¼Æ¬
                     SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(parent).edit();
                     editor.putInt(Constants.PREFS_LAST_IND_COLOR, imgId);
                     editor.commit();
@@ -239,7 +206,7 @@ public class IndCustomPreference extends Preference
                 }
             });
 
-            // Õâ¾äÓÐÊ²Ã´×÷ÓÃ?
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ê²Ã´ï¿½ï¿½ï¿½ï¿½?
             builder.setInverseBackgroundForced(true);
             dialog = builder.create();
         }
@@ -247,113 +214,94 @@ public class IndCustomPreference extends Preference
         return dialog;
     }
 
-    private void applyAction(int currentColor)
-    {
+    private void applyAction(int currentColor) {
         lastColor = currentColor;
         updateView();
         dlg.dismiss();
         parent.updatePreView();
     }
 
-    public void updateView()
-    {
-        if (parent.listLayout != null)
-        {
+    public void updateView() {
+        if (parent.listLayout != null) {
             String layoutName = parent.listLayout.getValue();
 
             if (layoutName.equals(parent.layoutCustom) || layoutName.equals(parent.layoutCustomShadow)
-                    || layoutName.equals(parent.layoutNoBack))
-            {
-                if (lastColor >= 0 && lastColor <= 9)
-                {
+                    || layoutName.equals(parent.layoutNoBack)) {
+                if (lastColor >= 0 && lastColor <= 9) {
                     lastColor = Color.WHITE;
                 }
-            }
-            else
-            {
-                if (lastColor < 0 || lastColor > 9)
-                {
+            } else {
+                if (lastColor < 0 || lastColor > 9) {
                     lastColor = Constants.IND_COLOR_DEFAULT;
                 }
             }
 
-            switch (lastColor)
-            {
+            switch (lastColor) {
                 case Constants.IND_COLOR_PINK:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_pink_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_pink);
                     break;
                 case Constants.IND_COLOR_RED:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_red_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_red);
                     break;
                 case Constants.IND_COLOR_ORANGE:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_orange_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_orange);
                     break;
                 case Constants.IND_COLOR_YELLOW:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_yellow_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_yellow);
                     break;
                 case Constants.IND_COLOR_DEFAULT:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_default);
                     break;
                 case Constants.IND_COLOR_GREEN:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_green_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_green);
                     break;
                 case Constants.IND_COLOR_LIGHTBLUE:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_lightblue_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_lightblue);
                     break;
                 case Constants.IND_COLOR_BLUE:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_blue_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_blue);
                     break;
                 case Constants.IND_COLOR_PURPLE:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_purple_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
                     setSummary(R.string.color_purple);
                     break;
                 case Constants.IND_COLOR_GRAY:
-                    if (preview_img != null)
-                    {
+                    if (preview_img != null) {
                         preview_img.setImageResource(R.drawable.ind_gray_on_c);
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     }
@@ -364,7 +312,7 @@ public class IndCustomPreference extends Preference
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     setSummary(parent.getResources().getString(R.string.hide));
                     break;
-                // ÕâµØ·½¿ÉÄÜµÄÇé¿ö¾ÍÊÇÑÕÉ«µÄ16½øÖÆÖµ
+                // ï¿½ï¿½Ø·ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½16ï¿½ï¿½ï¿½ï¿½Öµ
                 default:
                     if (preview_img != null)
                         preview_img.setBackgroundColor(lastColor);
@@ -374,13 +322,11 @@ public class IndCustomPreference extends Preference
         }
     }
 
-    public int getLastColor()
-    {
+    public int getLastColor() {
         return lastColor;
     }
 
-    public void setLastColor(int indColor)
-    {
+    public void setLastColor(int indColor) {
         lastColor = indColor;
         updateView();
     }

@@ -11,8 +11,13 @@ import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-public class ToggleConfigActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener
-{
+public class ToggleConfigActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+    private static String[] silentSummary;
+    private static String[] silentValues = new String[]{"0", "1", "2"};
+    private static String[] deviceSummary;
+    private static String[] deviceValues = new String[]{Constants.DEVICE_TYPE1, Constants.DEVICE_TYPE2,
+            Constants.DEVICE_TYPE3, Constants.DEVICE_TYPE4, Constants.DEVICE_TYPE5, Constants.DEVICE_TYPE6,
+            Constants.DEVICE_TYPE7};
     private CheckBoxPreference aireplaneWifi;
     private CheckBoxPreference toggleFlash;
     private CheckBoxPreference useApn;
@@ -21,40 +26,29 @@ public class ToggleConfigActivity extends PreferenceActivity implements OnShared
     private ListPreference silentBtn;
     private ListPreference deviceType;
 
-    private static String[] silentSummary;
-    private static String[] silentValues = new String[] { "0", "1", "2" };
-
-    private static String[] deviceSummary;
-    private static String[] deviceValues = new String[] { Constants.DEVICE_TYPE1, Constants.DEVICE_TYPE2,
-            Constants.DEVICE_TYPE3, Constants.DEVICE_TYPE4, Constants.DEVICE_TYPE5, Constants.DEVICE_TYPE6,
-            Constants.DEVICE_TYPE7 };
-
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        deviceSummary = new String[] { getResources().getString(R.string.type1),
+        deviceSummary = new String[]{getResources().getString(R.string.type1),
                 getResources().getString(R.string.type2), getResources().getString(R.string.type3),
                 getResources().getString(R.string.type4), getResources().getString(R.string.type5),
-                getResources().getString(R.string.type6), getResources().getString(R.string.type7) };
-        silentSummary = new String[] { getResources().getString(R.string.vsmode),
-                getResources().getString(R.string.vibrate), getResources().getString(R.string.silent) };
+                getResources().getString(R.string.type6), getResources().getString(R.string.type7)};
+        silentSummary = new String[]{getResources().getString(R.string.vsmode),
+                getResources().getString(R.string.vibrate), getResources().getString(R.string.silent)};
         addPreferencesFromResource(R.xml.pref_toggle_conf);
         initUI();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         initUI();
     }
 
     /**
-     * ÒòÎªÔÚonCreateºó»áµ÷ÓÃonResumeËùÒÔÖ±½ÓÔÚonResumeÖÐ³õÊ¼»¯
+     * ï¿½ï¿½Îªï¿½ï¿½onCreateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½onResumeï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½onResumeï¿½Ð³ï¿½Ê¼ï¿½ï¿½
      */
-    private void initUI()
-    {
+    private void initUI() {
         aireplaneWifi = (CheckBoxPreference) findPreference(Constants.PREFS_AIRPLANE_WIFI);
         aireplaneRadio = (CheckBoxPreference) findPreference(Constants.PREFS_AIRPLANE_RADIO);
         toggleFlash = (CheckBoxPreference) findPreference(Constants.PREFS_TOGGLE_FLASH);
@@ -69,173 +63,125 @@ public class ToggleConfigActivity extends PreferenceActivity implements OnShared
         deviceType.setEntries(deviceSummary);
         deviceType.setEntryValues(deviceValues);
 
-        // Èç¹ûÓÐÒÑ¾­ÉèÖÃµÄ²ÎÊýÒª¸ù¾ÝÒÑÉèÖÃµÄ³õÊ¼»¯
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ÃµÄ²ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ³ï¿½Ê¼ï¿½ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         String silentValue = config.getString(Constants.PREFS_SILENT_BTN, Constants.BTN_VS);
         silentBtn.setValue(silentValue);
         silentBtn.setSummary(getSilentSummary(silentValue));
 
-        // Èç¹ûradioÑ¡ÖÐÁË£¬Ôòwifi¾Í²»¿ÉÓÃ
+        // ï¿½ï¿½ï¿½radioÑ¡ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½wifiï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½
         aireplaneWifi.setEnabled(!config.getBoolean(Constants.PREFS_AIRPLANE_RADIO, false));
 
-        // ÉèÖÃÉè±¸Àà±ð
+        // ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½
         deviceType.setEnabled(config.getBoolean(Constants.PREFS_TOGGLE_FLASH, true));
         String deviceValue = config.getString(Constants.PREFS_DEVICE_TYPE, Constants.DEVICE_TYPE1);
         deviceType.setValue(deviceValue);
         deviceType.setSummary(getDeviceSummary(deviceValue));
 
-        // ÏÔÊ¾ÁÁ¶ÈÌõ¼þ½ø¶ÈÌõÊ±£¬¼¶±ðÉèÖÃ²»¿ÉÓÃ
+        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½
         brightLevel.setActivity(this);
 
-        // ×¢²áÑ¡Ïî±ä»¯¼àÌýÆ÷
+        // ×¢ï¿½ï¿½Ñ¡ï¿½ï¿½ä»¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
-     * µ±±ä»»Ñ¡ÏîÊ±Òª¶¯Ì¬¸üÐÂÆäËû¿Ø¼þÖÐ¿ÉÑ¡µÄÌõÄ¿
-     * 
+     * ï¿½ï¿½ï¿½ä»»Ñ¡ï¿½ï¿½Ê±Òªï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½Ð¿ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ä¿
+     *
      * @param btnName
      * @return
      */
-    public void onSharedPreferenceChanged(SharedPreferences preferences, String key)
-    {
-        if (key.equals(Constants.PREFS_AIRPLANE_RADIO))
-        {
-            // Èç¹ûÑ¡ÖÐÁËÖ»¹Ø±ÕÒÆ¶¯ÍøÂç
-            if (aireplaneRadio.isChecked())
-            {
+    public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
+        if (key.equals(Constants.PREFS_AIRPLANE_RADIO)) {
+            // ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ö»ï¿½Ø±ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (aireplaneRadio.isChecked()) {
                 aireplaneWifi.setEnabled(false);
-            }
-            else
-            {
+            } else {
                 aireplaneWifi.setEnabled(true);
             }
 
-            // Èç¹ûµ±Ç°µÄ°´Å¥ÊÇ¿ª×ÅµÄ
-            if (SwitchUtils.getNetworkState(this))
-            {
-                // Èç¹û·ÉÐÐÄ£Ê½ÒÑ¾­´ò¿ª
-                if (SwitchUtils.getAirplaneState(this))
-                {
-                    // ÏÈ¹Ø±Õ·ÉÐÐÄ£Ê½
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ä°ï¿½Å¥ï¿½Ç¿ï¿½ï¿½Åµï¿½
+            if (SwitchUtils.getNetworkState(this)) {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½Ñ¾ï¿½ï¿½ï¿½
+                if (SwitchUtils.getAirplaneState(this)) {
+                    // ï¿½È¹Ø±Õ·ï¿½ï¿½ï¿½Ä£Ê½
                     SwitchUtils.setAirplaneState(this, false);
-                }
-                else
-                {
-                    // ÏÈ´ò¿ªÊÖ»úÍøÂç
+                } else {
+                    // ï¿½È´ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½
                     NetUtils.setSignalState(this, true);
                 }
             }
-        }
-        else if (key.equals(Constants.PREFS_TOGGLE_FLASH))
-        {
-            if (SwitchUtils.getFlashlight(this))
-            {
+        } else if (key.equals(Constants.PREFS_TOGGLE_FLASH)) {
+            if (SwitchUtils.getFlashlight(this)) {
                 SwitchUtils.setCameraFlashState(this, false);
                 Utils.updateWidget(this);
             }
 
             deviceType.setEnabled(toggleFlash.isChecked());
-        }
-        else if (key.equals(Constants.PREFS_TOGGLE_TIMEOUT))
-        {
-            if (SwitchUtils.getScreenTimeoutState(this))
-            {
+        } else if (key.equals(Constants.PREFS_TOGGLE_TIMEOUT)) {
+            if (SwitchUtils.getScreenTimeoutState(this)) {
                 SwitchUtils.toggleScreenTimeout(this);
                 Utils.updateWidget(this);
             }
-        }
-        else if (key.equals(Constants.PREFS_USE_APN))
-        {
-            // Èç¹ûµ±Ç°Ñ¡ÔñÁËÊ¹ÓÃAPN
-            if (useApn.isChecked())
-            {
-                // Èç¹ûµ±Ç°µÄÊý¾ÝÁ¬½ÓÊÇÃ»´ò¿ªµÄ
-                if (!NetUtils.getMobileNetworkState(this))
-                {
-                    // ÏÈ´ò¿ªÊý¾ÝÁ¬½Ó£¬ÔÚ¹Ø±ÕAPN
+        } else if (key.equals(Constants.PREFS_USE_APN)) {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°Ñ¡ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½APN
+            if (useApn.isChecked()) {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ò¿ªµï¿½
+                if (!NetUtils.getMobileNetworkState(this)) {
+                    // ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½ï¿½Ú¹Ø±ï¿½APN
                     NetUtils.setMobileNetworkState(this, true);
                     ApnUtils.setApnState(this, false);
                 }
-                // Èç¹ûÊÇ´ò¿ªµÄ£¬Ö±½ÓÒ²´ò¿ªAPN
-                else
-                {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ò¿ªµÄ£ï¿½Ö±ï¿½ï¿½Ò²ï¿½ï¿½APN
+                else {
                     ApnUtils.setApnState(this, true);
                 }
 
                 useApn.setSummary(R.string.use_apn_summary);
             }
-            // Èç¹ûÓÃµÄÊÇÊý¾ÝÁ¬½Ó
-            else
-            {
-                // Èç¹ûµ±Ç°APNÃ»´ò¿ª
-                if (!ApnUtils.getApnState(this))
-                {
-                    // ÏÈ´ò¿ªAPN£¬ÔÚ¹Ø±ÕÊý¾ÝÁ¬½Ó
+            // ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            else {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°APNÃ»ï¿½ï¿½
+                if (!ApnUtils.getApnState(this)) {
+                    // ï¿½È´ï¿½APNï¿½ï¿½ï¿½Ú¹Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     ApnUtils.setApnState(this, true);
                     NetUtils.setMobileNetworkState(this, false);
-                }
-                else
-                {
-                    // Èç¹ûAPNÒÑ¾­´ò¿ªÁË£¬¾ÍÖ±½Ó´ò¿ªÊý¾ÝÁ¬½Ó
+                } else {
+                    // ï¿½ï¿½ï¿½APNï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½Ö±ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     NetUtils.setMobileNetworkState(this, true);
                 }
             }
-        }
-        else if (key.equals(Constants.PREFS_SILENT_BTN))
-        {
+        } else if (key.equals(Constants.PREFS_SILENT_BTN)) {
             silentBtn.setSummary(silentBtn.getEntry());
-        }
-        else if (key.equals(Constants.PREFS_DEVICE_TYPE))
-        {
+        } else if (key.equals(Constants.PREFS_DEVICE_TYPE)) {
             deviceType.setSummary(deviceType.getEntry());
         }
     }
 
-    private String getSilentSummary(String value)
-    {
-        if (value.equals(Constants.BTN_ONLY_SILENT))
-        {
+    private String getSilentSummary(String value) {
+        if (value.equals(Constants.BTN_ONLY_SILENT)) {
             return getResources().getString(R.string.silent);
-        }
-        else if (value.equals(Constants.BTN_ONLY_VIVERATE))
-        {
+        } else if (value.equals(Constants.BTN_ONLY_VIVERATE)) {
             return getResources().getString(R.string.vibrate);
-        }
-        else
-        {
+        } else {
             return getResources().getString(R.string.vsmode);
         }
     }
 
-    private String getDeviceSummary(String value)
-    {
-        if (value.equals(Constants.DEVICE_TYPE1))
-        {
+    private String getDeviceSummary(String value) {
+        if (value.equals(Constants.DEVICE_TYPE1)) {
             return getResources().getString(R.string.type1);
-        }
-        else if (value.equals(Constants.DEVICE_TYPE2))
-        {
+        } else if (value.equals(Constants.DEVICE_TYPE2)) {
             return getResources().getString(R.string.type2);
-        }
-        else if (value.equals(Constants.DEVICE_TYPE3))
-        {
+        } else if (value.equals(Constants.DEVICE_TYPE3)) {
             return getResources().getString(R.string.type3);
-        }
-        else if (value.equals(Constants.DEVICE_TYPE4))
-        {
+        } else if (value.equals(Constants.DEVICE_TYPE4)) {
             return getResources().getString(R.string.type4);
-        }
-        else if (value.equals(Constants.DEVICE_TYPE5))
-        {
+        } else if (value.equals(Constants.DEVICE_TYPE5)) {
             return getResources().getString(R.string.type5);
-        }
-        else if (value.equals(Constants.DEVICE_TYPE6))
-        {
+        } else if (value.equals(Constants.DEVICE_TYPE6)) {
             return getResources().getString(R.string.type6);
-        }
-        else
-        {
+        } else {
             return getResources().getString(R.string.type7);
         }
     }

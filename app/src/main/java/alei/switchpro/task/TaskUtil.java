@@ -1,16 +1,5 @@
 package alei.switchpro.task;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlSerializer;
-
 import alei.switchpro.Constants;
 import alei.switchpro.DatabaseOper;
 import android.app.AlarmManager;
@@ -23,12 +12,21 @@ import android.os.Environment;
 import android.os.Parcel;
 import android.text.format.DateFormat;
 import android.util.Xml;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * The Alarms provider supplies info about Alarm Clock settings
  */
-public class TaskUtil
-{
+public class TaskUtil {
     // This action triggers the AlarmReceiver as well as the AlarmKlaxon. It
     // is a public action used in the manifest for receiving Alarm broadcasts
     // from the alarm manager.
@@ -45,19 +43,16 @@ public class TaskUtil
     // This string is used to identify the alarm id passed to SetAlarm from the
     // list of alarms.
     public static final String ALARM_ID = "alarm_id";
-
-    private final static String M12 = "h:mm aa";
     // Shared with DigitalClock
     final static String M24 = "kk:mm";
-
+    private final static String M12 = "h:mm aa";
     private static final String TAG_TASK = "task";
     private static final String TAG_SWITCH = "switch";
 
     /**
-     * ÍùÊý¾Ý¿âÖÐÌí¼ÓÒ»¸ö¼ÇÂ¼
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼
      */
-    public static int addAlarm(DatabaseOper ap)
-    {
+    public static int addAlarm(DatabaseOper ap) {
         ContentValues values = new ContentValues(2);
         values.put(Constants.TASK.COLUMN_START_HOUR, 8);
         values.put(Constants.TASK.COLUMN_END_HOUR, 9);
@@ -65,17 +60,14 @@ public class TaskUtil
     }
 
     /**
-     * »ñÈ¡Ö¸¶¨µÄAlarm,ÓÐ¿ÉÄÜ·µ»ØNull
+     * ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ï¿½Alarm,ï¿½Ð¿ï¿½ï¿½Ü·ï¿½ï¿½ï¿½Null
      */
-    public static Task getAlarmById(DatabaseOper ap, int alarmId)
-    {
+    public static Task getAlarmById(DatabaseOper ap, int alarmId) {
         Cursor cursor = ap.queryTaskById(alarmId);
         Task alarm = null;
 
-        if (cursor != null)
-        {
-            if (cursor.moveToFirst())
-            {
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
                 alarm = new Task(cursor);
             }
 
@@ -85,17 +77,13 @@ public class TaskUtil
         return alarm;
     }
 
-    public static List<Toggle> getSwitchesByTaskId(DatabaseOper ap, int taskId)
-    {
+    public static List<Toggle> getSwitchesByTaskId(DatabaseOper ap, int taskId) {
         Cursor cursor = ap.querySwitchesByTaskId(taskId);
         List<Toggle> list = new ArrayList<Toggle>();
 
-        if (cursor != null)
-        {
-            if (cursor.moveToFirst())
-            {
-                do
-                {
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
                     list.add(new Toggle(cursor));
                 }
                 while (cursor.moveToNext());
@@ -106,13 +94,11 @@ public class TaskUtil
         return list;
     }
 
-    public static void deleteSwitch(DatabaseOper ap, int taskId)
-    {
+    public static void deleteSwitch(DatabaseOper ap, int taskId) {
         ap.deleteSwitchById(taskId);
     }
 
-    public static void addSwitch(DatabaseOper ap, int taskid, int switchid, String param1, String param2)
-    {
+    public static void addSwitch(DatabaseOper ap, int taskid, int switchid, String param1, String param2) {
         ContentValues values = new ContentValues(4);
         values.put(Constants.SWITCH.COLUMN_TASK_ID, taskid);
         values.put(Constants.SWITCH.COLUMN_SWITCH_ID, switchid);
@@ -121,17 +107,14 @@ public class TaskUtil
         ap.insertSwitch(values);
     }
 
-    public static void updateSwitch(DatabaseOper ap, int taskid, int switchid, String param1, String param2)
-    {
+    public static void updateSwitch(DatabaseOper ap, int taskid, int switchid, String param1, String param2) {
         ContentValues values = new ContentValues();
 
-        if (param1 != null)
-        {
+        if (param1 != null) {
             values.put(Constants.SWITCH.COLUMN_PARAM1, param1);
         }
 
-        if (param2 != null)
-        {
+        if (param2 != null) {
             values.put(Constants.SWITCH.COLUMN_PARAM2, param2);
         }
 
@@ -139,31 +122,27 @@ public class TaskUtil
     }
 
     /**
-     * É¾³ýÒ»¸öÈÎÎñ£¬µ«ÊÇÐèÒªÉèÖÃÏÂÒ»¸öÈÎÎñ
+     * É¾ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ñ£¬µï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
-    public static void deleteAlarm(DatabaseOper ap, int alarmId)
-    {
+    public static void deleteAlarm(DatabaseOper ap, int alarmId) {
         ap.deleteTask(alarmId);
         setNextAlert(ap);
     }
 
     // Private method to get a more limited set of alarms from the database.
-    private static Cursor getEnabledAlarm(DatabaseOper ap)
-    {
+    private static Cursor getEnabledAlarm(DatabaseOper ap) {
         return ap.queryEnabledTask();
     }
 
     public static void setAlarm(DatabaseOper ap, int id, int startHour, int startMinutes, int endHour, int endMinutes,
-            Task.DaysOfWeek daysOfWeek, boolean enabled, String message)
-    {
+                                Task.DaysOfWeek daysOfWeek, boolean enabled, String message) {
         ContentValues values = new ContentValues(9);
         long startTime = 0;
         long endTime = 0;
 
-        // Ö»ÓÐÔÚ²»ÊÇÖØ¸´ÈÎÎñµÄÊ±ºò²ÅÉèÖÃËüµÄ´¥·¢Ê±¼ä£¬ÓÃ´ËÅÐ¶ÏÈç¹û¹ýÁËÕâ¸ö´¥·¢Ê±¼ä¾ÍÉèÖÃÈÎÎñ¹ýÆÚ
-        // ·ñÔòÔÚÊÖ»úÖØÐÂÆô¶¯ºó£¬¼ÆËãÏÂÒ»¸ö´¥·¢ÈÎÎñÊ±²»ÖªµÀÕâ¸öÈÎÎñÊÇÒÑ¾­´¥·¢»¹ÊÇÃ»´¥·¢
-        if (!daysOfWeek.isRepeatSet())
-        {
+        // Ö»ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½Ã´ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬¼ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+        if (!daysOfWeek.isRepeatSet()) {
             startTime = calculateAlarm(startHour, startMinutes, daysOfWeek).getTimeInMillis();
             endTime = calculateAlarm(endHour, endMinutes, daysOfWeek).getTimeInMillis();
         }
@@ -184,31 +163,25 @@ public class TaskUtil
 
     /**
      * A convenience method to enable or disable an alarm.
-     * 
-     * @param id
-     *            corresponds to the _id column
-     * @param enabled
-     *            corresponds to the ENABLED column
+     *
+     * @param id      corresponds to the _id column
+     * @param enabled corresponds to the ENABLED column
      */
-    public static void enableAlarm(DatabaseOper ap, int alarmId, boolean enabled)
-    {
+    public static void enableAlarm(DatabaseOper ap, int alarmId, boolean enabled) {
         enableAlarmInternal(ap, getAlarmById(ap, alarmId), enabled);
         setNextAlert(ap);
     }
 
-    private static void enableAlarmInternal(DatabaseOper ap, final Task alarm, boolean enabled)
-    {
+    private static void enableAlarmInternal(DatabaseOper ap, final Task alarm, boolean enabled) {
         ContentValues values = new ContentValues(3);
         values.put(Constants.TASK.COLUMN_ENABLED, enabled ? 1 : 0);
 
-        // µ±¼¤»îÒ»¸öÈÎÎñÊ±ÐèÒª¸üÐÂËüµÄ´¥·¢Ê±¼ä
-        if (enabled)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+        if (enabled) {
             long startTime = 0;
             long endTime = 0;
 
-            if (!alarm.daysOfWeek.isRepeatSet())
-            {
+            if (!alarm.daysOfWeek.isRepeatSet()) {
                 startTime = calculateAlarm(alarm.startHour, alarm.startMinutes, alarm.daysOfWeek).getTimeInMillis();
                 endTime = calculateAlarm(alarm.endHour, alarm.endMinutes, alarm.daysOfWeek).getTimeInMillis();
             }
@@ -221,23 +194,19 @@ public class TaskUtil
     }
 
     /**
-     * ÉèÖÃÒ»´ÎÐÔÈÎÎñ¹ýÆÚ£¬ÔÚÏµÍ³ÖØÆôºóµ÷ÓÃ
+     * ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
-    public static void disableExpiredAlarms(DatabaseOper ap)
-    {
+    public static void disableExpiredAlarms(DatabaseOper ap) {
         Cursor cur = getEnabledAlarm(ap);
         long now = System.currentTimeMillis();
 
-        if (cur.moveToFirst())
-        {
-            do
-            {
+        if (cur.moveToFirst()) {
+            do {
                 Task alarm = new Task(cur);
 
-                // ¿ªÊ¼ºÍ½áÊøÊ±¼ä²»Îª0£¬ËµÃ÷²»ÊÇÖØ¸´ÈÎÎñ
-                // µ±¿ªÊ¼ºÍ½áÊøÊ±¼ä¶¼¹ýÆÚÊ±£¬ËµÃ÷´ËÈÎÎñÒÑ¾­¹ýÆÚÁË
-                if (alarm.startTime != 0 && alarm.startTime < now && alarm.endTime != 0 && alarm.endTime < now)
-                {
+                // ï¿½ï¿½Ê¼ï¿½Í½ï¿½ï¿½ï¿½Ê±ï¿½ä²»Îª0ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
+                // ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Í½ï¿½ï¿½ï¿½Ê±ï¿½ä¶¼ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                if (alarm.startTime != 0 && alarm.startTime < now && alarm.endTime != 0 && alarm.endTime < now) {
                     enableAlarmInternal(ap, alarm, false);
                 }
             }
@@ -249,50 +218,42 @@ public class TaskUtil
     /**
      * Called at system startup, on time/timezone change, and whenever the user
      * changes alarm settings. Activates snooze if set, otherwise loads all
-     * alarms, activates next alert. ÕâÀïÃæ¸½µÄÖµ¶¼ÊÇÁÙÊ±ÐÔµÄ£¬²»»á´æÈëµ½Êý¾Ý¿âÖÐ£¬µ«»á´«µÝµ½IntentµÄReceiver
+     * alarms, activates next alert. ï¿½ï¿½ï¿½ï¿½ï¿½æ¸½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ÔµÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ëµ½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½á´«ï¿½Ýµï¿½Intentï¿½ï¿½Receiver
      */
-    public static void setNextAlert(DatabaseOper ap)
-    {
+    public static void setNextAlert(DatabaseOper ap) {
         Task alarm = null;
         long minTime = Long.MAX_VALUE;
         long now = System.currentTimeMillis();
         Cursor cursor = getEnabledAlarm(ap);
 
-        if (cursor != null)
-        {
-            if (cursor.moveToFirst())
-            {
-                do
-                {
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
                     Task a = new Task(cursor);
 
-                    // µ±ÊÇÖØ¸´µÄÈÎÎñ
-                    if (a.startTime == 0 && a.endTime == 0)
-                    {
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                    if (a.startTime == 0 && a.endTime == 0) {
                         a.startTime = calculateAlarm(a.startHour, a.startMinutes, a.daysOfWeek).getTimeInMillis();
                         a.endTime = calculateAlarm(a.endHour, a.endMinutes, a.daysOfWeek).getTimeInMillis();
                     }
-                    // ²»ÊÇÖØ¸´µÄÈÎÎñ£¬Èç¹û¿ªÊ¼Ê±¼äºÍ½áÊøÊ±¼ä¶¼¹ýÆÚÁË£¬ÉèÖÃÈÎÎñ¹ýÆÚ
-                    else if (a.startTime < now && a.endTime < now)
-                    {
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½Í½ï¿½ï¿½ï¿½Ê±ï¿½ä¶¼ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                    else if (a.startTime < now && a.endTime < now) {
                         enableAlarmInternal(ap, a, false);
                         continue;
                     }
 
-                    // ×ßµ½Ò»ÏÂµÄÁ÷³ÌµÄÊÇÖØ¸´µÄÈÎÎñ£¬ºÍ¿ªÊ¼Ê±¼ä»ò½áÊøÊ±¼äÃ»¹ýÆÚµÄÈÎÎñ
-                    // ¶ÔÓÚÖØ¸´µÄÈÎÎñ¼ÆËãËüµÄ¿ªÊ¼ºÍ½áÊø´¥·¢Ê±¼ä£¬ÕâÀï¿ªÊ¼Ê±¼äÓÐ¿ÉÄÜ´óÓÚ½áÊøÊ±¼ä£¬ÒòÎªÈç¹û¿ªÊ¼Ê±¼ä¹ýÆÚÁË£¬¼ÆËã³öµÄ¾ÍÊÇÏÂÒ»¸ö¿ªÊ¼Ê±¼ä
-                    // ¶ÔÓÚÒ»´ÎÐÔµÄÈÎÎñ£¬¿ªÊ¼Ê±¼äÊ¼ÖÕÐ¡ÓÚ½áÊøÊ±¼ä£¬¶øÇÒ¿ªÊ¼Ê±¼äÓÐ¿ÏÄÜÒÑ¾­¹ýÆÚ
+                    // ï¿½ßµï¿½Ò»ï¿½Âµï¿½ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ£¬ºÍ¿ï¿½Ê¼Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ê¼ï¿½Í½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½ï¿½ï¿ªÊ¼Ê±ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ü´ï¿½ï¿½Ú½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½
+                    // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ñ£¬¿ï¿½Ê¼Ê±ï¿½ï¿½Ê¼ï¿½ï¿½Ð¡ï¿½Ú½ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½ï¿½Ò¿ï¿½Ê¼Ê±ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
 
-                    // Èç¹û¿ªÊ¼Ê±¼äÃ»¹ýÆÚ£¬ÇÒ×îÐ¡
-                    if (a.startTime > now && a.startTime < minTime)
-                    {
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
+                    if (a.startTime > now && a.startTime < minTime) {
                         minTime = a.startTime;
                         alarm = a;
                     }
 
-                    // ÓÐ¿ÉÄÜÄ³¸ö¿ªÊ¼Ê±¼äÒÑ¾­¹ýÆÚÁË£¬»ò¿ªÊ¼Ê±¼äÊÇ´óÓÚ½áÊøÊ±¼äµÄ£¬ËùÒÔÔÙÅÐ¶Ï½áÊøÊ±¼ä
-                    if (a.endTime < minTime)
-                    {
+                    // ï¿½Ð¿ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½ï¿½Ç´ï¿½ï¿½Ú½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+                    if (a.endTime < minTime) {
                         minTime = a.endTime;
                         alarm = a;
                     }
@@ -302,33 +263,24 @@ public class TaskUtil
             cursor.close();
         }
 
-        // ÕâÀïÄÃµ½µÄAlarm¾ÍÊÇÓÐ×î½ü´¥·¢ÈÎÎñµÄÊ±¼ä
-        if (alarm != null)
-        {
-            // ¿ªÊ¼Ê±¼äÓÐ¿ÉÄÜÒÑ¾­¹ýÆÚÁË(Ò»´ÎÐÔÈÎÎñ)
-            if (alarm.startTime < now)
-            {
-                // ËµÃ÷ÊÇ½áÊøÈÎÎñ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Alarmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+        if (alarm != null) {
+            // ï¿½ï¿½Ê¼Ê±ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+            if (alarm.startTime < now) {
+                // Ëµï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 alarm.type = 1;
                 enableAlert(ap, alarm, alarm.endTime);
-            }
-            else
-            {
-                // »òÕß¿ªÊ¼Ê±¼äÊÇ´óÓÚ½áÊøÊ±¼äµÄ£¨ÖÜÆÚÈÎÎñ£©
-                if (alarm.startTime > alarm.endTime)
-                {
+            } else {
+                // ï¿½ï¿½ï¿½ß¿ï¿½Ê¼Ê±ï¿½ï¿½ï¿½Ç´ï¿½ï¿½Ú½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                if (alarm.startTime > alarm.endTime) {
                     alarm.type = 1;
                     enableAlert(ap, alarm, alarm.endTime);
-                }
-                else
-                {
+                } else {
                     alarm.type = 0;
                     enableAlert(ap, alarm, alarm.startTime);
                 }
             }
-        }
-        else
-        {
+        } else {
             disableAlert(ap);
         }
     }
@@ -336,14 +288,11 @@ public class TaskUtil
     /**
      * Sets alert in AlarmManger and StatusBar. This is what will actually
      * launch the alert when the alarm triggers.
-     * 
-     * @param alarm
-     *            Alarm.
-     * @param atTimeInMillis
-     *            milliseconds since epoch
+     *
+     * @param alarm          Alarm.
+     * @param atTimeInMillis milliseconds since epoch
      */
-    private static void enableAlert(DatabaseOper ap, final Task alarm, final long atTimeInMillis)
-    {
+    private static void enableAlert(DatabaseOper ap, final Task alarm, final long atTimeInMillis) {
         AlarmManager am = (AlarmManager) ap.getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(ALARM_ALERT_ACTION);
 
@@ -368,12 +317,10 @@ public class TaskUtil
 
     /**
      * Disables alert in AlarmManger and StatusBar.
-     * 
-     * @param id
-     *            Alarm ID.
+     *
+     * @param id Alarm ID.
      */
-    static void disableAlert(DatabaseOper ap)
-    {
+    static void disableAlert(DatabaseOper ap) {
         AlarmManager am = (AlarmManager) ap.getContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent sender = PendingIntent.getBroadcast(ap.getContext(), 0, new Intent(ALARM_ALERT_ACTION),
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -383,16 +330,12 @@ public class TaskUtil
     /**
      * Given an alarm in hours and minutes, return a time suitable for setting
      * in AlarmManager.
-     * 
-     * @param hour
-     *            Always in 24 hour 0-23
-     * @param minute
-     *            0-59
-     * @param daysOfWeek
-     *            0-59
+     *
+     * @param hour       Always in 24 hour 0-23
+     * @param minute     0-59
+     * @param daysOfWeek 0-59
      */
-    static Calendar calculateAlarm(int hour, int minute, Task.DaysOfWeek daysOfWeek)
-    {
+    static Calendar calculateAlarm(int hour, int minute, Task.DaysOfWeek daysOfWeek) {
 
         // start with now
         Calendar c = Calendar.getInstance();
@@ -402,8 +345,7 @@ public class TaskUtil
         int nowMinute = c.get(Calendar.MINUTE);
 
         // if alarm is behind current time, advance one day
-        if (hour < nowHour || hour == nowHour && minute <= nowMinute)
-        {
+        if (hour < nowHour || hour == nowHour && minute <= nowMinute) {
             c.add(Calendar.DAY_OF_YEAR, 1);
         }
         c.set(Calendar.HOUR_OF_DAY, hour);
@@ -422,15 +364,13 @@ public class TaskUtil
         return c;
     }
 
-    static String formatTime(final Context context, int hour, int minute, Task.DaysOfWeek daysOfWeek)
-    {
+    static String formatTime(final Context context, int hour, int minute, Task.DaysOfWeek daysOfWeek) {
         Calendar c = calculateAlarm(hour, minute, daysOfWeek);
         return formatTime(context, c);
     }
 
     /* used by AlarmAlert */
-    static String formatTime(final Context context, Calendar c)
-    {
+    static String formatTime(final Context context, Calendar c) {
         String format = get24HourMode(context) ? M24 : M12;
         return (c == null) ? "" : (String) DateFormat.format(format, c);
     }
@@ -438,31 +378,26 @@ public class TaskUtil
     /**
      * @return true if clock is set to 24-hour mode
      */
-    static boolean get24HourMode(final Context context)
-    {
+    static boolean get24HourMode(final Context context) {
         return android.text.format.DateFormat.is24HourFormat(context);
     }
 
     /**
-     * °ÑÊý¾Ý¿âÖÐµÄÅäÖÃ±£´æÖÁxmlÎÄ¼þÖÐ
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½xmlï¿½Ä¼ï¿½ï¿½ï¿½
+     *
      * @param ap
      * @return
      */
-    public static boolean saveTaskConf(DatabaseOper ap)
-    {
-        try
-        {
-            // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
-                // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+    public static boolean saveTaskConf(DatabaseOper ap) {
+        try {
+            // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File dir = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH);
 
-                if (!dir.exists())
-                {
+                if (!dir.exists()) {
                     dir.mkdir();
                 }
 
@@ -472,31 +407,25 @@ public class TaskUtil
                 outStream.close();
                 return true;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return false;
     }
 
-    private static String writeTaskToXml(DatabaseOper ap)
-    {
+    private static String writeTaskToXml(DatabaseOper ap) {
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
 
-        try
-        {
+        try {
             serializer.setOutput(writer);
             serializer.startDocument(Constants.DEFAULT_ENCODING, true);
             serializer.startTag("", Constants.APP_NAME);
             Cursor taskCursor = ap.queryAllTask();
 
-            if (taskCursor.moveToFirst())
-            {
-                do
-                {
+            if (taskCursor.moveToFirst()) {
+                do {
                     Task task = new Task(taskCursor);
                     serializer.startTag("", TAG_TASK);
                     serializer.attribute("", Constants.TASK.COLUMN_START_HOUR, task.startHour + "");
@@ -511,8 +440,7 @@ public class TaskUtil
 
                     List<Toggle> switchList = getSwitchesByTaskId(ap, task.id);
 
-                    for (Toggle toggle : switchList)
-                    {
+                    for (Toggle toggle : switchList) {
                         serializer.startTag("", TAG_SWITCH);
                         serializer.attribute("", Constants.SWITCH.COLUMN_SWITCH_ID, toggle.switchId + "");
                         serializer.attribute("", Constants.SWITCH.COLUMN_PARAM1, toggle.param1 + "");
@@ -529,39 +457,32 @@ public class TaskUtil
             serializer.endTag("", Constants.APP_NAME);
             serializer.endDocument();
             return writer.toString();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return "";
     }
 
-    public static boolean loadTask(DatabaseOper ap)
-    {
+    public static boolean loadTask(DatabaseOper ap) {
         XmlPullParser parser = Xml.newPullParser();
         FileInputStream fis = null;
 
-        try
-        {
-            // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
-                // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+        try {
+            // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + Constants.TASK.TABLE_TASK);
 
-                if (file.exists())
-                {
+                if (file.exists()) {
                     fis = new FileInputStream(file);
                 }
             }
 
-            if (fis == null)
-            {
+            if (fis == null) {
                 return false;
             }
 
@@ -569,20 +490,17 @@ public class TaskUtil
             parser.setInput(fis, null);
             int eventType = parser.getEventType();
             boolean done = false;
-            // taskId Ã¿´ÎÑ­»·µ½Task±êÇ©Ê±»á±»ÖØÐÂ¸³Öµ
+            // taskId Ã¿ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½Taskï¿½ï¿½Ç©Ê±ï¿½á±»ï¿½ï¿½ï¿½Â¸ï¿½Öµ
             int taskId = -1;
 
-            while (eventType != XmlPullParser.END_DOCUMENT && !done)
-            {
+            while (eventType != XmlPullParser.END_DOCUMENT && !done) {
                 String name = null;
 
-                switch (eventType)
-                {
+                switch (eventType) {
                     case XmlPullParser.START_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(TAG_TASK))
-                        {
+                        if (name.equalsIgnoreCase(TAG_TASK)) {
                             ContentValues values = new ContentValues(9);
                             values.put(Constants.TASK.COLUMN_START_HOUR,
                                     Integer.parseInt(parser.getAttributeValue("", Constants.TASK.COLUMN_START_HOUR)));
@@ -603,9 +521,7 @@ public class TaskUtil
                             values.put(Constants.TASK.COLUMN_MESSAGE,
                                     parser.getAttributeValue("", Constants.TASK.COLUMN_MESSAGE));
                             taskId = ap.insertTask(values);
-                        }
-                        else if (name.equalsIgnoreCase(TAG_SWITCH))
-                        {
+                        } else if (name.equalsIgnoreCase(TAG_SWITCH)) {
                             ContentValues values = new ContentValues(4);
                             values.put(Constants.SWITCH.COLUMN_TASK_ID, taskId);
                             values.put(Constants.SWITCH.COLUMN_SWITCH_ID,
@@ -620,8 +536,7 @@ public class TaskUtil
                     case XmlPullParser.END_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(Constants.APP_NAME))
-                        {
+                        if (name.equalsIgnoreCase(Constants.APP_NAME)) {
                             done = true;
                         }
                         break;
@@ -630,9 +545,7 @@ public class TaskUtil
             }
 
             fis.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

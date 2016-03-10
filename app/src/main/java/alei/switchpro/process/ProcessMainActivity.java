@@ -1,7 +1,5 @@
 package alei.switchpro.process;
 
-import java.util.ArrayList;
-
 import alei.switchpro.DatabaseOper;
 import alei.switchpro.MyApplication;
 import alei.switchpro.R;
@@ -21,19 +19,19 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class ProcessMainActivity extends Activity
-{
-    protected static final String ACTION_LOADFINISH = "com.xmobileapp.taskmanager.ACTION_LOADFINISH";
+import java.util.ArrayList;
+
+public class ProcessMainActivity extends Activity {
     public static final boolean DEBUG = true;
     public static final String TAG = "TaskManager";
+    protected static final String ACTION_LOADFINISH = "com.xmobileapp.taskmanager.ACTION_LOADFINISH";
+    DatabaseOper dbOper;
     private ProcessAdapter mProcessAdapter;
     private BroadcastReceiver loadFinish = new LoadFinishReceiver();
     private ArrayList<ProcessData> dataList;
-    DatabaseOper dbOper;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_process);
@@ -41,39 +39,34 @@ public class ProcessMainActivity extends Activity
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         registerReceiver(loadFinish, new IntentFilter(ACTION_LOADFINISH));
         refreshList();
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         unregisterReceiver(loadFinish);
     }
 
     /**
-     * Ìí¼Óµ¯³ö²Ëµ¥
+     * ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½Ëµï¿½
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate our menu.
         getMenuInflater().inflate(R.menu.process_refresh_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     /**
-     * µ¯³ö²Ëµ¥µÄÏìÓ¦ÊÂ¼þ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Â¼ï¿½
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if (item.getItemId() == R.id.menu_refresh)
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_refresh) {
             refreshList();
             return true;
         }
@@ -81,14 +74,11 @@ public class ProcessMainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    public void refreshList()
-    {
+    public void refreshList() {
         setProgressBarIndeterminateVisibility(true);
 
-        Thread t = new Thread(new Runnable()
-        {
-            public void run()
-            {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
                 dataList = ProcessUtils.getProcessData(ProcessMainActivity.this);
                 sendBroadcast(new Intent(ACTION_LOADFINISH));
             }
@@ -97,30 +87,23 @@ public class ProcessMainActivity extends Activity
         t.start();
     }
 
-    private class LoadFinishReceiver extends BroadcastReceiver
-    {
+    private class LoadFinishReceiver extends BroadcastReceiver {
         @Override
-        public void onReceive(final Context ctx, Intent intent)
-        {
+        public void onReceive(final Context ctx, Intent intent) {
             setProgressBarIndeterminateVisibility(false);
             mProcessAdapter = new ProcessAdapter(ProcessMainActivity.this, dataList);
             ListView listView = (ListView) findViewById(R.id.listbody);
-            listView.setOnItemClickListener(new OnItemClickListener()
-            {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                {
+            listView.setOnItemClickListener(new OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     ProcessData processData = (ProcessData) mProcessAdapter.getItem(position);
 
                     Intent intent = new Intent();
 
-                    if (VERSION.SDK_INT >= 9)
-                    {
+                    if (VERSION.SDK_INT >= 9) {
                         intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
                         Uri uri = Uri.fromParts("package", processData.packagename, null);
                         intent.setData(uri);
-                    }
-                    else
-                    {
+                    } else {
                         final String appPkgName = (VERSION.SDK_INT == 8 ? "pkg"
                                 : "com.android.settings.ApplicationPkgName");
                         intent.setAction(Intent.ACTION_VIEW);

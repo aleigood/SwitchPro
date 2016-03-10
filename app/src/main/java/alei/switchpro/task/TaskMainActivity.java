@@ -1,8 +1,5 @@
 package alei.switchpro.task;
 
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-
 import alei.switchpro.DatabaseOper;
 import alei.switchpro.MyApplication;
 import alei.switchpro.R;
@@ -32,22 +29,23 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class TaskMainActivity extends PreferenceActivity implements OnItemClickListener
-{
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+
+public class TaskMainActivity extends PreferenceActivity implements OnItemClickListener {
+    // This string is used to identify the alarm id passed to SetAlarm from the
+    // list of alarms.
+    public static final String ALARM_ID = "alarm_id";
+    final static int MAX_ALARM_COUNT = 12;
     private Preference newTaskPref;
     private LayoutInflater mFactory;
     private ListView mAlarmsList;
     private Cursor mCursor;
     private String mAm, mPm;
-    final static int MAX_ALARM_COUNT = 12;
-    // This string is used to identify the alarm id passed to SetAlarm from the
-    // list of alarms.
-    public static final String ALARM_ID = "alarm_id";
     private DatabaseOper dbOper;
 
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_task_main);
         addPreferencesFromResource(R.xml.pref_new_task);
@@ -63,8 +61,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
         updateLayout();
     }
 
-    private void updateLayout()
-    {
+    private void updateLayout() {
         TimerAdapter timerAdapter = new TimerAdapter(this, mCursor);
         mAlarmsList = (ListView) findViewById(R.id.alarms_list);
         mAlarmsList.setAdapter(timerAdapter);
@@ -74,10 +71,8 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference)
-    {
-        if (preference == newTaskPref)
-        {
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == newTaskPref) {
             int newId = TaskUtil.addAlarm(dbOper);
             Intent intent = new Intent(this, TaskModifyActivity.class);
             intent.putExtra(ALARM_ID, newId);
@@ -88,42 +83,37 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateLayout();
         inflateClock();
     }
 
     /**
-     * Ìí¼Óµ¯³ö²Ëµ¥
+     * ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½Ëµï¿½
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate our menu.
         getMenuInflater().inflate(R.menu.task_pop_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     /**
-     * ³õÊ¼»¯²Ëµ¥µÄ×´Ì¬
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½×´Ì¬
      */
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.menu_add).setVisible(mAlarmsList.getAdapter().getCount() < MAX_ALARM_COUNT);
         return super.onPrepareOptionsMenu(menu);
     }
 
     /**
-     * µ¯³ö²Ëµ¥µÄÏìÓ¦ÊÂ¼þ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Â¼ï¿½
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if (item.getItemId() == R.id.menu_add)
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_add) {
             int newId = TaskUtil.addAlarm(dbOper);
             Intent intent = new Intent(this, TaskModifyActivity.class);
             intent.putExtra(ALARM_ID, newId);
@@ -135,32 +125,27 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * ³õÊ¼»¯³¤°´Ä³Ò»ÏîÊ±µÄµ¯³ö²Ëµ¥
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½Ê±ï¿½Äµï¿½ï¿½ï¿½ï¿½Ëµï¿½
      */
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo)
-    {
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
         getMenuInflater().inflate(R.menu.task_context_menu, menu);
     }
 
     /**
-     * ³õÊ¼»¯³¤°´Ä³Ò»ÏîÊ±µÄÊÂ¼þ
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Â¼ï¿½
      */
     @Override
-    public boolean onContextItemSelected(final MenuItem item)
-    {
+    public boolean onContextItemSelected(final MenuItem item) {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         final int id = (int) info.id;
 
-        if (item.getItemId() == R.id.delete_alarm)
-        {
+        if (item.getItemId() == R.id.delete_alarm) {
             // Confirm that the alarm will be deleted.
             new AlertDialog.Builder(this).setTitle(getString(R.string.delete_alarm))
                     .setMessage(getString(R.string.delete_alarm_confirm))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface d, int w)
-                        {
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface d, int w) {
                             TaskUtil.deleteAlarm(dbOper, id);
                             requery();
                         }
@@ -172,24 +157,61 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * µã»÷Ä³Ò»²Ëµ¥ÏîÊ±½øÈëÐÞ¸Ä½çÃæ
+     * ï¿½ï¿½ï¿½Ä³Ò»ï¿½Ëµï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä½ï¿½ï¿½ï¿½
      */
-    public void onItemClick(AdapterView<?> parent, View v, int pos, long id)
-    {
+    public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
         Intent intent = new Intent(this, TaskModifyActivity.class);
         intent.putExtra(TaskUtil.ALARM_ID, (int) id);
         startActivity(intent);
     }
 
-    private class TimerAdapter extends CursorAdapter
-    {
-        public TimerAdapter(Context context, Cursor cursor)
-        {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCursor.deactivate();
+        mCursor.close();
+    }
+
+    ;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        inflateClock();
+        // ï¿½ï¿½ï¿½Þ¸ï¿½,ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½æ·µï¿½Øºï¿½ï¿½ï¿½Ã´Ë·ï¿½ï¿½ï¿½Ë¢ï¿½ï¿½ï¿½Ð±ï¿½
+        requery();
+    }
+
+    protected void inflateClock() {
+        TextView am = (TextView) findViewById(R.id.am);
+        TextView pm = (TextView) findViewById(R.id.pm);
+        TextView am2 = (TextView) findViewById(R.id.am2);
+        TextView pm2 = (TextView) findViewById(R.id.pm2);
+
+        if (am != null) {
+            am.setText(mAm);
+            am2.setText(mAm);
+        }
+
+        if (pm != null) {
+            pm.setText(mPm);
+            pm2.setText(mPm);
+        }
+    }
+
+    /**
+     * ï¿½ï¿½É¾ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½,ï¿½Þ¸Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ï¿½Ê±Ë¢ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+     */
+    public void requery() {
+        mCursor.requery();
+    }
+
+    private class TimerAdapter extends CursorAdapter {
+        public TimerAdapter(Context context, Cursor cursor) {
             super(context, cursor, false);
         }
 
-        public View newView(Context context, Cursor cursor, ViewGroup parent)
-        {
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
             View ret = mFactory.inflate(R.layout.item_task, parent, false);
 
             ((TextView) ret.findViewById(R.id.am)).setText(mAm);
@@ -204,16 +226,13 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
             return ret;
         }
 
-        public void bindView(View view, Context context, Cursor cursor)
-        {
+        public void bindView(View view, Context context, Cursor cursor) {
             final Task alarm = new Task(cursor);
 
             CheckBox onButton = (CheckBox) view.findViewById(R.id.alarmButton);
             onButton.setChecked(alarm.enabled);
-            onButton.setOnClickListener(new OnClickListener()
-            {
-                public void onClick(View v)
-                {
+            onButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
                     boolean isChecked = ((CheckBox) v).isChecked();
                     TaskUtil.enableAlarm(dbOper, alarm.id, isChecked);
                 }
@@ -233,73 +252,22 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
             // Set the repeat text or leave it blank if it does not repeat.
             TextView daysOfWeekView = (TextView) digitalClock.findViewById(R.id.daysOfWeek);
             final String daysOfWeekStr = alarm.daysOfWeek.toString(TaskMainActivity.this, false);
-            if (daysOfWeekStr != null && daysOfWeekStr.length() != 0)
-            {
+            if (daysOfWeekStr != null && daysOfWeekStr.length() != 0) {
                 daysOfWeekView.setText(daysOfWeekStr);
                 daysOfWeekView.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 daysOfWeekView.setVisibility(View.GONE);
             }
 
             // Display the label
             TextView labelView = (TextView) digitalClock.findViewById(R.id.label);
-            if (alarm.message != null && alarm.message.length() != 0)
-            {
+            if (alarm.message != null && alarm.message.length() != 0) {
                 labelView.setText(alarm.message);
                 labelView.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 labelView.setVisibility(View.GONE);
             }
         }
-    };
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        mCursor.deactivate();
-        mCursor.close();
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        inflateClock();
-        // ÔÚÐÞ¸Ä,Ìí¼ÓÊÇ´ÓÉèÖÃ½çÃæ·µ»Øºóµ÷ÓÃ´Ë·½·¨Ë¢ÐÂÁÐ±í
-        requery();
-    }
-
-    protected void inflateClock()
-    {
-        TextView am = (TextView) findViewById(R.id.am);
-        TextView pm = (TextView) findViewById(R.id.pm);
-        TextView am2 = (TextView) findViewById(R.id.am2);
-        TextView pm2 = (TextView) findViewById(R.id.pm2);
-
-        if (am != null)
-        {
-            am.setText(mAm);
-            am2.setText(mAm);
-        }
-
-        if (pm != null)
-        {
-            pm.setText(mPm);
-            pm2.setText(mPm);
-        }
-    }
-
-    /**
-     * ÔÚÉ¾³ý,ÐÂÔö,ÐÞ¸Ä»òÕßÖØÐÂ½øÈë´Ë½çÃæÊ±Ë¢ÐÂÁÐ±íÊý¾ÝÊ±µ÷ÓÃ
-     */
-    public void requery()
-    {
-        mCursor.requery();
     }
 
 }

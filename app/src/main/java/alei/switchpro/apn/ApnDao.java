@@ -1,15 +1,14 @@
 package alei.switchpro.apn;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-public final class ApnDao
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public final class ApnDao {
     private static final String ID = "_id";
     private static final String APN = "apn";
     private static final String TYPE = "type";
@@ -27,72 +26,84 @@ public final class ApnDao
 
     private static final String DB_LIKE_SUFFIX = SUFFIX_START + "%" + SUFFIX_END;
 
-    private static final String[] MMS_SUFFIX = new String[] { SUFFIX_START + "mms" + SUFFIX_END };
+    private static final String[] MMS_SUFFIX = new String[]{SUFFIX_START + "mms" + SUFFIX_END};
 
     private final ContentResolver contentResolver;
 
     private int mmsTarget = ApnUtils.ON;
     private boolean disableAll = false;
 
-    public ApnDao(ContentResolver contentResolver, int mmsTarget)
-    {
+    public ApnDao(ContentResolver contentResolver, int mmsTarget) {
         this.contentResolver = contentResolver;
         this.mmsTarget = mmsTarget;
     }
 
-    public ApnDao(ContentResolver contentResolver)
-    {
+    public ApnDao(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
     }
 
+    private static String addSuffix(String currentName) {
+        if (currentName == null) {
+            return SUFFIX_START + SUFFIX_END;
+        } else {
+            return SUFFIX_START + currentName + SUFFIX_END;
+        }
+    }
+
+    private static String removeSuffix(String currentName) {
+        if (currentName.startsWith(SUFFIX_START) && currentName.endsWith(SUFFIX_END)) {
+            String tmp = currentName.substring(1, currentName.length() - SUFFIX_END.length());
+
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÄ°æ±¾
+            if (tmp.endsWith("_off")) {
+                return tmp.substring(0, tmp.length() - "_off".length());
+            } else {
+                return tmp;
+            }
+        } else {
+            return currentName;
+        }
+    }
+
     /**
-     * ÉèÖÃÊÇ·ñÒª±£³ÖMMSÁ¬½Ó
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Òªï¿½ï¿½ï¿½ï¿½MMSï¿½ï¿½ï¿½ï¿½
+     *
      * @param mmsTarget
      */
-    public void setMmsTarget(int mmsTarget)
-    {
+    public void setMmsTarget(int mmsTarget) {
         this.mmsTarget = mmsTarget;
     }
 
     /**
-     * ÉèÖÃÊÇ·ñ¹Ø±ÕËùÓÐapn
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½apn
+     *
      * @param disableAll
      */
-    public void setDisableAllApns(boolean disableAll)
-    {
+    public void setDisableAllApns(boolean disableAll) {
         this.disableAll = disableAll;
     }
 
     /**
      * @return current mms state
      */
-    public int getMmsState()
-    {
+    public int getMmsState() {
         int countMmsApns = executeCountQuery("(type like ? or type like 'mms')"
                 + (disableAll ? "" : " and current is not null"), MMS_SUFFIX);
         int countDisabledMmsApns = executeCountQuery("type like ?", MMS_SUFFIX);
         return countMmsApns > 0 && countDisabledMmsApns > 0 ? ApnUtils.OFF : ApnUtils.ON;
     }
 
-    public long getRandomCurrentDataApn()
-    {
+    public long getRandomCurrentDataApn() {
         Cursor cursor = null;
-        try
-        {
-            cursor = contentResolver.query(CONTENT_URI, new String[] { ID },
+        try {
+            cursor = contentResolver.query(CONTENT_URI, new String[]{ID},
                     "(not lower(type)='mms' or type is null) and current is not null", null, null);
             cursor.moveToFirst();
-            if (!cursor.isAfterLast())
-            {
+            if (!cursor.isAfterLast()) {
                 return cursor.getLong(0);
             }
-        }
-        finally
-        {
-            if (cursor != null)
-            {
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
@@ -100,17 +111,15 @@ public final class ApnDao
     }
 
     /**
-     * »ñµÃ±»ÒýÓÃµÄAPNÅäÖÃ
-     * 
+     * ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½Ãµï¿½APNï¿½ï¿½ï¿½ï¿½
+     *
      * @return
      */
-    public long getPreferredApnId()
-    {
-        Cursor cursor = contentResolver.query(PREFERRED_APN_URI, new String[] { ID }, null, null, null);
+    public long getPreferredApnId() {
+        Cursor cursor = contentResolver.query(PREFERRED_APN_URI, new String[]{ID}, null, null, null);
         cursor.moveToFirst();
 
-        if (!cursor.isAfterLast())
-        {
+        if (!cursor.isAfterLast()) {
             return cursor.getLong(0);
         }
 
@@ -118,12 +127,11 @@ public final class ApnDao
     }
 
     /**
-     * »Ö¸´±»ÒýÓÃµÄAPN
-     * 
+     * ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½APN
+     *
      * @param id
      */
-    public void restorePreferredApn(long id)
-    {
+    public void restorePreferredApn(long id) {
         ContentValues cv = new ContentValues();
         cv.putNull(PREFER_APN_ID_KEY);
         contentResolver.update(PREFERRED_APN_URI, cv, null, null);
@@ -133,32 +141,25 @@ public final class ApnDao
 
     /**
      * Performs switching apns work state according to passed state parameter
-     * 
-     * @param targetState
-     *            apn state. this method tries to make a switch passed target
-     *            state
+     *
+     * @param targetState apn state. this method tries to make a switch passed target
+     *                    state
      * @return {@code true} if switch was successfull (apn state changed) and
-     *         {@code false} if apn state was not changed
+     * {@code false} if apn state was not changed
      */
-    public boolean switchApnState(int targetState)
-    {
-        if (targetState == ApnUtils.OFF)
-        {
-            // »ñÈ¡ËùÓÐ¿ÉÓÃµÄAPNÅäÖÃ
+    public boolean switchApnState(int targetState) {
+        if (targetState == ApnUtils.OFF) {
+            // ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ãµï¿½APNï¿½ï¿½ï¿½ï¿½
             String query;
             boolean disableAll = this.disableAll;
             String disableAllQuery = disableAll ? null : "current is not null";
 
-            if (mmsTarget == ApnUtils.OFF)
-            {
+            if (mmsTarget == ApnUtils.OFF) {
                 query = disableAllQuery;
-            }
-            else
-            {
+            } else {
                 query = "(not lower(type)='mms' or type is null)";
 
-                if (!disableAll)
-                {
+                if (!disableAll) {
                     query += " and " + disableAllQuery;
                 }
             }
@@ -167,124 +168,98 @@ public final class ApnDao
             List<ApnInfo> apns = selectApnInfo(query, null);
 
             // when selected apns is empty
-            if (apns.isEmpty())
-            {
-                int countDisabledApns = executeCountQuery("apn like ? or type like ?", new String[] { DB_LIKE_SUFFIX,
-                        DB_LIKE_SUFFIX });
+            if (apns.isEmpty()) {
+                int countDisabledApns = executeCountQuery("apn like ? or type like ?", new String[]{DB_LIKE_SUFFIX,
+                        DB_LIKE_SUFFIX});
                 return countDisabledApns > 0;
             }
 
             // if one o more apns changed and {@code false} if all APNs did not
             // changed their states
             return disableApnList(apns);
-        }
-        else
-        {
+        } else {
             return enableAllInDb();
         }
     }
 
     /**
-     * »ñÈ¡¡°²»¹Ø±ÕMMS¡±µÄ×´Ì¬ÊÇ·ñÊÇ´ò¿ª»ò¹Ø±ÕµÄ
-     * 
-     * @param targetState
-     *            apn state. this method tries to passed target state
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½MMSï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ç·ï¿½ï¿½Ç´ò¿ª»ï¿½Ø±Õµï¿½
+     *
+     * @param targetState apn state. this method tries to passed target state
      * @return {@code true} if switch was successfull (apn state changed) and
-     *         {@code false} if apn state was not changed
+     * {@code false} if apn state was not changed
      */
-    public boolean switchMmsState(int targetState)
-    {
-        if (targetState == ApnUtils.OFF)
-        {
+    public boolean switchMmsState(int targetState) {
+        if (targetState == ApnUtils.OFF) {
             // selectEnabledMmsApns
             final List<ApnInfo> mmsList = selectApnInfo("type like ?" + (disableAll ? "" : " and current is not null"),
-                    new String[] { "mms" });
+                    new String[]{"mms"});
             return mmsList.size() != 0 && disableApnList(mmsList);
-        }
-        else
-        {
+        } else {
             // selectDisabledMmsApns
             return enableApnList(selectApnInfo("type like ?", MMS_SUFFIX));
         }
     }
 
     /**
-     * »ñÈ¡APNÊÇ·ñ´ò¿ªµÄ×´Ì¬ Calculates current apn state
-     * 
+     * ï¿½ï¿½È¡APNï¿½Ç·ï¿½ò¿ªµï¿½×´Ì¬ Calculates current apn state
+     *
      * @return current apn state;
      */
-    public int getApnState()
-    {
-        int countDisabledApns = executeCountQuery("apn like ? or type like ?", new String[] { DB_LIKE_SUFFIX,
-                DB_LIKE_SUFFIX });
+    public int getApnState() {
+        int countDisabledApns = executeCountQuery("apn like ? or type like ?", new String[]{DB_LIKE_SUFFIX,
+                DB_LIKE_SUFFIX});
         return countDisabledApns == 0 ? ApnUtils.ON : ApnUtils.OFF;
     }
 
-    private int executeCountQuery(String whereQuery, String[] whereParams)
-    {
+    private int executeCountQuery(String whereQuery, String[] whereParams) {
         Cursor cursor = null;
 
-        try
-        {
-            cursor = contentResolver.query(CONTENT_URI, new String[] { "count(*)" }, whereQuery, whereParams, null);
-            if (cursor.moveToFirst())
-            {
+        try {
+            cursor = contentResolver.query(CONTENT_URI, new String[]{"count(*)"}, whereQuery, whereParams, null);
+            if (cursor.moveToFirst()) {
                 return cursor.getInt(0);
-            }
-            else
-            {
+            } else {
                 return -1;
             }
-        }
-        finally
-        {
-            if (cursor != null)
-            {
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
     }
 
-    private List<ApnInfo> selectApnInfo(String whereQuery, String[] whereParams)
-    {
+    private List<ApnInfo> selectApnInfo(String whereQuery, String[] whereParams) {
         Cursor cursor = null;
 
-        try
-        {
-            cursor = contentResolver.query(CONTENT_URI, new String[] { ID, APN, TYPE }, whereQuery, whereParams, null);
+        try {
+            cursor = contentResolver.query(CONTENT_URI, new String[]{ID, APN, TYPE}, whereQuery, whereParams, null);
             return createApnList(cursor);
-        }
-        finally
-        {
-            if (cursor != null)
-            {
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
     }
 
-    private boolean enableAllInDb()
-    {
-        // »ñÈ¡ÒÑ¾­±»¼ÓÁËºó×ºµÄ²»¿ÉÓÃµÄAPN
+    private boolean enableAllInDb() {
+        // ï¿½ï¿½È¡ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½×ºï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ãµï¿½APN
         String suffix = DB_LIKE_SUFFIX;
-        List<ApnInfo> apns = selectApnInfo("apn like ? or type like ?", new String[] { suffix, suffix });
+        List<ApnInfo> apns = selectApnInfo("apn like ? or type like ?", new String[]{suffix, suffix});
         return enableApnList(apns);
     }
 
     /**
      * Creates list of apn dtos from a DB cursor
-     * 
-     * @param mCursor
-     *            db cursor with select result set
+     *
+     * @param mCursor db cursor with select result set
      * @return list of APN dtos
      */
-    private List<ApnInfo> createApnList(Cursor mCursor)
-    {
+    private List<ApnInfo> createApnList(Cursor mCursor) {
         List<ApnInfo> result = new ArrayList<ApnInfo>();
         mCursor.moveToFirst();
 
-        while (!mCursor.isAfterLast())
-        {
+        while (!mCursor.isAfterLast()) {
             long id = mCursor.getLong(0);
             String apn = mCursor.getString(1);
             String type = mCursor.getString(2);
@@ -298,47 +273,39 @@ public final class ApnDao
     /**
      * Use this one if you have fresh list of APNs already and you can save one
      * query to DB
-     * 
-     * @param apns
-     *            list of apns data to modify
+     *
+     * @param apns list of apns data to modify
      * @return {@code true} if switch was successfull and {@code false}
-     *         otherwise
+     * otherwise
      */
-    private boolean enableApnList(List<ApnInfo> apns)
-    {
+    private boolean enableApnList(List<ApnInfo> apns) {
         final ContentResolver contentResolver = this.contentResolver;
-        for (ApnInfo apnInfo : apns)
-        {
+        for (ApnInfo apnInfo : apns) {
             ContentValues values = new ContentValues();
             String newApnName = removeSuffix(apnInfo.apn);
             values.put(APN, newApnName);
             String newApnType = removeSuffix(apnInfo.type);
-            if ("".equals(newApnType))
-            {
+            if ("".equals(newApnType)) {
                 values.putNull(TYPE);
-            }
-            else
-            {
+            } else {
                 values.put(TYPE, newApnType);
             }
-            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[] { String.valueOf(apnInfo.id) });
+            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[]{String.valueOf(apnInfo.id)});
 
         }
         return true;// we always return true because in any situation we can
         // reset all apns to initial state
     }
 
-    private boolean disableApnList(List<ApnInfo> apns)
-    {
+    private boolean disableApnList(List<ApnInfo> apns) {
         final ContentResolver contentResolver = this.contentResolver;
-        for (ApnInfo apnInfo : apns)
-        {
+        for (ApnInfo apnInfo : apns) {
             ContentValues values = new ContentValues();
             String newApnName = addSuffix(apnInfo.apn);
             values.put(APN, newApnName);
             String newApnType = addSuffix(apnInfo.type);
             values.put(TYPE, newApnType);
-            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[] { String.valueOf(apnInfo.id) });
+            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[]{String.valueOf(apnInfo.id)});
         }
         return true;
     }
@@ -346,51 +313,15 @@ public final class ApnDao
     /**
      * Selection of few interesting columns from APN table
      */
-    private static final class ApnInfo
-    {
+    private static final class ApnInfo {
         final long id;
         final String apn;
         final String type;
 
-        public ApnInfo(long id, String apn, String type)
-        {
+        public ApnInfo(long id, String apn, String type) {
             this.id = id;
             this.apn = apn;
             this.type = type;
-        }
-    }
-
-    private static String addSuffix(String currentName)
-    {
-        if (currentName == null)
-        {
-            return SUFFIX_START + SUFFIX_END;
-        }
-        else
-        {
-            return SUFFIX_START + currentName + SUFFIX_END;
-        }
-    }
-
-    private static String removeSuffix(String currentName)
-    {
-        if (currentName.startsWith(SUFFIX_START) && currentName.endsWith(SUFFIX_END))
-        {
-            String tmp = currentName.substring(1, currentName.length() - SUFFIX_END.length());
-
-            // ¼æÈÝÀÏµÄ°æ±¾
-            if (tmp.endsWith("_off"))
-            {
-                return tmp.substring(0, tmp.length() - "_off".length());
-            }
-            else
-            {
-                return tmp;
-            }
-        }
-        else
-        {
-            return currentName;
         }
     }
 }

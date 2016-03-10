@@ -1,7 +1,6 @@
 package alei.switchpro;
 
-public class Constants
-{
+public class Constants {
     public static final String DEFAULT_ENCODING = "UTF-8";
     public static final String APP_NAME = "switchpro";
     public static final String PREFS_NAME = "SwitchProPrefs";
@@ -14,7 +13,7 @@ public class Constants
     public static final int NOT_SHOW_FLAG = 100;
 
     public static final String PKG_THEME_HOLO = "alei.switchpro.theme.holo";
-    // °´Å¥±êÊ¶
+    // ï¿½ï¿½Å¥ï¿½ï¿½Ê¶
     public static final int BUTTON_WIFI = 0;
     public static final int BUTTON_EDGE = 1;
     public static final int BUTTON_BLUETOOTH = 2;
@@ -46,7 +45,7 @@ public class Constants
     public static final int BUTTON_BT_TE = 28;
     public static final int BUTTON_NFC = 29;
 
-    // Í¼±êµÄ±êÊ¶
+    // Í¼ï¿½ï¿½Ä±ï¿½Ê¶
     public static final int ICON_WIFI = 0;
     public static final int ICON_EDGE = 1;
     public static final int ICON_BLUETOOTH = 2;
@@ -81,13 +80,13 @@ public class Constants
     public static final int ICON_BT_TE = 30;
     public static final int ICON_NFC = 31;
 
-    // ±£´æ¸÷ÖÖ×´Ì¬µÄ²ÎÊý
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä²ï¿½ï¿½ï¿½
     public static final String PREFS_FLASH_STATE = "flashState";
     public static final String PREF_NET_STATE = "netstate";
     public static final String PREF_AUTOLOCK_STATE = "autolockState";
     public static final String PREF_4G_STATE = "4gState";
 
-    // È«¾Ö²ÎÊý
+    // È«ï¿½Ö²ï¿½ï¿½ï¿½
     public static final String PREFS_TOGGLE_WIFI = "toggle_wifi";
     public static final String PREFS_TOGGLE_BLUETOOTH = "toggle_bluetooth";
     public static final String PREFS_TOGGLE_GPS = "toggle_gps";
@@ -112,11 +111,11 @@ public class Constants
     public static final String PREFS_SHOW_BRIGHTNESS_BAR = "show_brightness_bar";
     public static final String PREFS_GPS_FIRST_LAUNCH = "gps_first_launch";
 
-    // µç³Ø²ÎÊý
+    // ï¿½ï¿½Ø²ï¿½ï¿½ï¿½
     public static final String PREFS_BATTERY_LEVEL = "Pref_Battery_Level";
 
     public static final String PREFS_CUSICON_FIELD_PATTERN = "cusIcon-%d";
-    // Ã¿¸öWidgetµÄË½ÓÐ²ÎÊý
+    // Ã¿ï¿½ï¿½Widgetï¿½ï¿½Ë½ï¿½Ð²ï¿½ï¿½ï¿½
     public static final String PREFS_BUTTONS_FIELD_PATTERN = "buttonIds-%d";
     public static final String PREFS_BACK_COLOR_FIELD_PATTERN = "backColor-%d";
     public static final String PREFS_BACK_IMAGE_FIELD_PATTERN = "backImage-%d";
@@ -126,7 +125,7 @@ public class Constants
     public static final String PREFS_DIVIDER_COLOR_FIELD_PATTERN = "dividerColor-%d";
     public static final String PREFS_LAYOUT_FIELD_PATTERN = "widgetLayout-%d";
 
-    // ´´½¨Widgetºó±£´æµÄ×î½üÅäÖÃ
+    // ï¿½ï¿½ï¿½ï¿½Widgetï¿½ó±£´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public static final String PREFS_LAST_BUTTONS_ORDER = "lastBtnOrder";
     public static final String PREFS_LAST_BACKGROUND = "lastWidgetLayout";
     public static final String PREFS_LAST_BACK_COLOR = "lastBackColor";
@@ -174,12 +173,12 @@ public class Constants
 
     public static final String BACK_FILE_PATH = ".switchpro";
 
-    // ¾²ÒôÕñ¶¯°´Å¥µÄÅäÖÃ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ñ¶¯°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public static final String BTN_ONLY_SILENT = "2";
     public static final String BTN_ONLY_VIVERATE = "1";
     public static final String BTN_VS = "0";
 
-    // Éè±¸ÀàÐÍµÄÅäÖÃ
+    // ï¿½è±¸ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½
     public static final String DEVICE_TYPE1 = "0";
     public static final String DEVICE_TYPE2 = "1";
     public static final String DEVICE_TYPE3 = "2";
@@ -188,8 +187,7 @@ public class Constants
     public static final String DEVICE_TYPE6 = "5";
     public static final String DEVICE_TYPE7 = "6";
 
-    public interface TASK
-    {
+    public interface TASK {
         public static final String TABLE_TASK = "tasks";
 
         public static final String COLUMN_ID = "_id";
@@ -204,7 +202,7 @@ public class Constants
         public static final String COLUMN_MESSAGE = "message";
 
         /**
-         * These save calls to cursor.getColumnIndexOrThrow() ÒªÓë´´½¨±í¸ñÊ±µÄÁÐ±£³ÖÍ¬²½
+         * These save calls to cursor.getColumnIndexOrThrow() Òªï¿½ë´´ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½Í¬ï¿½ï¿½
          */
         public static final int INDEX_ID = 0;
         public static final int INDEX_START_HOUR = 1;
@@ -218,8 +216,7 @@ public class Constants
         public static final int INDEX_MESSAGE = 9;
     }
 
-    public interface SWITCH
-    {
+    public interface SWITCH {
         public static final String TABLE_SWITCH = "switches";
 
         public static final String COLUMN_ID = "_id";
@@ -235,8 +232,7 @@ public class Constants
         public static final int INDEX_PARAM2 = 4;
     }
 
-    public interface IGNORED
-    {
+    public interface IGNORED {
         public static final String TABLE_IGNORED = "ignoreds";
 
         public static final String COLUMN_ID = "_id";

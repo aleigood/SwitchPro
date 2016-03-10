@@ -17,8 +17,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class VolumeActivity extends Activity implements OnCheckedChangeListener
-{
+public class VolumeActivity extends Activity implements OnCheckedChangeListener {
     private static String NOTIFICATIONS_USE_RING_VOLUME = "notifications_use_ring_volume";
     private CheckBox sameNotificationVolume;
     private TextView notificationVolumeTitle;
@@ -30,8 +29,7 @@ public class VolumeActivity extends Activity implements OnCheckedChangeListener
     private SeekBar voiceVolumeSeekbar;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle(getString(R.string.volume));
@@ -63,55 +61,45 @@ public class VolumeActivity extends Activity implements OnCheckedChangeListener
         voiceVolumeSeekbar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL));
         notificationVolumeSeekbar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION));
         notificationVolumeSeekbar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION));
-        alert.setPositiveButton(getString(R.string.button_apply), new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int whichButton)
-            {
+        alert.setPositiveButton(getString(R.string.button_apply), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
                 audioManager.setStreamVolume(AudioManager.STREAM_RING, ringVolumeSeekbar.getProgress(), 0);
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mediaVolumeSeekbar.getProgress(), 0);
                 audioManager.setStreamVolume(AudioManager.STREAM_ALARM, alarmVolumeSeekbar.getProgress(), 0);
                 audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, systemVolumeSeekbar.getProgress(), 0);
                 audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, voiceVolumeSeekbar.getProgress(), 0);
-                if (!sameNotificationVolume.isChecked())
-                {
+                if (!sameNotificationVolume.isChecked()) {
                     audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION,
                             notificationVolumeSeekbar.getProgress(), 0);
                 }
                 finish();
             }
         });
-        alert.setNeutralButton(getString(R.string.button_cancel), new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int whichButton)
-            {
+        alert.setNeutralButton(getString(R.string.button_cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
                 finish();
             }
         });
-        // Ò»¶¨ÒªÔÚÈ¡ÏûµÄÊ±ºò¹Ø±Õ±¾ACTIVITY£¬·ñÔò»áÎÞ·¨²Ù×÷½çÃæ,ÔÚµã»÷¡°Back¡±°´Å¥»áµ÷ÓÃ
-        alert.setOnCancelListener(new OnCancelListener()
-        {
-            public void onCancel(DialogInterface arg0)
-            {
+        // Ò»ï¿½ï¿½Òªï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ø±Õ±ï¿½ACTIVITYï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Úµï¿½ï¿½ï¿½ï¿½Backï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½
+        alert.setOnCancelListener(new OnCancelListener() {
+            public void onCancel(DialogInterface arg0) {
                 finish();
             }
         });
         alert.show();
     }
 
-    // Ò»¶¨ÒªÔÚpauseµÄÊ±ºò½áÊø±¾activity
+    // Ò»ï¿½ï¿½Òªï¿½ï¿½pauseï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½activity
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         finish();
     }
 
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-    {
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         setNotificationVolumeVisibility(!isChecked);
         Settings.System.putInt(getContentResolver(), NOTIFICATIONS_USE_RING_VOLUME, isChecked ? 1 : 0);
-        if (isChecked)
-        {
+        if (isChecked) {
             // The user wants the notification to be same as ring, so do a
             // one-time sync right now
             AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -119,8 +107,7 @@ public class VolumeActivity extends Activity implements OnCheckedChangeListener
         }
     }
 
-    private void setNotificationVolumeVisibility(boolean visible)
-    {
+    private void setNotificationVolumeVisibility(boolean visible) {
         notificationVolumeSeekbar.setVisibility(visible ? View.VISIBLE : View.GONE);
         notificationVolumeTitle.setVisibility(visible ? View.VISIBLE : View.GONE);
     }

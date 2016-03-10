@@ -12,81 +12,68 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 
-public class VolumePreference extends DialogPreference implements OnClickListener
-{
+public class VolumePreference extends DialogPreference implements OnClickListener {
     private boolean isChecked;
     private TaskModifyActivity parent;
     private int percent;
     private SeekBar seekBar;
 
-    public VolumePreference(Context context, AttributeSet attrs)
-    {
+    public VolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void initData(TaskModifyActivity activity)
-    {
+    public void initData(TaskModifyActivity activity) {
         parent = activity;
     }
 
     @Override
-    protected void onPrepareDialogBuilder(Builder builder)
-    {
+    protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
         builder.setTitle("Volume");
         LayoutInflater inflater = parent.getLayoutInflater();
         View dlgView = inflater.inflate(R.layout.view_task_seekbar, null, false);
         seekBar = (SeekBar) dlgView.findViewById(R.id.seek_bar);
-        // ÉèÖÃ³õÊ¼Öµ
+        // ï¿½ï¿½ï¿½Ã³ï¿½Ê¼Öµ
         seekBar.setProgress(percent);
         builder.setView(dlgView);
     }
 
     @Override
-    protected void onDialogClosed(boolean positiveResult)
-    {
-        if (positiveResult)
-        {
+    protected void onDialogClosed(boolean positiveResult) {
+        if (positiveResult) {
             percent = seekBar.getProgress();
             setSummary(percent + " %");
         }
     }
 
     @Override
-    protected void onBindView(View view)
-    {
+    protected void onBindView(View view) {
         super.onBindView(view);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.pref_check);
 
-        if (checkBox != null)
-        {
+        if (checkBox != null) {
             checkBox.setChecked(isChecked);
             checkBox.setOnClickListener(this);
         }
     }
 
-    public boolean isChecked()
-    {
+    public boolean isChecked() {
         return isChecked;
     }
 
-    public void setChecked(boolean b)
-    {
+    public void setChecked(boolean b) {
         isChecked = b;
     }
 
-    public void onClick(View paramView)
-    {
+    public void onClick(View paramView) {
         isChecked = ((CheckBox) paramView).isChecked();
     }
 
-    public int getPercent()
-    {
+    public int getPercent() {
         return percent;
     }
 
-    public void setPercent(int percent)
-    {
+    public void setPercent(int percent) {
         this.percent = percent;
     }
 

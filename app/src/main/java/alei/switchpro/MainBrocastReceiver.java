@@ -9,79 +9,66 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-public class MainBrocastReceiver extends BroadcastReceiver
-{
+public class MainBrocastReceiver extends BroadcastReceiver {
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         Log.d("MainBrocastReceiver", "onReceive:" + intent.getAction());
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor configEditor = config.edit();
 
-        // ´¦ÀíÍ¨ÖªÀ¸ÖÐ°´Å¥µÄÏìÓ¦ÊÂ¼þ£¬widgetµÄ°´Å¥ÏìÓ¦ÊÂ¼þÖ»»á±»×ÔÉí²¶×½
+        // ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½ï¿½Ð°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Â¼ï¿½ï¿½ï¿½widgetï¿½Ä°ï¿½Å¥ï¿½ï¿½Ó¦ï¿½Â¼ï¿½Ö»ï¿½á±»ï¿½ï¿½ï¿½ï¿½×½
         WidgetProviderUtil.performButtonEvent(context, intent);
 
-        if (intent.getAction() != null)
-        {
-            if (intent.getAction().equals("android.intent.action.BATTERY_CHANGED"))
-            {
+        if (intent.getAction() != null) {
+            if (intent.getAction().equals("android.intent.action.BATTERY_CHANGED")) {
                 int currentBatteryLevel = intent.getIntExtra("level", -1);
 
-                if (currentBatteryLevel != -1)
-                {
+                if (currentBatteryLevel != -1) {
                     configEditor.putInt(Constants.PREFS_BATTERY_LEVEL, currentBatteryLevel).commit();
                 }
             }
-            // É¨ÃèSD¿¨Íê³ÉÊÂ¼þ£¬Ö»ÏÔÊ¾Íê³ÉÌáÊ¾
+            // É¨ï¿½ï¿½SDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
             else if (intent.getAction().equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)
-                    && WidgetProviderUtil.scanMediaFlag)
-            {
+                    && WidgetProviderUtil.scanMediaFlag) {
                 Toast.makeText(context, R.string.media_scanner_finished, Toast.LENGTH_SHORT).show();
                 WidgetProviderUtil.scanMediaFlag = false;
             }
-            // Èç¹ûÆÁÄ»¹Ø±ÕÁË¾Í¹Ø±ÕÉÁ¹âµÆ
-            else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF))
-            {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ø±ï¿½ï¿½Ë¾Í¹Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 boolean savedState = config.getBoolean(Constants.PREFS_FLASH_STATE, false);
 
-                if (savedState)
-                {
+                if (savedState) {
                     configEditor.putBoolean(Constants.PREFS_FLASH_STATE, false);
                     SwitchUtils.setCameraFlashState(context, false);
                     configEditor.commit();
                 }
             }
-            // Èç¹û¸ÕÆô¶¯ÔòÖØÖÃÉÁ¹âµÆºÍÆÁÄ»ËøµÄ×´Ì¬
-            else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
-            {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æºï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½×´Ì¬
+            else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
                 configEditor.putBoolean(Constants.PREFS_FLASH_STATE, false);
                 configEditor.putBoolean(Constants.PREF_AUTOLOCK_STATE, true);
                 configEditor.commit();
 
-                // Èç¹û4G¿ª¹Ø±»ÏµÍ³×Ô¶¯´ò¿ª£¬Ôò¹ØµôËü
-                // ×îºóÒ»´ÎÅäÖÃ
+                // ï¿½ï¿½ï¿½4Gï¿½ï¿½ï¿½Ø±ï¿½ÏµÍ³ï¿½Ô¶ï¿½ï¿½ò¿ª£ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½
+                // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 int state = config.getInt(Constants.PREF_4G_STATE, WidgetProviderUtil.STATE_ENABLED);
 
-                // Èç¹û×îºóÒ»´ÎÅäÖÃÊÇ¹Ø±ÕµÄ£¬ÇÒµ±Ç°ÒÑ¾­´ò¿ªÁË£¬¾Í°ÑËü¹Ø±Õ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹Ø±ÕµÄ£ï¿½ï¿½Òµï¿½Ç°ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½Í°ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
                 if (state == WidgetProviderUtil.STATE_DISABLED
-                        && SwitchUtils.getWimaxState(context) == WidgetProviderUtil.STATE_ENABLED)
-                {
+                        && SwitchUtils.getWimaxState(context) == WidgetProviderUtil.STATE_ENABLED) {
                     SwitchUtils.toggleWimax(context);
                 }
-            }
-            else if (("android.bluetooth.adapter.action.STATE_CHANGED".equals(intent.getAction()) || "android.bluetooth.intent.action.BLUETOOTH_STATE_CHANGED"
-                    .equals(intent.getAction())) && SwitchUtils.toggle_bluetooth_te)
-            {
-                if (SwitchUtils.getBluetoothState(context) == WidgetProviderUtil.STATE_ENABLED)
-                {
+            } else if (("android.bluetooth.adapter.action.STATE_CHANGED".equals(intent.getAction()) || "android.bluetooth.intent.action.BLUETOOTH_STATE_CHANGED"
+                    .equals(intent.getAction())) && SwitchUtils.toggle_bluetooth_te) {
+                if (SwitchUtils.getBluetoothState(context) == WidgetProviderUtil.STATE_ENABLED) {
                     BluetoothTeUtil.toggleBluetoothTe();
-                    // ±ê¼ÇÊÇÒ»´ÎÐÔµÄ£¬Ö»Òª´ò¿ªÁËÀ¶ÑÀ¾ÍÐÐ
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ÔµÄ£ï¿½Ö»Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     SwitchUtils.toggle_bluetooth_te = false;
                 }
             }
         }
 
-        // Í¨Öªwidget¸üÐÂ
+        // Í¨Öªwidgetï¿½ï¿½ï¿½ï¿½
         Utils.updateWidget(context);
     }
 }

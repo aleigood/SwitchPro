@@ -10,21 +10,18 @@ import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.WindowManager;
 
-public class MyApplication extends Application
-{
+public class MyApplication extends Application {
     private static MyApplication instance;
-    private DatabaseOper dbOper;
     private static MainBrocastReceiver mainReceiver = new MainBrocastReceiver();
+    private DatabaseOper dbOper;
     private WindowManager.LayoutParams mWindowParams;
 
-    public static MyApplication getInstance()
-    {
+    public static MyApplication getInstance() {
         return instance;
     }
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         instance = this;
         dbOper = new DatabaseOper(this);
@@ -35,31 +32,28 @@ public class MyApplication extends Application
 
         registerReceiver(mainReceiver, new IntentFilter("android.intent.action.BATTERY_CHANGED"));
 
-        // ÓÃÓÚÔÚÖØÆôºó³õÊ¼»¯ÍøÂç×´Ì¬£¬ÒòÎªÄ¬ÈÏÖØÆôºó¶¼»á´ò¿ªÊý¾ÝÍøÂç
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ÎªÄ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó¶¼»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         NetUtils.initNetworkState(this);
 
-        // ³õÊ¼»¯¼àÌýÍøÂç×´Ì¬µÄ¼àÌýÆ÷
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
         TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         mTelephonyMgr.listen(new NetStateListener(this), PhoneStateListener.LISTEN_SERVICE_STATE
                 | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE | PhoneStateListener.LISTEN_SIGNAL_STRENGTH);
     }
 
     @Override
-    public void onTerminate()
-    {
+    public void onTerminate() {
         super.onTerminate();
         dbOper.close();
 
         unregisterReceiver(mainReceiver);
     }
 
-    public DatabaseOper getDataOper()
-    {
+    public DatabaseOper getDataOper() {
         return dbOper;
     }
 
-    public WindowManager.LayoutParams getWindowParams()
-    {
+    public WindowManager.LayoutParams getWindowParams() {
         return mWindowParams;
     }
 }

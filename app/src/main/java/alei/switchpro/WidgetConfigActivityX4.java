@@ -9,74 +9,64 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-public class WidgetConfigActivityX4 extends WidgetConfigBaseActivity
-{
+public class WidgetConfigActivityX4 extends WidgetConfigBaseActivity {
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_widget_conf);
         addPreferencesFromResource(R.xml.pref_widget_conf);
 
-        // ´ÓÆô¶¯Õâ¸ö»î¶¯µÄÒâÍ¼ÖÐ»ñÈ¡App Widget ID
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î¶¯ï¿½ï¿½ï¿½ï¿½Í¼ï¿½Ð»ï¿½È¡App Widget ID
         Intent launchIntent = getIntent();
         Bundle extras = launchIntent.getExtras();
 
-        // µ¯³öÕâ¸öÅäÖÃ½çÃæµÄwidgetµÄID
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½widgetï¿½ï¿½ID
         int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
-        // ×ªÈë´ËÅäÖÃ½çÃæ±ØÐë´øwidgetId²ÎÊý
-        if (extras != null)
-        {
+        // ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½widgetIdï¿½ï¿½ï¿½ï¿½
+        if (extras != null) {
             appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
         createAction(appWidgetId);
     }
 
-    protected void updateWidget(int appWidgetId)
-    {
+    protected void updateWidget(int appWidgetId) {
         Intent launchIntent = new Intent();
         launchIntent.setClass(this, WidgetProviderX4.class);
         launchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        // Ã¿¸öIntent¶¼ÊÇÎ¨Ò»µÄ£¬²»»á±»Ïà»¥¸²¸Ç
+        // Ã¿ï¿½ï¿½Intentï¿½ï¿½ï¿½ï¿½Î¨Ò»ï¿½Ä£ï¿½ï¿½ï¿½ï¿½á±»ï¿½à»¥ï¿½ï¿½ï¿½ï¿½
         launchIntent.setData(Uri.withAppendedPath(Uri.parse(WidgetProviderUtil.URI_SCHEME + "://widget/id/"),
                 String.valueOf(appWidgetId)));
         PendingIntent newIntent = PendingIntent.getBroadcast(this, 0, launchIntent, 0);
 
-        try
-        {
+        try {
             newIntent.send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * »ñÈ¡×îºóÒ»´ÎÅäÖÃµÄ°´Å¥Ë³Ðò£¬Èç¹ûÃ»ÓÐµÄ»°·µ»ØÒ»¸öÄ¬ÈÏË³Ðò£¬×ÓÀàÒª¸²¸Ç
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ°ï¿½Å¥Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ÐµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä¬ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+     *
      * @return
      */
-    protected String getLastBtnOrder()
-    {
+    protected String getLastBtnOrder() {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         String btnOrder = config.getString(Constants.PREFS_LAST_BUTTONS_ORDER, "0,2,3,4,6,25,1,7");
         return btnOrder;
     }
 
     @Override
-    protected int getWidgetSize()
-    {
+    protected int getWidgetSize() {
         return 4;
     }
 
-    protected void saveBtnAction()
-    {
+    protected void saveBtnAction() {
         super.saveBtnAction();
         saveCfgToSD(PreferenceManager.getDefaultSharedPreferences(this), false, null);
-        // ×ª½»¸øÏàÓ¦µÄwidget½øÐÐ¸üÐÂ
+        // ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½widgetï¿½ï¿½ï¿½Ð¸ï¿½ï¿½ï¿½
         updateWidget(widgetId);
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);

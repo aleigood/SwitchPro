@@ -1,7 +1,5 @@
 package alei.switchpro.color;
 
-import java.util.ArrayList;
-
 import alei.switchpro.R;
 import android.content.Context;
 import android.content.res.Resources;
@@ -14,50 +12,26 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ColorAdapter extends BaseAdapter
-{
+import java.util.ArrayList;
+
+public class ColorAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private final ArrayList<ListItem> mItems = new ArrayList<ListItem>();
 
     /**
-     * Specific item in our list.
-     */
-    public class ListItem
-    {
-        public final CharSequence text;
-        public final Drawable image;
-
-        public ListItem(Resources res, int textResourceId, int imageResourceId)
-        {
-            text = res.getString(textResourceId);
-
-            if (imageResourceId != -1)
-            {
-                image = res.getDrawable(imageResourceId);
-            }
-            else
-            {
-                image = null;
-            }
-        }
-    }
-
-    /**
-     * 
      * IND_COLOR_PINK = 0; IND_COLOR_RED = 1; IND_COLOR_YELLOW = 2;
      * IND_COLOR_DEFAULT = 3; IND_COLOR_GREEN = 4; IND_COLOR_LIGHTBLUE = 5;
      * IND_COLOR_BLUE = 6; IND_COLOR_PURPLE = 7; IND_COLOR_ORANGE = 8;
      * IND_COLOR_GRAY = 9;
-     * 
+     *
      * @param newValue
      */
-    public ColorAdapter(PreferenceActivity activity)
-    {
+    public ColorAdapter(PreferenceActivity activity) {
         super();
         mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Resources res = activity.getResources();
 
-        // Ë³Ðò²»ÄÜ´í£¬¸ù¾Ý
+        // Ë³ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½ï¿½ï¿½
         mItems.add(new ListItem(res, R.string.color_pink, R.drawable.ind_pink_on_c));
         mItems.add(new ListItem(res, R.string.color_red, R.drawable.ind_red_on_c));
         mItems.add(new ListItem(res, R.string.color_orange, R.drawable.ind_orange_on_c));
@@ -70,12 +44,10 @@ public class ColorAdapter extends BaseAdapter
         mItems.add(new ListItem(res, R.string.color_gray, R.drawable.ind_gray_on_c));
     }
 
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    public View getView(int position, View convertView, ViewGroup parent) {
         ListItem item = (ListItem) getItem(position);
 
-        if (convertView == null)
-        {
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_image, parent, false);
         }
 
@@ -89,19 +61,34 @@ public class ColorAdapter extends BaseAdapter
         return convertView;
     }
 
-    public int getCount()
-    {
+    public int getCount() {
         return mItems.size();
     }
 
-    public Object getItem(int position)
-    {
+    public Object getItem(int position) {
         return mItems.get(position);
     }
 
-    public long getItemId(int position)
-    {
+    public long getItemId(int position) {
         return position;
+    }
+
+    /**
+     * Specific item in our list.
+     */
+    public class ListItem {
+        public final CharSequence text;
+        public final Drawable image;
+
+        public ListItem(Resources res, int textResourceId, int imageResourceId) {
+            text = res.getString(textResourceId);
+
+            if (imageResourceId != -1) {
+                image = res.getDrawable(imageResourceId);
+            } else {
+                image = null;
+            }
+        }
     }
 
 }

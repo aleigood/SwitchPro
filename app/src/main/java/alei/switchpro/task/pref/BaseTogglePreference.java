@@ -9,27 +9,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 
-public class BaseTogglePreference extends ListPreference implements OnClickListener
-{
+public class BaseTogglePreference extends ListPreference implements OnClickListener {
     private boolean isChecked;
 
-    public BaseTogglePreference(Context context, AttributeSet attrs)
-    {
+    public BaseTogglePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void initData()
-    {
-        setOnPreferenceChangeListener(new OnPreferenceChangeListener()
-        {
-            public boolean onPreferenceChange(Preference preference, Object newValue)
-            {
+    public void initData() {
+        setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String[] values = (String[]) getEntryValues();
 
-                for (int i = 0; i < values.length; i++)
-                {
-                    if (values[i].equals(newValue.toString()))
-                    {
+                for (int i = 0; i < values.length; i++) {
+                    if (values[i].equals(newValue.toString())) {
                         setSummary(getEntries()[i].toString());
                         setValue(newValue.toString());
                         break;
@@ -42,30 +35,25 @@ public class BaseTogglePreference extends ListPreference implements OnClickListe
     }
 
     @Override
-    protected void onBindView(View view)
-    {
+    protected void onBindView(View view) {
         super.onBindView(view);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.pref_check);
 
-        if (checkBox != null)
-        {
+        if (checkBox != null) {
             checkBox.setChecked(isChecked);
             checkBox.setOnClickListener(this);
         }
     }
 
-    public boolean isChecked()
-    {
+    public boolean isChecked() {
         return isChecked;
     }
 
-    public void setChecked(boolean b)
-    {
+    public void setChecked(boolean b) {
         isChecked = b;
     }
 
-    public void onClick(View paramView)
-    {
+    public void onClick(View paramView) {
         isChecked = ((CheckBox) paramView).isChecked();
     }
 }

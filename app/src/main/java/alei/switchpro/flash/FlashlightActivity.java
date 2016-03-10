@@ -23,50 +23,44 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-public class FlashlightActivity extends Activity
-{
+public class FlashlightActivity extends Activity {
     private PowerManager.WakeLock mWakeLock;
     private View mWindow;
     private AlertDialog dlg;
     private int lastColor;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_flashlight);
 
-        // ÉèÖÃÈ«ÆÁ
+        // ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½
         Window win = getWindow();
         win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // ÉèÖÃ±³¾°Îª×îºóÒ»´ÎÉèÖÃµÄÑÕÉ«
+        // ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
         mWindow = findViewById(R.id.flashlight_main);
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(this);
         lastColor = pre.getInt(Constants.PREFS_FLASH_COLOR, Color.WHITE);
         mWindow.setBackgroundColor(lastColor);
 
-        // ÉèÖÃÆÁÄ»ÁÁ¶È
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½
         LayoutParams attributes = getWindow().getAttributes();
         attributes.screenBrightness = 1.0f;
         getWindow().setAttributes(attributes);
 
-        // ÉèÖÃÆÁÄ»³£ÁÁ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½
         mWakeLock = Utils.getWakeLock(this);
         mWakeLock.acquire();
 
-        findViewById(R.id.color_image).setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View paramView)
-            {
+        findViewById(R.id.color_image).setOnClickListener(new OnClickListener() {
+            public void onClick(View paramView) {
                 dlg = initColorChooser();
                 dlg.show();
             }
         });
-        findViewById(R.id.flash_image).setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View paramView)
-            {
+        findViewById(R.id.flash_image).setOnClickListener(new OnClickListener() {
+            public void onClick(View paramView) {
                 finish();
             }
         });
@@ -74,19 +68,16 @@ public class FlashlightActivity extends Activity
         super.onCreate(savedInstanceState);
     }
 
-    private AlertDialog initColorChooser()
-    {
+    private AlertDialog initColorChooser() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.flash_color);
 
-        OnColorChangedListener listener = new OnColorChangedListener()
-        {
-            public void colorChanged(int color)
-            {
-                // ±£´æÉèÖÃºÃµÄÑÕÉ«
+        OnColorChangedListener listener = new OnColorChangedListener() {
+            public void colorChanged(int color) {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÃºÃµï¿½ï¿½ï¿½É«
                 lastColor = color;
 
-                // ±£´æ×îºóÒ»´ÎÅäÖÃµÄÑÕÉ«
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
                 SharedPreferences.Editor editor = PreferenceManager
                         .getDefaultSharedPreferences(FlashlightActivity.this).edit();
                 editor.putInt(Constants.PREFS_FLASH_COLOR, lastColor);
@@ -96,12 +87,12 @@ public class FlashlightActivity extends Activity
             }
         };
 
-        // Ö÷ÒªÊÇÉèÖÃ µ÷É«°åµÄ²¼¾Ö
+        // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½É«ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
         LinearLayout layout = new LinearLayout(this);
         layout.setPadding(0, 0, 0, 0);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        // ÎÞ±³¾°Ê±¿ÉÑ¡Ôñ°ëÍ¸Ã÷Ñ¡Ôñ£¬ËùÒÔ°ë¾¶ÒªÐ¡
+        // ï¿½Þ±ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Í¸ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½Ô°ë¾¶ÒªÐ¡
         Display display = getWindowManager().getDefaultDisplay();
         int x = ((display.getWidth() - display.getWidth() / 3) / 2);
 
@@ -117,16 +108,14 @@ public class FlashlightActivity extends Activity
         hsv.addView(layout);
         builder.setView(hsv);
 
-        // ³õÊ¼»¯°´Å¥ÊÂ¼þ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Å¥ï¿½Â¼ï¿½
         builder.setPositiveButton(getResources().getString(R.string.button_apply),
-                new android.content.DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                    {
-                        // ±£´æÉèÖÃºÃµÄÑÕÉ«
+                new android.content.DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÃºÃµï¿½ï¿½ï¿½É«
                         lastColor = mCPView.getColor();
 
-                        // ±£´æ×îºóÒ»´ÎÅäÖÃµÄÑÕÉ«
+                        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
                                 FlashlightActivity.this).edit();
                         editor.putInt(Constants.PREFS_FLASH_COLOR, lastColor);
@@ -135,10 +124,8 @@ public class FlashlightActivity extends Activity
                     }
                 });
         builder.setNegativeButton(getResources().getString(R.string.button_cancel),
-                new android.content.DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt)
-                    {
+                new android.content.DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     }
                 });
 
@@ -146,10 +133,9 @@ public class FlashlightActivity extends Activity
         return dialog;
     }
 
-    // Ò»¶¨ÒªÔÚpauseµÄÊ±ºò½áÊø±¾activity
+    // Ò»ï¿½ï¿½Òªï¿½ï¿½pauseï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½activity
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         mWakeLock.release();
         finish();

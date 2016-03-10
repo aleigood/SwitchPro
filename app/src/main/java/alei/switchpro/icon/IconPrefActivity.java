@@ -1,7 +1,5 @@
 package alei.switchpro.icon;
 
-import java.io.FileOutputStream;
-
 import alei.switchpro.Constants;
 import alei.switchpro.R;
 import alei.switchpro.WidgetProviderUtil;
@@ -23,8 +21,9 @@ import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-public class IconPrefActivity extends PreferenceActivity
-{
+import java.io.FileOutputStream;
+
+public class IconPrefActivity extends PreferenceActivity {
     private IconPreferenceScreen wifi;
     private IconPreferenceScreen edge;
     private IconPreferenceScreen bluetooth;
@@ -57,8 +56,7 @@ public class IconPrefActivity extends PreferenceActivity
     private IconPreferenceScreen nfc;
 
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         addPreferencesFromResource(R.xml.pref_icon_conf);
 
@@ -94,155 +92,91 @@ public class IconPrefActivity extends PreferenceActivity
         nfc = (IconPreferenceScreen) findPreference("custom_ico_nfc");
     }
 
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference)
-    {
-        if (preference == airplane)
-        {
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == airplane) {
             pickIcon(Constants.ICON_AIRPLANE);
-        }
-        else if (preference == autolock)
-        {
+        } else if (preference == autolock) {
             pickIcon(Constants.ICON_AUTOLOCK);
-        }
-        else if (preference == battery)
-        {
+        } else if (preference == battery) {
             pickIcon(Constants.ICON_BATTERY);
-        }
-        else if (preference == bluetooth)
-        {
+        } else if (preference == bluetooth) {
             pickIcon(Constants.ICON_BLUETOOTH);
-        }
-        else if (preference == brightness)
-        {
+        } else if (preference == brightness) {
             pickIcon(Constants.ICON_BRIGHTNESS);
-        }
-        else if (preference == autoBrightness)
-        {
+        } else if (preference == autoBrightness) {
             pickIcon(Constants.ICON_AUTO_BRIGHTNESS);
-        }
-        else if (preference == edge)
-        {
+        } else if (preference == edge) {
             pickIcon(Constants.ICON_EDGE);
-        }
-        else if (preference == flashlight)
-        {
+        } else if (preference == flashlight) {
             pickIcon(Constants.ICON_FLASHLIGHT);
-        }
-        else if (preference == gps)
-        {
+        } else if (preference == gps) {
             pickIcon(Constants.ICON_GPS);
-        }
-        else if (preference == gravity)
-        {
+        } else if (preference == gravity) {
             pickIcon(Constants.ICON_GRAVITY);
-        }
-        else if (preference == lockScreen)
-        {
+        } else if (preference == lockScreen) {
             pickIcon(Constants.ICON_LOCK_SCREEN);
-        }
-        else if (preference == mount)
-        {
+        } else if (preference == mount) {
             pickIcon(Constants.ICON_MOUNT);
-        }
-        else if (preference == netSwitch)
-        {
+        } else if (preference == netSwitch) {
             pickIcon(Constants.ICON_NET_SWITCH);
-        }
-        else if (preference == reboot)
-        {
+        } else if (preference == reboot) {
             pickIcon(Constants.ICON_REBOOT);
-        }
-        else if (preference == scanmedia)
-        {
+        } else if (preference == scanmedia) {
             pickIcon(Constants.ICON_SCANMEDIA);
-        }
-        else if (preference == screenTimeout)
-        {
+        } else if (preference == screenTimeout) {
             pickIcon(Constants.ICON_SCREEN_TIMEOUT);
-        }
-        else if (preference == speaker)
-        {
+        } else if (preference == speaker) {
             pickIcon(Constants.ICON_SPEAKER);
-        }
-        else if (preference == sync)
-        {
+        } else if (preference == sync) {
             pickIcon(Constants.ICON_SYNC);
-        }
-        else if (preference == unlock)
-        {
+        } else if (preference == unlock) {
             pickIcon(Constants.ICON_UNLOCK);
-        }
-        else if (preference == usbte)
-        {
+        } else if (preference == usbte) {
             pickIcon(Constants.ICON_USBTE);
-        }
-        else if (preference == vibrate)
-        {
+        } else if (preference == vibrate) {
             pickIcon(Constants.ICON_VIBRATE);
-        }
-        else if (preference == silent)
-        {
+        } else if (preference == silent) {
             pickIcon(Constants.ICON_SILENT);
-        }
-        else if (preference == wifi)
-        {
+        } else if (preference == wifi) {
             pickIcon(Constants.ICON_WIFI);
-        }
-        else if (preference == wifiSleep)
-        {
+        } else if (preference == wifiSleep) {
             pickIcon(Constants.ICON_WIFI_SLEEP);
-        }
-        else if (preference == wifiap)
-        {
+        } else if (preference == wifiap) {
             pickIcon(Constants.ICON_WIFIAP);
-        }
-        else if (preference == wimax)
-        {
+        } else if (preference == wimax) {
             pickIcon(Constants.ICON_WIMAX);
-        }
-        else if (preference == volume)
-        {
+        } else if (preference == volume) {
             pickIcon(Constants.ICON_VOLUME);
-        }
-        else if (preference == killProcess)
-        {
+        } else if (preference == killProcess) {
             pickIcon(Constants.ICON_KILL_PROCESS);
-        }
-        else if (preference == bluetoothTe)
-        {
+        } else if (preference == bluetoothTe) {
             pickIcon(Constants.ICON_BT_TE);
-        }
-        else if (preference == nfc)
-        {
+        } else if (preference == nfc) {
             pickIcon(Constants.ICON_NFC);
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
-    private void pickIcon(int reqCode)
-    {
+    private void pickIcon(int reqCode) {
         Uri localUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Intent localIntent = new Intent("android.intent.action.PICK", localUri);
         this.startActivityForResult(localIntent, reqCode);
     }
 
-    // ÐèÒª¿¼ÂÇµ½Èç¹ûÃ»ÓÐÑ¡ÔñµÄÍ¼Æ¬µÄÓ¦ÓÃÈçºÎ·µ»Ø£¬ºÍÃ»Ñ¡ÔñÍ¼Æ¬ÈçºÎ·µ»Ø
+    // ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Î·ï¿½ï¿½Ø£ï¿½ï¿½ï¿½Ã»Ñ¡ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Î·ï¿½ï¿½ï¿½
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data == null)
-        {
+        if (data == null) {
             return;
         }
 
-        try
-        {
+        try {
             Uri localUri = data.getData();
             ContentResolver localContentResolver = getContentResolver();
-            Cursor localCursor = localContentResolver.query(localUri, new String[] { "_data" }, null, null, null);
+            Cursor localCursor = localContentResolver.query(localUri, new String[]{"_data"}, null, null, null);
             localCursor.moveToFirst();
             String str1 = localCursor.getString(0);
             localCursor.close();
@@ -253,8 +187,7 @@ public class IconPrefActivity extends PreferenceActivity
             arrayOfBitmap.recycle();
             WidgetProviderUtil.freeMemory(requestCode);
 
-            switch (requestCode)
-            {
+            switch (requestCode) {
                 case Constants.ICON_AIRPLANE:
                     airplane.update();
                     break;
@@ -348,31 +281,24 @@ public class IconPrefActivity extends PreferenceActivity
                 default:
                     break;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Toast.makeText(this, R.string.select_img_error, Toast.LENGTH_LONG).show();
         }
     }
 
-    private Bitmap makeDockIcon(Bitmap paramBitmap)
-    {
+    private Bitmap makeDockIcon(Bitmap paramBitmap) {
         int scaledSize = (int) Math.abs(32.0F * getResources().getDisplayMetrics().density);
         int width = paramBitmap.getWidth();
         int height = paramBitmap.getHeight();
         int newWidth = width;
         int newHeight = height;
 
-        if ((width > scaledSize) || (height > scaledSize))
-        {
-            if (width > height)
-            {
-                // Ê¹Í¼Ïñ²»»áÀ­Éì
+        if ((width > scaledSize) || (height > scaledSize)) {
+            if (width > height) {
+                // Ê¹Í¼ï¿½ñ²»»ï¿½ï¿½ï¿½ï¿½ï¿½
                 newWidth = scaledSize;
                 newHeight = scaledSize * height / width;
-            }
-            else
-            {
+            } else {
                 newHeight = scaledSize;
                 newWidth = scaledSize * width / height;
             }
@@ -381,7 +307,7 @@ public class IconPrefActivity extends PreferenceActivity
         int left = (scaledSize - newWidth) / 2;
         int right = (scaledSize - newHeight) / 2;
         Rect srcRect = new android.graphics.Rect(0, 0, width, height);
-        // Èç¹ûÍ¼Ïñ±¾ÉíÐ¡ÓÚ48£¬Ê¹Í¼Ïñ¾ÓÖÐ
+        // ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½48ï¿½ï¿½Ê¹Í¼ï¿½ï¿½ï¿½ï¿½ï¿½
         Rect dstRect = new android.graphics.Rect(left, right, left + newWidth, right + newHeight);
 
         Canvas canvas = new Canvas();
@@ -396,19 +322,15 @@ public class IconPrefActivity extends PreferenceActivity
         return localBitmap1;
     }
 
-    private void saveDockIcon(Bitmap paramArrayOfBitmap, int btnId)
-    {
-        try
-        {
+    private void saveDockIcon(Bitmap paramArrayOfBitmap, int btnId) {
+        try {
             FileOutputStream fileOutputStream = openFileOutput(btnId + "_icon.png", 0);
             paramArrayOfBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             fileOutputStream.close();
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
             config.edit().putString(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, btnId), btnId + "_icon.png")
                     .commit();
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }

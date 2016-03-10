@@ -1,7 +1,5 @@
 package alei.switchpro;
 
-import java.lang.reflect.Method;
-
 import alei.switchpro.apn.ApnUtils;
 import alei.switchpro.brightness.BrightnessActivity;
 import alei.switchpro.brightness.BrightnessBar;
@@ -44,84 +42,68 @@ import android.telephony.TelephonyManager;
 import android.util.SparseArray;
 import android.widget.Toast;
 
-public class SwitchUtils
-{
-    public static boolean toggle_bluetooth_te = false;
+import java.lang.reflect.Method;
+
+public class SwitchUtils {
     public static final int WIFI_AP_STATE_DISABLED = 1;
     public static final int WIFI_AP_STATE_ENABLED = 3;
-
     // android sdk version > 14
     public static final int WIFI_AP_STATE_DISABLING_14 = 10;
     public static final int WIFI_AP_STATE_DISABLED_14 = 11;
     public static final int WIFI_AP_STATE_ENABLING_14 = 12;
     public static final int WIFI_AP_STATE_ENABLED_14 = 13;
     public static final int WIFI_AP_STATE_FAILED_14 = 14;
-
+    public static boolean toggle_bluetooth_te = false;
+    public static SparseArray<Notification> notifications = new SparseArray<Notification>();
     private static WakeLock wakeLock;
     private static KeyguardLock keyLock;
 
-    public static SparseArray<Notification> notifications = new SparseArray<Notification>();
-
     /**
      * Gets the state of Wi-Fi
-     * 
+     *
      * @param context
      * @return STATE_ENABLED, STATE_DISABLED, or STATE_INTERMEDIATE
      */
-    public static int getWifiState(Context context)
-    {
+    public static int getWifiState(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         int wifiState = wifiManager.getWifiState();
 
-        if (wifiState == WifiManager.WIFI_STATE_DISABLED)
-        {
+        if (wifiState == WifiManager.WIFI_STATE_DISABLED) {
             return WidgetProviderUtil.STATE_DISABLED;
-        }
-        else if (wifiState == WifiManager.WIFI_STATE_ENABLED)
-        {
+        } else if (wifiState == WifiManager.WIFI_STATE_ENABLED) {
             return WidgetProviderUtil.STATE_ENABLED;
-        }
-        else
-        {
+        } else {
             return WidgetProviderUtil.STATE_INTERMEDIATE;
         }
     }
 
     /**
      * Toggles the state of Wi-Fi
-     * 
+     *
      * @param context
      */
-    public static void toggleWifi(Context context)
-    {
+    public static void toggleWifi(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         int wifiState = getWifiState(context);
 
-        if (wifiState == WidgetProviderUtil.STATE_ENABLED)
-        {
+        if (wifiState == WidgetProviderUtil.STATE_ENABLED) {
             wifiManager.setWifiEnabled(false);
-        }
-        else if (wifiState == WidgetProviderUtil.STATE_DISABLED)
-        {
+        } else if (wifiState == WidgetProviderUtil.STATE_DISABLED) {
             wifiManager.setWifiEnabled(true);
 
-            // Èç¹ûÅäÖÃÁËÐèÒª´ò¿ªÅäÖÃ½çÃæ£¬ÔÚ´ò¿ªºóµ¯³ö½çÃæ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½æ£¬ï¿½Ú´ò¿ªºóµ¯³ï¿½ï¿½ï¿½ï¿½ï¿½
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
             boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_WIFI, false);
 
-            if (openAction)
-            {
+            if (openAction) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.setClassName("com.android.settings", "com.android.settings.wifi.WifiSettings");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-                try
-                {
+                try {
                     pendingIntent.send();
-                }
-                catch (CanceledException e)
-                {
+                } catch (CanceledException e) {
                     e.printStackTrace();
                 }
             }
@@ -130,30 +112,24 @@ public class SwitchUtils
 
     /**
      * Toggles of APN
-     * 
+     *
      * @param context
      */
-    public static void toggleApn(Context context)
-    {
+    public static void toggleApn(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // Èç¹ûÊÇ9ÒÔÉÏµÄÏµÍ³£¬Ä¬ÈÏÊÇÑ¡ÖÐAPN¿ª¹Ø
-        if (config.getBoolean(Constants.PREFS_USE_APN, false))
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½9ï¿½ï¿½ï¿½Ïµï¿½ÏµÍ³ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½APNï¿½ï¿½ï¿½ï¿½
+        if (config.getBoolean(Constants.PREFS_USE_APN, false)) {
             ApnUtils.switchAndNotify(context);
             Utils.updateWidget(context);
         }
-        // Èç¹ûÃ»Ñ¡ÔñAPN¿ª¹Ø
-        else
-        {
-            if (VERSION.SDK_INT >= 9)
-            {
+        // ï¿½ï¿½ï¿½Ã»Ñ¡ï¿½ï¿½APNï¿½ï¿½ï¿½ï¿½
+        else {
+            if (VERSION.SDK_INT >= 9) {
                 NetUtils.toggleMobileNetwork9(context);
-                // Õâ¸ö×´Ì¬¿ÉÒÔÁ¢¼´¸üÐÂ
+                // ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 Utils.updateWidget(context);
-            }
-            else
-            {
+            } else {
                 NetUtils.toggleMobileNetwork(context);
             }
         }
@@ -161,76 +137,58 @@ public class SwitchUtils
 
     /**
      * Gets the state of APN.
-     * 
+     *
      * @param context
      * @return true if enabled
      */
-    public static boolean getApnState(Context context)
-    {
+    public static boolean getApnState(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (config.getBoolean(Constants.PREFS_USE_APN, false))
-        {
+        if (config.getBoolean(Constants.PREFS_USE_APN, false)) {
             return ApnUtils.getApnState(context);
-        }
-        else
-        {
+        } else {
             return NetUtils.getMobileNetworkState(context);
         }
     }
 
     /**
      * Gets the state of auto-sync.
-     * 
+     *
      * @param context
      * @return true if enabled
      */
-    public static boolean getSync(Context context)
-    {
-        if (VERSION.SDK.equals("4"))
-        {
+    public static boolean getSync(Context context) {
+        if (VERSION.SDK.equals("4")) {
             return SyncUtilsV4.getSync(context);
-        }
-        else
-        {
+        } else {
             return SyncUtils.getSync(context);
         }
     }
 
     /**
      * Toggle auto-sync
-     * 
+     *
      * @param context
      */
-    public static void toggleSync(Context context)
-    {
-        // Èç¹ûÅäÖÃÁËÐèÒª´ò¿ªÅäÖÃ½çÃæ£¬ÔÚ´ò¿ªºóµ¯³ö½çÃæ
+    public static void toggleSync(Context context) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½æ£¬ï¿½Ú´ò¿ªºóµ¯³ï¿½ï¿½ï¿½ï¿½ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_SYNC, false);
 
-        // Èç¹ûÐèÒª´ò¿ªÃæ°å£¬ÇÒµ±Ç°Í¬²½ÊÇ¹Ø±ÕµÄ
-        if (openAction)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½å£¬ï¿½Òµï¿½Ç°Í¬ï¿½ï¿½ï¿½Ç¹Ø±Õµï¿½
+        if (openAction) {
             Intent intent = new Intent("android.settings.SYNC_SETTINGS");
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
+            try {
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
-            if (VERSION.SDK.equals("4"))
-            {
+        } else {
+            if (VERSION.SDK.equals("4")) {
                 SyncUtilsV4.toggleSync(context);
-            }
-            else
-            {
+            } else {
                 SyncUtils.toggleSync(context);
             }
         }
@@ -238,46 +196,36 @@ public class SwitchUtils
 
     /**
      * Toggles the state of GPS.
-     * 
+     *
      * @param context
      */
-    public static void toggleGps(Context context)
-    {
-        // Èç¹ûÅäÖÃÁËÐèÒª´ò¿ªÅäÖÃ½çÃæ£¬ÔÚ´ò¿ªºóµ¯³ö½çÃæ
+    public static void toggleGps(Context context) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½æ£¬ï¿½Ú´ò¿ªºóµ¯³ï¿½ï¿½ï¿½ï¿½ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
-        // Èç¹ûSDK´óÓÚ9£¬Ä¬ÈÏÊÇ´ò¿ªÃæ°å£¬³ý·ÇÉèÖÃËü²»´ò¿ªÃæ°å
+        // ï¿½ï¿½ï¿½SDKï¿½ï¿½ï¿½ï¿½9ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½å£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_GPS, false);
 
-        // Èç¹ûÐèÒª´ò¿ªÃæ°å
-        if (openAction)
-        {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½
+        if (openAction) {
             Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException e1)
-            {
+            } catch (CanceledException e1) {
                 e1.printStackTrace();
             }
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 ContentResolver resolver = context.getContentResolver();
                 boolean enabled = getGpsState(context);
                 Settings.Secure.class.getMethod("setLocationProviderEnabled",
-                        new Class[] { ContentResolver.class, String.class, boolean.class }).invoke(null,
-                        new Object[] { resolver, LocationManager.GPS_PROVIDER, !enabled });
-            }
-            catch (Exception e)
-            {
+                        new Class[]{ContentResolver.class, String.class, boolean.class}).invoke(null,
+                        new Object[]{resolver, LocationManager.GPS_PROVIDER, !enabled});
+            } catch (Exception e) {
                 Intent launchIntent = new Intent();
                 launchIntent.setClassName("com.android.settings",
                         "com.android.settings.widget.SettingsAppWidgetProvider");
@@ -285,34 +233,27 @@ public class SwitchUtils
                 launchIntent.setData(Uri.parse("custom:" + 3));
                 PendingIntent pi = PendingIntent.getBroadcast(context, 0, launchIntent, 0);
 
-                try
-                {
+                try {
                     pi.send();
-                }
-                catch (CanceledException e1)
-                {
+                } catch (CanceledException e1) {
                     e1.printStackTrace();
                 }
             }
 
-            // Í¨Öªwidget¸üÐÂ
+            // Í¨Öªwidgetï¿½ï¿½ï¿½ï¿½
             Utils.updateWidget(context);
 
-            if (!config.contains(Constants.PREFS_GPS_FIRST_LAUNCH) && VERSION.SDK_INT >= 9 && VERSION.SDK_INT != 17)
-            {
+            if (!config.contains(Constants.PREFS_GPS_FIRST_LAUNCH) && VERSION.SDK_INT >= 9 && VERSION.SDK_INT != 17) {
                 config.edit().putBoolean(Constants.PREFS_GPS_FIRST_LAUNCH, false).commit();
                 Intent intent = new Intent(context, GoToSettingsActivity.class);
                 intent.putExtra("title", context.getString(R.string.is_it_work));
                 intent.putExtra("content", context.getString(R.string.goto_settings));
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-                try
-                {
+                try {
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     pendingIntent.send();
-                }
-                catch (CanceledException e)
-                {
+                } catch (CanceledException e) {
                     e.printStackTrace();
                 }
             }
@@ -321,12 +262,11 @@ public class SwitchUtils
 
     /**
      * Gets the state of GPS location.
-     * 
+     *
      * @param context
      * @return true if enabled.
      */
-    public static boolean getGpsState(Context context)
-    {
+    public static boolean getGpsState(Context context) {
         ContentResolver resolver = context.getContentResolver();
         String gps = Settings.Secure.getString(resolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
         return gps.contains(LocationManager.GPS_PROVIDER);
@@ -334,21 +274,17 @@ public class SwitchUtils
 
     /**
      * Toggle grayvity
-     * 
+     *
      * @param context
      */
-    public static void toggleGrayity(Context context)
-    {
+    public static void toggleGrayity(Context context) {
         ContentResolver cr = context.getContentResolver();
         int autoRotate = Settings.System.getInt(cr, Settings.System.ACCELEROMETER_ROTATION, 0);
 
-        if (autoRotate == 1)
-        {
+        if (autoRotate == 1) {
             Settings.System.putInt(cr, Settings.System.ACCELEROMETER_ROTATION, 0);
             Toast.makeText(context, R.string.auto_rotate_off, Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             Settings.System.putInt(cr, Settings.System.ACCELEROMETER_ROTATION, 1);
             Toast.makeText(context, R.string.auto_rotate_on, Toast.LENGTH_SHORT).show();
         }
@@ -356,108 +292,82 @@ public class SwitchUtils
 
     /**
      * Gets state of gravity.
-     * 
+     *
      * @param context
      * @return true if more than moderately bright.
      */
-    public static boolean getGravityState(Context context)
-    {
+    public static boolean getGravityState(Context context) {
         int autoRotate = Settings.System
                 .getInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
 
-        if (autoRotate == 1)
-        {
+        if (autoRotate == 1) {
             return true;
         }
 
         return false;
     }
 
-    public static void toggleNetSwitch(Context context)
-    {
+    public static void toggleNetSwitch(Context context) {
         Intent intent = new Intent("android.intent.action.MAIN");
 
-        if (VERSION.SDK_INT >= 16)
-        {
+        if (VERSION.SDK_INT >= 16) {
             intent.setClassName("com.android.phone", "com.android.phone.MobileNetworkSettings");
-        }
-        else
-        {
+        } else {
             intent.setClassName("com.android.phone", "com.android.phone.Settings");
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        try
-        {
-            // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+        try {
+            // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             pendingIntent.send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean getNetSwitch(Context context)
-    {
+    public static boolean getNetSwitch(Context context) {
         int netType = NetUtils.getNetworkType(context);
 
-        if (netType == TelephonyManager.NETWORK_TYPE_EDGE || netType == TelephonyManager.NETWORK_TYPE_GPRS)
-        {
+        if (netType == TelephonyManager.NETWORK_TYPE_EDGE || netType == TelephonyManager.NETWORK_TYPE_GPRS) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
-    public static void toggleBattery(Context context)
-    {
-        if (Utils.isAppExist(context, "com.htc.htcpowermanager"))
-        {
+    public static void toggleBattery(Context context) {
+        if (Utils.isAppExist(context, "com.htc.htcpowermanager")) {
             Intent htcIntent = new Intent(Intent.ACTION_MAIN);
             htcIntent.addCategory("com.android.settings.SHORTCUT");
             htcIntent.setClassName("com.htc.htcpowermanager", "com.htc.htcpowermanager.PowerManagerActivity");
             htcIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 PendingIntent.getActivity(context, 0, htcIntent, 0).send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
-            if (VERSION.SDK_INT >= 11)
-            {
+        } else {
+            if (VERSION.SDK_INT >= 11) {
                 Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
                 shortcutIntent.addCategory("com.android.settings.SHORTCUT");
                 shortcutIntent.setClassName("com.android.settings",
                         "com.android.settings.Settings$PowerUsageSummaryActivity");
                 shortcutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                try
-                {
-                    // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+                try {
+                    // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     PendingIntent.getActivity(context, 0, shortcutIntent, 0).send();
-                }
-                catch (CanceledException e)
-                {
+                } catch (CanceledException e) {
                     e.printStackTrace();
                 }
 
-            }
-            else
-            {
+            } else {
                 Intent intent = new Intent(Intent.ACTION_MAIN, null);
                 intent.addCategory(Intent.CATEGORY_LAUNCHER);
                 ComponentName cn = new ComponentName("com.android.settings",
@@ -466,53 +376,40 @@ public class SwitchUtils
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-                try
-                {
-                    // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+                try {
+                    // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     pendingIntent.send();
-                }
-                catch (CanceledException e)
-                {
+                } catch (CanceledException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    public static void toggleBirghtness(Context context)
-    {
+    public static void toggleBirghtness(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean showBar = config.getBoolean(Constants.PREFS_SHOW_BRIGHTNESS_BAR, false);
 
-        if (showBar)
-        {
+        if (showBar) {
             Intent intent = new Intent(context, BrightnessBar.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
+            try {
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             Intent intent = new Intent(context, BrightnessActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
+            try {
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
         }
@@ -521,34 +418,25 @@ public class SwitchUtils
 
     /**
      * Gets state of brightness.
-     * 
+     *
      * @param context
      * @return true if more than moderately bright.
      */
-    public static int getBrightness(Context context)
-    {
+    public static int getBrightness(Context context) {
         int brightness = Settings.System.getInt(context.getContentResolver(),
                 android.provider.Settings.System.SCREEN_BRIGHTNESS, BrightnessActivity.BRIGHT_LEVEL_30);
         int mode = Settings.System.getInt(context.getContentResolver(), BrightnessActivity.BRIGHT_MODE, 1);
 
-        if (mode == BrightnessActivity.BRIGHT_MODE_AUTO)
-        {
+        if (mode == BrightnessActivity.BRIGHT_MODE_AUTO) {
             return WidgetProviderUtil.STATE_OTHER;
-        }
-        else
-        {
-            if (brightness <= BrightnessActivity.BRIGHT_LEVEL_30)
-            {
+        } else {
+            if (brightness <= BrightnessActivity.BRIGHT_LEVEL_30) {
                 return WidgetProviderUtil.STATE_DISABLED;
-            }
-            else if (brightness > BrightnessActivity.BRIGHT_LEVEL_30
-                    && brightness <= BrightnessActivity.BRIGHT_LEVEL_70)
-            {
+            } else if (brightness > BrightnessActivity.BRIGHT_LEVEL_30
+                    && brightness <= BrightnessActivity.BRIGHT_LEVEL_70) {
                 return WidgetProviderUtil.STATE_INTERMEDIATE;
-            }
-            else if (brightness > BrightnessActivity.BRIGHT_LEVEL_70
-                    && brightness <= BrightnessActivity.BRIGHT_LEVEL_100)
-            {
+            } else if (brightness > BrightnessActivity.BRIGHT_LEVEL_70
+                    && brightness <= BrightnessActivity.BRIGHT_LEVEL_100) {
                 return WidgetProviderUtil.STATE_ENABLED;
             }
         }
@@ -558,97 +446,82 @@ public class SwitchUtils
 
     /**
      * Gets state of bluetooth
-     * 
+     *
      * @param context
      * @return true if enabled.
      */
-    public static int getBluetoothState(Context context)
-    {
+    public static int getBluetoothState(Context context) {
         return BluetoothUtils.getBluetoothState(context);
     }
 
     /**
      * Toggles the state of bluetooth
-     * 
+     *
      * @param context
      */
-    public static void toggleBluetooth(Context context)
-    {
+    public static void toggleBluetooth(Context context) {
         BluetoothUtils.toggleBluetooth(context);
     }
 
     /**
-     * »ñÈ¡ÆÁÄ»³¬Ê±×´Ì¬
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½Ä»ï¿½ï¿½Ê±×´Ì¬
+     *
      * @param context
      * @return
      */
-    public static boolean getScreenTimeoutState(Context context)
-    {
+    public static boolean getScreenTimeoutState(Context context) {
         return Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, 0) < 0 ? true
                 : false;
     }
 
     /**
-     * ÉèÖÃÆÁÄ»³¬Ê±
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Ê±
+     *
      * @param context
      */
-    public static void toggleScreenTimeout(Context context)
-    {
-        // Èç¹ûÅäÖÃÁËÐèÒª´ò¿ªÅäÖÃ½çÃæ£¬ÔÚ´ò¿ªºóµ¯³ö½çÃæ
+    public static void toggleScreenTimeout(Context context) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½æ£¬ï¿½Ú´ò¿ªºóµ¯³ï¿½ï¿½ï¿½ï¿½ï¿½
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_TIMEOUT, false);
 
-        if (openAction)
-        {
+        if (openAction) {
             Intent intent = new Intent(context, TimeoutSelectorActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
 
             int screenTimeOut = Settings.System.getInt(context.getContentResolver(),
                     Settings.System.SCREEN_OFF_TIMEOUT, 0);
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
-            // Èç¹û²»ÊÇ³£ÁÁ£¬¾Í±£´æÕâ¸öÊ±¼äÖµ
-            if (screenTimeOut != -1)
-            {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Öµ
+            if (screenTimeOut != -1) {
                 SharedPreferences.Editor configEditor = sp.edit();
                 configEditor.putInt("Timeout", screenTimeOut);
                 configEditor.commit();
                 Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, -1);
                 Toast.makeText(context, R.string.keep_awake_on, Toast.LENGTH_SHORT).show();
 
-                if (VERSION.SDK_INT >= 17)
-                {
+                if (VERSION.SDK_INT >= 17) {
                     wakeLock = Utils.getWakeLock(context);
                     wakeLock.acquire();
                 }
             }
-            // ¶Á³öÒÑ±£´æµÄÊ±¼äÖµ
-            else
-            {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ñ±ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Öµ
+            else {
                 int time = sp.getInt("Timeout", 30000);
                 Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, time);
                 Toast.makeText(context, R.string.keep_awake_off, Toast.LENGTH_SHORT).show();
 
-                if (VERSION.SDK_INT >= 17)
-                {
-                    if (wakeLock != null)
-                    {
+                if (VERSION.SDK_INT >= 17) {
+                    if (wakeLock != null) {
                         wakeLock.release();
                     }
                 }
@@ -656,96 +529,71 @@ public class SwitchUtils
         }
     }
 
-    public static void toggleNetwork(Context context)
-    {
+    public static void toggleNetwork(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean closeRadio = config.getBoolean(Constants.PREFS_AIRPLANE_RADIO, false);
 
-        if (closeRadio)
-        {
+        if (closeRadio) {
             NetUtils.toggleSignal(context);
             Utils.updateWidget(context);
-        }
-        else
-        {
+        } else {
             toggleAirPlane(context);
         }
     }
 
-    public static boolean getNetworkState(Context context)
-    {
+    public static boolean getNetworkState(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean closeRadio = config.getBoolean(Constants.PREFS_AIRPLANE_RADIO, true);
 
-        if (closeRadio)
-        {
+        if (closeRadio) {
             return !NetUtils.getSignalState(context);
-        }
-        else
-        {
+        } else {
             return Settings.System.getInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
         }
     }
 
     /**
-     * ·ÉÐÐÄ£Ê½¿ª¹Ø
-     * 
+     * ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½
+     *
      * @param context
      */
-    public static void toggleAirPlane(Context context)
-    {
-        if (VERSION.SDK_INT >= 17)
-        {
+    public static void toggleAirPlane(Context context) {
+        if (VERSION.SDK_INT >= 17) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.setClassName("com.android.settings", "com.android.settings.Settings$WirelessSettingsActivity");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
-            if (getAirplaneState(context))
-            {
+        } else {
+            if (getAirplaneState(context)) {
                 setAirplaneState(context, false);
-            }
-            else
-            {
+            } else {
                 setAirplaneState(context, true);
             }
         }
     }
 
-    public static void setAirplaneState(Context context, boolean state)
-    {
+    public static void setAirplaneState(Context context, boolean state) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean closeWifi = config.getBoolean(Constants.PREFS_AIRPLANE_WIFI, true);
 
-        if (state)
-        {
-            // ¿ªÆô·ÉÐÐÄ£Ê½
-            if (closeWifi)
-            {
+        if (state) {
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+            if (closeWifi) {
                 Settings.System.putInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 1);
-            }
-            else
-            {
+            } else {
                 Settings.System.putString(context.getContentResolver(), Settings.System.AIRPLANE_MODE_RADIOS, "cell"
                         + (closeWifi ? ",wifi" : ""));
                 Settings.System.putInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 1);
             }
-        }
-        else
-        {
+        } else {
             Settings.System.putString(context.getContentResolver(), Settings.System.AIRPLANE_MODE_RADIOS,
                     "cell,bluetooth,wifi");
             Settings.System.putInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0);
@@ -757,86 +605,67 @@ public class SwitchUtils
     }
 
     /**
-     * »ñÈ¡·ÉÐÐÄ£Ê½×´Ì¬
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ä£Ê½×´Ì¬
+     *
      * @param context
      * @return
      */
-    public static boolean getAirplaneState(Context context)
-    {
+    public static boolean getAirplaneState(Context context) {
         return Settings.System.getInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
     }
 
     /**
-     * ¼ÓÔØSD¿¨ÖÐµÄÃ½Ìå
+     * ï¿½ï¿½ï¿½ï¿½SDï¿½ï¿½ï¿½Ðµï¿½Ã½ï¿½ï¿½
      */
-    public static void scanMedia(Context context)
-    {
+    public static void scanMedia(Context context) {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
                 + Environment.getExternalStorageDirectory())));
         Toast.makeText(context, R.string.media_scanner_start, Toast.LENGTH_LONG).show();
     }
 
-    public static void toggleVibrate(Context context)
-    {
+    public static void toggleVibrate(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         String btn = config.getString(Constants.PREFS_SILENT_BTN, Constants.BTN_VS);
         AudioManager audioManager = (AudioManager) context.getApplicationContext().getSystemService(
                 Context.AUDIO_SERVICE);
 
-        // Èç¹ûµ±Ç°ÊÇÕý³£µÄ£¬ÔòÐèÒª½øÐÐ¾²Òô
-        if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL)
-        {
-            if (btn.equals(Constants.BTN_ONLY_SILENT))
-            {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ð¾ï¿½ï¿½ï¿½
+        if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+            if (btn.equals(Constants.BTN_ONLY_SILENT)) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            }
-            else if (btn.equals(Constants.BTN_ONLY_VIVERATE))
-            {
+            } else if (btn.equals(Constants.BTN_ONLY_VIVERATE)) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            }
-            else
-            {
+            } else {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
             }
 
-            // Èç¹ûÑ¡ÔñÁËÃ½Ìå¾²Òô£¬ÔòÔÚ¾²ÒôÊ±¹Ø±ÕÃ½ÌåÒôÁ¿
-            if (config.getBoolean(Constants.PREFS_MUTE_MEDIA, false))
-            {
+            // ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ã½ï¿½å¾²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¾ï¿½ï¿½ï¿½Ê±ï¿½Ø±ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (config.getBoolean(Constants.PREFS_MUTE_MEDIA, false)) {
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
             }
 
-            if (config.getBoolean(Constants.PREFS_MUTE_ALARM, false))
-            {
+            if (config.getBoolean(Constants.PREFS_MUTE_ALARM, false)) {
                 audioManager.setStreamMute(AudioManager.STREAM_ALARM, true);
             }
-        }
-        else
-        {
-            // Ö»Ñ¡ÔñÁË¾²Òô£¬Ôò»Ö¸´ÁåÉù
-            if (btn.equals(Constants.BTN_ONLY_SILENT))
-            {
+        } else {
+            // Ö»Ñ¡ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (btn.equals(Constants.BTN_ONLY_SILENT)) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                 audioManager.setStreamMute(AudioManager.STREAM_ALARM, false);
             }
-            // Ö»Ñ¡ÔñÁËÕñ¶¯Ôò»Ö¸´ÁåÉù
-            else if (btn.equals(Constants.BTN_ONLY_VIVERATE))
-            {
+            // Ö»Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
+            else if (btn.equals(Constants.BTN_ONLY_VIVERATE)) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                 audioManager.setStreamMute(AudioManager.STREAM_ALARM, false);
             }
-            // Ñ¡ÔñÁË¾²ÒôºÍÕñ¶¯Ä£Ê½
-            else
-            {
-                // Èç¹ûµ±Ç°ÊÇÕñ¶¯ÔòÏÂÃæ½øÈë¾²ÒôÄ£Ê½£¬×¢ÒâÕâµØ·½²»ÓÃÔÙÉèÖÃÃ½Ìå¾²Òô£¬ÒòÎª½øÈëÕñ¶¯Ä£Ê½Ê±ÒÑ¾­ÉèÖÃÒ»´ÎÁË£¬ÔÙÉèÖÃÒ»´Î½«ÎÞ·¨»Ö¸´
-                if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-                {
+            // Ñ¡ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+            else {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¾²ï¿½ï¿½Ä£Ê½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½Ø·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½å¾²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½Ê±ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î½ï¿½ï¿½Þ·ï¿½ï¿½Ö¸ï¿½
+                if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                }
-                else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT)
-                {
+                } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                     audioManager.setStreamMute(AudioManager.STREAM_ALARM, false);
@@ -846,87 +675,69 @@ public class SwitchUtils
     }
 
     /**
-     * »ñÈ¡¾²ÒôÄ£Ê½
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+     *
      * @param context
      * @return
      */
-    public static int getViberate(Context context)
-    {
+    public static int getViberate(Context context) {
         AudioManager audioManager = (AudioManager) context.getApplicationContext().getSystemService(
                 Context.AUDIO_SERVICE);
         return audioManager.getRingerMode();
     }
 
-    public static void toggleUnlockPattern(Context context)
-    {
-        if (VERSION.SDK_INT >= 8)
-        {
+    public static void toggleUnlockPattern(Context context) {
+        if (VERSION.SDK_INT >= 8) {
             Intent intent = new Intent("android.intent.action.MAIN");
             intent.setClassName("com.android.settings", "com.android.settings.ChooseLockGeneric");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             android.provider.Settings.System.putInt(context.getContentResolver(), Settings.System.LOCK_PATTERN_ENABLED,
                     getUnlockPattern(context) ? 0 : 1);
         }
     }
 
-    public static boolean getUnlockPattern(Context context)
-    {
+    public static boolean getUnlockPattern(Context context) {
         return 1 == android.provider.Settings.System.getInt(context.getContentResolver(),
                 Settings.System.LOCK_PATTERN_ENABLED, 0);
     }
 
-    public static void toggleFlashlight(Context context)
-    {
+    public static void toggleFlashlight(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean openCameraFlash = config.getBoolean(Constants.PREFS_TOGGLE_FLASH, true);
 
-        if (!openCameraFlash)
-        {
+        if (!openCameraFlash) {
             Intent intent = new Intent(context, FlashlightActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             setCameraFlashState(context, !getFlashlight(context));
         }
     }
 
-    public static void setCameraFlashState(Context context, boolean state)
-    {
+    public static void setCameraFlashState(Context context, boolean state) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor configEditor = config.edit();
         int deviceType = Integer.parseInt(config.getString(Constants.PREFS_DEVICE_TYPE, "0"));
 
-        switch (deviceType)
-        {
+        switch (deviceType) {
             case 0:
                 FlashlightUtils.setFlashlightDefault(state, context);
                 break;
@@ -960,15 +771,11 @@ public class SwitchUtils
                 break;
         }
 
-        if (state)
-        {
+        if (state) {
             wakeLock = Utils.getWakeLock(context);
             wakeLock.acquire();
-        }
-        else
-        {
-            if (wakeLock != null)
-            {
+        } else {
+            if (wakeLock != null) {
                 wakeLock.release();
             }
         }
@@ -977,104 +784,77 @@ public class SwitchUtils
         configEditor.commit();
     }
 
-    public static boolean getFlashlight(Context context)
-    {
+    public static boolean getFlashlight(Context context) {
         return FlashlightUtils.getFlashlight();
     }
 
-    public static void rebootSystem(Context context)
-    {
+    public static void rebootSystem(Context context) {
         Intent intent = new Intent(context, RebootActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        try
-        {
-            // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+        try {
+            // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             pendingIntent.send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
     }
 
-    public static int getWimaxState(Context context)
-    {
+    public static int getWimaxState(Context context) {
         int wimaxState = WidgetProviderUtil.STATE_DISABLED;
 
-        try
-        {
+        try {
             Object wimaxManager = context.getSystemService("wimax");
             Method getWimaxState = wimaxManager.getClass().getMethod("getWimaxState", (Class[]) null);
             wimaxState = (Integer) getWimaxState.invoke(wimaxManager, (Object[]) null);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
         }
 
-        if (wimaxState == 1)
-        {
+        if (wimaxState == 1) {
             return WidgetProviderUtil.STATE_DISABLED;
-        }
-        else if (wimaxState == 3)
-        {
+        } else if (wimaxState == 3) {
             return WidgetProviderUtil.STATE_ENABLED;
-        }
-        else
-        {
+        } else {
             return WidgetProviderUtil.STATE_INTERMEDIATE;
         }
     }
 
-    public static void toggleWimax(Context context)
-    {
-        // ´æ´¢µ±Ç°µÄ×´Ì¬£¬ÒÔ±ãÔÚÖØÆôÒÔºó»Ö¸´×´Ì¬
+    public static void toggleWimax(Context context) {
+        // ï¿½æ´¢ï¿½ï¿½Ç°ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½Ö¸ï¿½×´Ì¬
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor configEditor = config.edit();
         int wimaxState = getWimaxState(context);
 
-        try
-        {
+        try {
             Object wimaxManager = context.getSystemService("wimax");
-            Method setWimaxEnabled = wimaxManager.getClass().getMethod("setWimaxEnabled", new Class[] { Boolean.TYPE });
+            Method setWimaxEnabled = wimaxManager.getClass().getMethod("setWimaxEnabled", new Class[]{Boolean.TYPE});
 
-            if (wimaxState == WidgetProviderUtil.STATE_ENABLED)
-            {
-                setWimaxEnabled.invoke(wimaxManager, new Object[] { Boolean.FALSE });
+            if (wimaxState == WidgetProviderUtil.STATE_ENABLED) {
+                setWimaxEnabled.invoke(wimaxManager, new Object[]{Boolean.FALSE});
                 configEditor.putInt(Constants.PREF_4G_STATE, WidgetProviderUtil.STATE_DISABLED);
-            }
-            else if (wimaxState == WidgetProviderUtil.STATE_DISABLED)
-            {
-                setWimaxEnabled.invoke(wimaxManager, new Object[] { Boolean.TRUE });
+            } else if (wimaxState == WidgetProviderUtil.STATE_DISABLED) {
+                setWimaxEnabled.invoke(wimaxManager, new Object[]{Boolean.TRUE});
                 configEditor.putInt(Constants.PREF_4G_STATE, WidgetProviderUtil.STATE_ENABLED);
             }
 
             configEditor.commit();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Intent intent = new Intent("android.intent.action.MAIN");
 
-            if (VERSION.SDK_INT >= 16)
-            {
+            if (VERSION.SDK_INT >= 16) {
                 intent.setClassName("com.android.phone", "com.android.phone.MobileNetworkSettings");
-            }
-            else
-            {
+            } else {
                 intent.setClassName("com.android.phone", "com.android.phone.Settings");
             }
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException ce)
-            {
+            } catch (CanceledException ce) {
                 ce.printStackTrace();
             }
 
@@ -1082,35 +862,27 @@ public class SwitchUtils
         }
     }
 
-    // ÐèÒªÔÚWidgetÔÚ´´½¨ÊÇ³õÊ¼»¯ÆÁÄ»ËøµÄ×´Ì¬
-    public static void toggleAutoLock(Context context)
-    {
+    // ï¿½ï¿½Òªï¿½ï¿½Widgetï¿½Ú´ï¿½ï¿½ï¿½ï¿½Ç³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½×´Ì¬
+    public static void toggleAutoLock(Context context) {
         KeyguardManager keyManager = (KeyguardManager) context.getApplicationContext().getSystemService("keyguard");
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor configEditor = config.edit();
 
-        // ×Ô¶¯ËøËøÈç¹ûÊÇ´ò¿ªµÄ
-        if (config.getBoolean(Constants.PREF_AUTOLOCK_STATE, true))
-        {
-            if (keyLock == null)
-            {
+        // ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ò¿ªµï¿½
+        if (config.getBoolean(Constants.PREF_AUTOLOCK_STATE, true)) {
+            if (keyLock == null) {
                 keyLock = keyManager.newKeyguardLock(context.getPackageName());
             }
 
             keyLock.disableKeyguard();
             configEditor.putBoolean(Constants.PREF_AUTOLOCK_STATE, false);
             Toast.makeText(context, R.string.auto_screen_lock_tip, Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            if (keyLock == null)
-            {
+        } else {
+            if (keyLock == null) {
                 keyLock = keyManager.newKeyguardLock(context.getPackageName());
                 keyLock.disableKeyguard();
                 keyLock.reenableKeyguard();
-            }
-            else
-            {
+            } else {
                 keyLock.reenableKeyguard();
                 keyLock = null;
             }
@@ -1120,43 +892,34 @@ public class SwitchUtils
         configEditor.commit();
     }
 
-    public static boolean getAutoLock(Context context)
-    {
+    public static boolean getAutoLock(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREF_AUTOLOCK_STATE, true);
     }
 
-    public static void toggleSpeakMode(Context context)
-    {
+    public static void toggleSpeakMode(Context context) {
         AudioManager sAudioManager = (AudioManager) context.getApplicationContext().getSystemService("audio");
         boolean speakModeState = sAudioManager.isSpeakerphoneOn();
         sAudioManager.setSpeakerphoneOn(!speakModeState);
     }
 
-    public static boolean getSpeakMode(Context context)
-    {
+    public static boolean getSpeakMode(Context context) {
         AudioManager sAudioManager = (AudioManager) context.getApplicationContext().getSystemService("audio");
         return sAudioManager.isSpeakerphoneOn();
     }
 
-    public static int getWifiApState(Context context)
-    {
+    public static int getWifiApState(Context context) {
         WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         int state = WIFI_AP_STATE_DISABLED;
 
-        try
-        {
-            Method wmMethod = wifi.getClass().getDeclaredMethod("getWifiApState", new Class[] {});
-            state = ((Integer) wmMethod.invoke(wifi, new Object[] {})).intValue();
-        }
-        catch (Exception e)
-        {
+        try {
+            Method wmMethod = wifi.getClass().getDeclaredMethod("getWifiApState", new Class[]{});
+            state = ((Integer) wmMethod.invoke(wifi, new Object[]{})).intValue();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (VERSION.SDK_INT >= 14)
-        {
-            switch (state)
-            {
+        if (VERSION.SDK_INT >= 14) {
+            switch (state) {
                 case WIFI_AP_STATE_DISABLED_14:
                     return WidgetProviderUtil.STATE_DISABLED;
                 case WIFI_AP_STATE_ENABLED_14:
@@ -1164,11 +927,8 @@ public class SwitchUtils
                 default:
                     return WidgetProviderUtil.STATE_INTERMEDIATE;
             }
-        }
-        else
-        {
-            switch (state)
-            {
+        } else {
+            switch (state) {
                 case WIFI_AP_STATE_DISABLED:
                     return WidgetProviderUtil.STATE_DISABLED;
                 case WIFI_AP_STATE_ENABLED:
@@ -1179,127 +939,97 @@ public class SwitchUtils
         }
     }
 
-    public static void toggleWifiAp(Context context)
-    {
-        if (getWifiState(context) == WidgetProviderUtil.STATE_ENABLED)
-        {
+    public static void toggleWifiAp(Context context) {
+        if (getWifiState(context) == WidgetProviderUtil.STATE_ENABLED) {
             toggleWifi(context);
         }
 
         WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
-        try
-        {
-            Method m = WifiManager.class.getMethod("setWifiApEnabled", new Class[] { WifiConfiguration.class,
-                    boolean.class });
+        try {
+            Method m = WifiManager.class.getMethod("setWifiApEnabled", new Class[]{WifiConfiguration.class,
+                    boolean.class});
             m.invoke(wifi, null, !(getWifiApState(context) == WidgetProviderUtil.STATE_ENABLED));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static int getMountState()
-    {
+    public static int getMountState() {
         return MountUtils.getMountState();
     }
 
-    public static void toggleMount(Context context)
-    {
+    public static void toggleMount(Context context) {
         MountUtils.toggleMount(context);
     }
 
-    public static void toggleWifiSleepPolicy(Context context)
-    {
-        if (VERSION.SDK_INT >= 17)
-        {
+    public static void toggleWifiSleepPolicy(Context context) {
+        if (VERSION.SDK_INT >= 17) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.setClassName("com.android.settings", "com.android.settings.Settings$AdvancedWifiSettingsActivity");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            try
-            {
-                // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+            try {
+                // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
-            }
-            catch (CanceledException e)
-            {
+            } catch (CanceledException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
-            if (getWifiSleepPolicy(context))
-            {
+        } else {
+            if (getWifiSleepPolicy(context)) {
                 Settings.System.putInt(context.getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, 0);
                 Toast.makeText(context, R.string.wifi_sleep_off, Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
+            } else {
                 Settings.System.putInt(context.getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, 2);
                 Toast.makeText(context, R.string.wifi_sleep_on, Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    public static boolean getWifiSleepPolicy(Context context)
-    {
+    public static boolean getWifiSleepPolicy(Context context) {
         int value = Settings.System.getInt(context.getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, 0);
         return value == 2 ? true : false;
     }
 
-    public static boolean getUsbTetherState(Context context)
-    {
-        try
-        {
+    public static boolean getUsbTetherState(Context context) {
+        try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             Class<?> cls = Class.forName("android.net.ConnectivityManager");
 
-            Method getTetherableUsbRegexs = cls.getMethod("getTetherableUsbRegexs", new Class[] {});
-            Method getTetheredIfaces = cls.getMethod("getTetheredIfaces", new Class[] {});
+            Method getTetherableUsbRegexs = cls.getMethod("getTetherableUsbRegexs", new Class[]{});
+            Method getTetheredIfaces = cls.getMethod("getTetheredIfaces", new Class[]{});
 
-            String[] mUsbRegexs = (String[]) getTetherableUsbRegexs.invoke(cm, new Object[] {});
-            String[] tethered = (String[]) getTetheredIfaces.invoke(cm, new Object[] {});
+            String[] mUsbRegexs = (String[]) getTetherableUsbRegexs.invoke(cm, new Object[]{});
+            String[] tethered = (String[]) getTetheredIfaces.invoke(cm, new Object[]{});
 
             boolean usbTethered = false;
 
-            for (Object o : tethered)
-            {
+            for (Object o : tethered) {
                 String s = (String) o;
-                for (String regex : mUsbRegexs)
-                {
+                for (String regex : mUsbRegexs) {
                     if (s.matches(regex))
                         usbTethered = true;
                 }
             }
 
-            if (usbTethered)
-            {
+            if (usbTethered) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public static void toggleUsbTether(Context context)
-    {
-        try
-        {
+    public static void toggleUsbTether(Context context) {
+        try {
             boolean massStorageActive = Environment.MEDIA_SHARED.equals(Environment.getExternalStorageState());
 
-            if (massStorageActive)
-            {
+            if (massStorageActive) {
                 Toast.makeText(context, R.string.usb_tethering_storage_active_subtext, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -1307,95 +1037,76 @@ public class SwitchUtils
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             Class<?> cls = Class.forName("android.net.ConnectivityManager");
 
-            Method getTetherableIfaces = cls.getMethod("getTetherableIfaces", new Class[] {});
-            Method getTetherableUsbRegexs = cls.getMethod("getTetherableUsbRegexs", new Class[] {});
-            Method getTetheredIfaces = cls.getMethod("getTetheredIfaces", new Class[] {});
-            Method tetherMethod = cls.getMethod("tether", new Class[] { String.class });
-            Method untetherMethod = cls.getMethod("untether", new Class[] { String.class });
+            Method getTetherableIfaces = cls.getMethod("getTetherableIfaces", new Class[]{});
+            Method getTetherableUsbRegexs = cls.getMethod("getTetherableUsbRegexs", new Class[]{});
+            Method getTetheredIfaces = cls.getMethod("getTetheredIfaces", new Class[]{});
+            Method tetherMethod = cls.getMethod("tether", new Class[]{String.class});
+            Method untetherMethod = cls.getMethod("untether", new Class[]{String.class});
             getTetherableIfaces.setAccessible(true);
             getTetherableUsbRegexs.setAccessible(true);
 
-            String[] mUsbRegexs = (String[]) getTetherableUsbRegexs.invoke(cm, new Object[] {});
+            String[] mUsbRegexs = (String[]) getTetherableUsbRegexs.invoke(cm, new Object[]{});
 
-            if (getUsbTetherState(context))
-            {
-                String[] tethered = (String[]) getTetheredIfaces.invoke(cm, new Object[] {});
+            if (getUsbTetherState(context)) {
+                String[] tethered = (String[]) getTetheredIfaces.invoke(cm, new Object[]{});
                 String usbIface = findIface(tethered, mUsbRegexs);
 
-                if (usbIface == null)
-                {
+                if (usbIface == null) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.setClassName("com.android.settings", "com.android.settings.Settings$TetherSettingsActivity");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-                    try
-                    {
-                        // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+                    try {
+                        // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                         PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0)
                                 .send();
                         pendingIntent.send();
-                    }
-                    catch (CanceledException e)
-                    {
+                    } catch (CanceledException e) {
                         e.printStackTrace();
                     }
                     return;
                 }
 
-                if ((Integer) untetherMethod.invoke(cm, new Object[] { usbIface }) != Constants.TETHER_ERROR_NO_ERROR)
-                {
+                if ((Integer) untetherMethod.invoke(cm, new Object[]{usbIface}) != Constants.TETHER_ERROR_NO_ERROR) {
                     Toast.makeText(context, R.string.usb_tethering_errored_subtext, Toast.LENGTH_SHORT).show();
                     return;
                 }
-            }
-            else
-            {
-                String[] available = (String[]) getTetherableIfaces.invoke(cm, new Object[] {});
+            } else {
+                String[] available = (String[]) getTetherableIfaces.invoke(cm, new Object[]{});
                 String usbIface = findIface(available, mUsbRegexs);
 
-                if (usbIface == null)
-                {
+                if (usbIface == null) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.setClassName("com.android.settings", "com.android.settings.Settings$TetherSettingsActivity");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-                    try
-                    {
-                        // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+                    try {
+                        // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                         PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0)
                                 .send();
                         pendingIntent.send();
-                    }
-                    catch (CanceledException e)
-                    {
+                    } catch (CanceledException e) {
                         e.printStackTrace();
                     }
                     return;
                 }
 
-                if ((Integer) tetherMethod.invoke(cm, new Object[] { usbIface }) != Constants.TETHER_ERROR_NO_ERROR)
-                {
+                if ((Integer) tetherMethod.invoke(cm, new Object[]{usbIface}) != Constants.TETHER_ERROR_NO_ERROR) {
                     Toast.makeText(context, R.string.usb_tethering_errored_subtext, Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
-        }
-        catch (Exception localException)
-        {
+        } catch (Exception localException) {
             localException.printStackTrace();
         }
     }
 
-    private static String findIface(String[] ifaces, String[] regexes)
-    {
-        for (String iface : ifaces)
-        {
-            for (String regex : regexes)
-            {
-                if (iface.matches(regex))
-                {
+    private static String findIface(String[] ifaces, String[] regexes) {
+        for (String iface : ifaces) {
+            for (String regex : regexes) {
+                if (iface.matches(regex)) {
                     return iface;
                 }
             }
@@ -1403,137 +1114,103 @@ public class SwitchUtils
         return null;
     }
 
-    public static void lockScreen(Context context)
-    {
+    public static void lockScreen(Context context) {
         Object localObject1 = context.getApplicationContext().getSystemService("device_policy");
 
-        try
-        {
+        try {
             boolean isActive = ((Boolean) localObject1.getClass()
-                    .getMethod("isAdminActive", new Class[] { ComponentName.class })
-                    .invoke(localObject1, new Object[] { new ComponentName(context, MainBrocastReceiver.class) }))
+                    .getMethod("isAdminActive", new Class[]{ComponentName.class})
+                    .invoke(localObject1, new Object[]{new ComponentName(context, MainBrocastReceiver.class)}))
                     .booleanValue();
 
-            if (isActive)
-            {
-                localObject1.getClass().getMethod("lockNow", new Class[] {}).invoke(localObject1, new Object[] {});
-            }
-            else
-            {
+            if (isActive) {
+                localObject1.getClass().getMethod("lockNow", new Class[]{}).invoke(localObject1, new Object[]{});
+            } else {
                 Intent intent = new Intent(context, DeviceAdminActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-                try
-                {
-                    // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+                try {
+                    // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     pendingIntent.send();
-                }
-                catch (CanceledException e)
-                {
+                } catch (CanceledException e) {
                     e.printStackTrace();
                 }
             }
-        }
-        catch (Exception localException)
-        {
+        } catch (Exception localException) {
             localException.printStackTrace();
         }
     }
 
-    public static void setvolume(Context context)
-    {
+    public static void setvolume(Context context) {
         Intent intent = new Intent(context, VolumeActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        try
-        {
-            // Èç¹ûÊÇ´ÓÍ¨ÖªÀ¸µ¯³ö£¬ÐèÒªÏÈµ¯ÆðÍ¨ÖªÀ¸
+        try {
+            // ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Èµï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             pendingIntent.send();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void killProcess(Context context)
-    {
+    public static void killProcess(Context context) {
         ProcessUtils.killProcess(context);
     }
 
-    public static void toggleMemory(Context context)
-    {
+    public static void toggleMemory(Context context) {
         Intent alarmIntent = new Intent(Intent.ACTION_MAIN);
         alarmIntent.setClassName("com.android.settings", "com.android.settings.Settings$RunningServicesActivity");
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        try
-        {
+        try {
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             PendingIntent.getActivity(context, 0, alarmIntent, 0).send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
     }
 
-    public static void toggleStorage(Context context)
-    {
+    public static void toggleStorage(Context context) {
         Intent alarmIntent = new Intent(Intent.ACTION_MAIN);
         alarmIntent.setClassName("com.android.settings", "com.android.settings.Settings$StorageSettingsActivity");
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        try
-        {
+        try {
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             PendingIntent.getActivity(context, 0, alarmIntent, 0).send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
     }
 
-    public static void toggleBlueToothTe(Context context)
-    {
-        if (VERSION.SDK_INT > 10)
-        {
-            if (getBluetoothState(context) == WidgetProviderUtil.STATE_ENABLED)
-            {
+    public static void toggleBlueToothTe(Context context) {
+        if (VERSION.SDK_INT > 10) {
+            if (getBluetoothState(context) == WidgetProviderUtil.STATE_ENABLED) {
                 BluetoothTeUtil.toggleBluetoothTe();
-            }
-            else
-            {
+            } else {
                 toggle_bluetooth_te = true;
                 toggleBluetooth(context);
             }
         }
     }
 
-    public static boolean getBluetoothTe(Context context)
-    {
-        if (VERSION.SDK_INT > 10)
-        {
+    public static boolean getBluetoothTe(Context context) {
+        if (VERSION.SDK_INT > 10) {
             return BluetoothTeUtil.getBluetoothTe();
         }
         return false;
     }
 
-    public static void toggleNFC(Context context)
-    {
-        if (VERSION.SDK_INT > 8)
-        {
+    public static void toggleNFC(Context context) {
+        if (VERSION.SDK_INT > 8) {
             NFCUtil.toggleNFC(context);
         }
     }
 
-    public static boolean getNFC(Context context)
-    {
-        if (VERSION.SDK_INT > 8)
-        {
+    public static boolean getNFC(Context context) {
+        if (VERSION.SDK_INT > 8) {
             return NFCUtil.getNFC(context);
         }
 

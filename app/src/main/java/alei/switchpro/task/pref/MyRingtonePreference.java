@@ -16,104 +16,84 @@ import android.widget.CheckBox;
  * The RingtonePreference does not have a way to get/set the current ringtone so
  * we override onSaveRingtone and onRestoreRingtone to get the same behavior.
  */
-public class MyRingtonePreference extends RingtonePreference implements OnClickListener
-{
+public class MyRingtonePreference extends RingtonePreference implements OnClickListener {
     private Uri mAlert;
     private boolean isChecked;
 
-    public MyRingtonePreference(Context context, AttributeSet attrs)
-    {
+    public MyRingtonePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    protected void onSaveRingtone(Uri ringtoneUri)
-    {
+    protected void onSaveRingtone(Uri ringtoneUri) {
         setAlert(ringtoneUri);
     }
 
     @Override
-    protected Uri onRestoreRingtone()
-    {
+    protected Uri onRestoreRingtone() {
         return mAlert;
     }
 
     @Override
-    protected void onBindView(View view)
-    {
+    protected void onBindView(View view) {
         super.onBindView(view);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.pref_check);
 
-        if (checkBox != null)
-        {
+        if (checkBox != null) {
             checkBox.setChecked(isChecked);
             checkBox.setOnClickListener(this);
         }
     }
 
-    public void setAlert(Uri alert)
-    {
+    public void setAlert(Uri alert) {
         mAlert = alert;
 
-        if (alert != null)
-        {
+        if (alert != null) {
             final Ringtone r = RingtoneManager.getRingtone(getContext(), alert);
 
-            if (r != null)
-            {
+            if (r != null) {
                 setSummary(r.getTitle(getContext()));
             }
-        }
-        else
-        {
+        } else {
             Uri defaultUri = RingtoneManager.getActualDefaultRingtoneUri(getContext(), RingtoneManager.TYPE_RINGTONE);
 
-            if (defaultUri != null)
-            {
+            if (defaultUri != null) {
                 Ringtone ringstone = RingtoneManager.getRingtone(getContext(), defaultUri);
 
-                if (ringstone != null)
-                {
+                if (ringstone != null) {
                     setSummary(ringstone.getTitle(getContext()));
                 }
             }
         }
     }
 
-    public String getAlertString()
-    {
-        if (mAlert != null)
-        {
+    public String getAlertString() {
+        if (mAlert != null) {
             return mAlert.toString();
         }
 
         return TaskUtil.ALARM_ALERT_SILENT;
     }
 
-    public String getDefaultAlertString()
-    {
+    public String getDefaultAlertString() {
         Uri defaultAlert = RingtoneManager.getActualDefaultRingtoneUri(getContext(), RingtoneManager.TYPE_RINGTONE);
 
-        if (defaultAlert != null)
-        {
+        if (defaultAlert != null) {
             return defaultAlert.toString();
         }
 
         return TaskUtil.ALARM_ALERT_SILENT;
     }
 
-    public boolean isChecked()
-    {
+    public boolean isChecked() {
         return isChecked;
     }
 
-    public void setChecked(boolean b)
-    {
+    public void setChecked(boolean b) {
         isChecked = b;
     }
 
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         isChecked = ((CheckBox) v).isChecked();
     }
 }

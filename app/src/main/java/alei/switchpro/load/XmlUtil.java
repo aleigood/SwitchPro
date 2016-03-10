@@ -1,16 +1,5 @@
 package alei.switchpro.load;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlSerializer;
-
 import alei.switchpro.Constants;
 import alei.switchpro.DatabaseOper;
 import alei.switchpro.brightness.LevelPreference;
@@ -22,27 +11,32 @@ import android.database.Cursor;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Xml;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlSerializer;
 
-public class XmlUtil
-{
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+public class XmlUtil {
     private static final String TAG_WIDGET = "widget";
     private static final String TAG_GLOBAL = "global";
     private static final String TAG_APP_NAME = "name";
 
-    private static boolean saveToFile(byte[] msgs, String fileName)
-    {
-        try
-        {
-            // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
-                // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+    private static boolean saveToFile(byte[] msgs, String fileName) {
+        try {
+            // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File dir = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH);
 
-                if (!dir.exists())
-                {
+                if (!dir.exists()) {
                     dir.mkdir();
                 }
 
@@ -52,9 +46,7 @@ public class XmlUtil
                 outStream.close();
                 return true;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
@@ -63,63 +55,51 @@ public class XmlUtil
     }
 
     /**
-     * ¼ÙÉèÁ½¸öÎÄ¼þËùÔÚÄ¿Â¼¶¼´æÔÚ
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     *
      * @param oldPath
      * @param newPath
      * @return
      */
-    public static boolean copyFile(String oldPath, String newPath)
-    {
-        try
-        {
+    public static boolean copyFile(String oldPath, String newPath) {
+        try {
             int byteRead = 0;
 
-            // ÎÄ¼þ´æÔÚÊ±
-            if (new File(oldPath).exists())
-            {
+            // ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
+            if (new File(oldPath).exists()) {
                 InputStream is = new FileInputStream(oldPath);
                 FileOutputStream fos = new FileOutputStream(newPath);
                 byte[] buffer = new byte[1024];
 
-                while ((byteRead = is.read(buffer)) != -1)
-                {
+                while ((byteRead = is.read(buffer)) != -1) {
                     fos.write(buffer, 0, byteRead);
                 }
 
                 fos.close();
                 is.close();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
 
         return true;
     }
 
-    public static boolean deleteFile(String fileName)
-    {
-        try
-        {
-            // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
-                // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+    public static boolean deleteFile(String fileName) {
+        try {
+            // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + fileName);
 
-                if (file.exists())
-                {
+                if (file.exists()) {
                     return file.delete();
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -127,33 +107,27 @@ public class XmlUtil
     }
 
     /**
-     * ¶ÁÈ¡ÅäÖÃÎÄ¼þ£¬µ±³öÏÖ´íÎóÊ±·µ»Ønull
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½null
+     *
      * @param fileName
      * @return
      */
-    private static FileInputStream readFile(String fileName)
-    {
-        try
-        {
-            // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
-                // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+    private static FileInputStream readFile(String fileName) {
+        try {
+            // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + fileName);
 
-                if (file.exists())
-                {
+                if (file.exists()) {
                     FileInputStream fis = new FileInputStream(file);
                     return fis;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -161,25 +135,22 @@ public class XmlUtil
     }
 
     /**
-     * ½«ÅäÖÃ×ª»»³ÉxmlµÄ×Ö·û´®
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½xmlï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+     *
      * @param XmlEntitys
      * @return
      */
-    public static boolean writeWidgetXml(List<XmlEntity> XmlEntitys, String fileName)
-    {
+    public static boolean writeWidgetXml(List<XmlEntity> XmlEntitys, String fileName) {
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
         String result = "";
 
-        try
-        {
+        try {
             serializer.setOutput(writer);
             serializer.startDocument(Constants.DEFAULT_ENCODING, true);
             serializer.startTag("", Constants.APP_NAME);
 
-            for (XmlEntity msg : XmlEntitys)
-            {
+            for (XmlEntity msg : XmlEntitys) {
                 serializer.startTag("", TAG_WIDGET);
                 serializer.attribute("", Constants.ATTR_WIDGET_BUTTONS, msg.getBtnIds());
                 serializer.attribute("", Constants.ATTR_WIDGET_ICON_COLOR, msg.getIconColor() + "");
@@ -194,9 +165,7 @@ public class XmlUtil
             serializer.endTag("", Constants.APP_NAME);
             serializer.endDocument();
             result = writer.toString();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -205,42 +174,36 @@ public class XmlUtil
 
     /**
      * @param is
-     * @return µ±¶ÁÈ¡ÎÄ¼þ³ö´íÊ±·µ»ØSizeÎª0µÄ¼¯ºÏ
+     * @return ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½SizeÎª0ï¿½Ä¼ï¿½ï¿½ï¿½
      */
-    public static List<XmlEntity> parseWidgetCfg(String fileName)
-    {
+    public static List<XmlEntity> parseWidgetCfg(String fileName) {
         InputStream is = readFile(fileName);
         List<XmlEntity> xmlEntitys = new ArrayList<XmlEntity>();
 
-        if (is == null)
-        {
+        if (is == null) {
             return xmlEntitys;
         }
 
         XmlPullParser parser = Xml.newPullParser();
 
-        try
-        {
+        try {
             // auto-detect the encoding from the stream
             parser.setInput(is, null);
             int eventType = parser.getEventType();
             XmlEntity currentXmlEntity = null;
             boolean done = false;
 
-            while (eventType != XmlPullParser.END_DOCUMENT && !done)
-            {
+            while (eventType != XmlPullParser.END_DOCUMENT && !done) {
                 String name = null;
 
-                switch (eventType)
-                {
+                switch (eventType) {
                     case XmlPullParser.START_DOCUMENT:
                         xmlEntitys = new ArrayList<XmlEntity>();
                         break;
                     case XmlPullParser.START_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(TAG_WIDGET))
-                        {
+                        if (name.equalsIgnoreCase(TAG_WIDGET)) {
                             currentXmlEntity = new XmlEntity();
                             currentXmlEntity.setBtnIds(parser.getAttributeValue("", Constants.ATTR_WIDGET_BUTTONS));
                             currentXmlEntity.setIconColor(Integer.parseInt(parser.getAttributeValue("",
@@ -259,12 +222,9 @@ public class XmlUtil
                     case XmlPullParser.END_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(TAG_WIDGET) && currentXmlEntity != null)
-                        {
+                        if (name.equalsIgnoreCase(TAG_WIDGET) && currentXmlEntity != null) {
                             xmlEntitys.add(currentXmlEntity);
-                        }
-                        else if (name.equalsIgnoreCase(Constants.APP_NAME))
-                        {
+                        } else if (name.equalsIgnoreCase(Constants.APP_NAME)) {
                             done = true;
                         }
                         break;
@@ -273,9 +233,7 @@ public class XmlUtil
             }
 
             is.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -283,148 +241,124 @@ public class XmlUtil
     }
 
     /**
-     * ½«ÅäÖÃ×ª»»³ÉxmlµÄ×Ö·û´®
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½xmlï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+     *
      * @param XmlEntitys
      * @return
      */
-    public static boolean writeGlobalXml(Context context, String fileName)
-    {
+    public static boolean writeGlobalXml(Context context, String fileName) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
         String result = "";
 
-        try
-        {
+        try {
             serializer.setOutput(writer);
             serializer.startDocument(Constants.DEFAULT_ENCODING, true);
             serializer.startTag("", Constants.APP_NAME);
 
             serializer.startTag("", TAG_GLOBAL);
 
-            if (config.contains(Constants.PREFS_TOGGLE_WIFI))
-            {
+            if (config.contains(Constants.PREFS_TOGGLE_WIFI)) {
                 serializer.attribute("", Constants.PREFS_TOGGLE_WIFI,
                         config.getBoolean(Constants.PREFS_TOGGLE_WIFI, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_TOGGLE_BLUETOOTH))
-            {
+            if (config.contains(Constants.PREFS_TOGGLE_BLUETOOTH)) {
                 serializer.attribute("", Constants.PREFS_TOGGLE_BLUETOOTH,
                         config.getBoolean(Constants.PREFS_TOGGLE_BLUETOOTH, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_TOGGLE_GPS))
-            {
+            if (config.contains(Constants.PREFS_TOGGLE_GPS)) {
                 serializer.attribute("", Constants.PREFS_TOGGLE_GPS,
                         config.getBoolean(Constants.PREFS_TOGGLE_GPS, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_TOGGLE_SYNC))
-            {
+            if (config.contains(Constants.PREFS_TOGGLE_SYNC)) {
                 serializer.attribute("", Constants.PREFS_TOGGLE_SYNC,
                         config.getBoolean(Constants.PREFS_TOGGLE_SYNC, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_AIRPLANE_WIFI))
-            {
+            if (config.contains(Constants.PREFS_AIRPLANE_WIFI)) {
                 serializer.attribute("", Constants.PREFS_AIRPLANE_WIFI,
                         config.getBoolean(Constants.PREFS_AIRPLANE_WIFI, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_TOGGLE_FLASH))
-            {
+            if (config.contains(Constants.PREFS_TOGGLE_FLASH)) {
                 serializer.attribute("", Constants.PREFS_TOGGLE_FLASH,
                         config.getBoolean(Constants.PREFS_TOGGLE_FLASH, true) + "");
             }
 
-            if (config.contains(Constants.PREFS_TOGGLE_TIMEOUT))
-            {
+            if (config.contains(Constants.PREFS_TOGGLE_TIMEOUT)) {
                 serializer.attribute("", Constants.PREFS_TOGGLE_TIMEOUT,
                         config.getBoolean(Constants.PREFS_TOGGLE_TIMEOUT, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_USE_APN))
-            {
+            if (config.contains(Constants.PREFS_USE_APN)) {
                 serializer.attribute("", Constants.PREFS_USE_APN, config.getBoolean(Constants.PREFS_USE_APN, false)
                         + "");
             }
 
-            if (config.contains(Constants.PREFS_MUTE_MEDIA))
-            {
+            if (config.contains(Constants.PREFS_MUTE_MEDIA)) {
                 serializer.attribute("", Constants.PREFS_MUTE_MEDIA,
                         config.getBoolean(Constants.PREFS_MUTE_MEDIA, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_MUTE_ALARM))
-            {
+            if (config.contains(Constants.PREFS_MUTE_ALARM)) {
                 serializer.attribute("", Constants.PREFS_MUTE_ALARM,
                         config.getBoolean(Constants.PREFS_MUTE_ALARM, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_AIRPLANE_RADIO))
-            {
+            if (config.contains(Constants.PREFS_AIRPLANE_RADIO)) {
                 serializer.attribute("", Constants.PREFS_AIRPLANE_RADIO,
                         config.getBoolean(Constants.PREFS_AIRPLANE_RADIO, false) + "");
             }
 
-            if (config.contains(Constants.PREFS_SYNC_NOW))
-            {
+            if (config.contains(Constants.PREFS_SYNC_NOW)) {
                 serializer.attribute("", Constants.PREFS_SYNC_NOW, config.getBoolean(Constants.PREFS_SYNC_NOW, false)
                         + "");
             }
 
-            if (config.contains(Constants.PREFS_BRIGHT_LEVEL))
-            {
+            if (config.contains(Constants.PREFS_BRIGHT_LEVEL)) {
                 serializer.attribute("", Constants.PREFS_BRIGHT_LEVEL,
                         config.getString(Constants.PREFS_BRIGHT_LEVEL, LevelPreference.DEFAULT_LEVEL));
             }
 
-            if (config.contains(Constants.PREFS_SILENT_BTN))
-            {
+            if (config.contains(Constants.PREFS_SILENT_BTN)) {
                 serializer.attribute("", Constants.PREFS_SILENT_BTN,
                         config.getString(Constants.PREFS_SILENT_BTN, Constants.BTN_VS));
             }
 
-            if (config.contains(Constants.PREFS_DEVICE_TYPE))
-            {
+            if (config.contains(Constants.PREFS_DEVICE_TYPE)) {
                 serializer.attribute("", Constants.PREFS_DEVICE_TYPE,
                         config.getString(Constants.PREFS_DEVICE_TYPE, "0") + "");
             }
 
-            for (int i = 0; i < Constants.ICON_COUNT; i++)
-            {
+            for (int i = 0; i < Constants.ICON_COUNT; i++) {
                 String tmp = String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, i);
                 String existFileName = config.getString(tmp, "");
 
-                if (config.contains(tmp))
-                {
+                if (config.contains(tmp)) {
                     serializer.attribute("", tmp, existFileName);
                 }
 
-                // °ÑÍ¼±êÎÄ¼þÒ²¿½±´µ½SD¿¨
-                try
-                {
-                    // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-                    {
-                        // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                        // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+                // ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Ä¼ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SDï¿½ï¿½
+                try {
+                    // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                        // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                        // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                         File sdCardDir = Environment.getExternalStorageDirectory();
                         File dir = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH);
 
-                        if (!dir.exists())
-                        {
+                        if (!dir.exists()) {
                             dir.mkdir();
                         }
 
                         copyFile(context.getFileStreamPath(existFileName).getPath(), dir.getPath() + File.separator
                                 + existFileName);
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -433,35 +367,28 @@ public class XmlUtil
             serializer.endTag("", Constants.APP_NAME);
             serializer.endDocument();
             result = writer.toString();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return saveToFile(result.getBytes(), fileName);
     }
 
-    public static boolean writeProcessExcludeToXml(DatabaseOper ap)
-    {
+    public static boolean writeProcessExcludeToXml(DatabaseOper ap) {
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
 
-        try
-        {
+        try {
             serializer.setOutput(writer);
             serializer.startDocument(Constants.DEFAULT_ENCODING, true);
             serializer.startTag("", Constants.APP_NAME);
             Cursor cursor = ap.queryIgnored();
 
-            if (cursor.moveToFirst())
-            {
-                do
-                {
+            if (cursor.moveToFirst()) {
+                do {
                     String pakName = cursor.getString(Constants.IGNORED.INDEX_NAME);
 
-                    if (pakName != null && !pakName.equals(""))
-                    {
+                    if (pakName != null && !pakName.equals("")) {
                         serializer.startTag("", TAG_APP_NAME);
                         serializer.attribute("", Constants.IGNORED.COLUMN_NAME, pakName);
                         serializer.endTag("", TAG_APP_NAME);
@@ -473,9 +400,7 @@ public class XmlUtil
             cursor.close();
             serializer.endTag("", Constants.APP_NAME);
             serializer.endDocument();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -483,204 +408,176 @@ public class XmlUtil
     }
 
     /**
-     * ±¸·ÝÈ«¾Ö²ÎÊý£¬°üÀ¨Í¼±êÉèÖÃ
-     * 
+     * ï¿½ï¿½ï¿½ï¿½È«ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     *
      * @param is
-     * @return µ±¶ÁÈ¡ÎÄ¼þ³ö´íÊ±·µ»Ønull
+     * @return ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½null
      */
-    public static boolean parseGlobalCfg(Context context, String fileName)
-    {
+    public static boolean parseGlobalCfg(Context context, String fileName) {
         InputStream is = readFile(fileName);
 
-        if (is == null)
-        {
+        if (is == null) {
             return false;
         }
 
         Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         XmlPullParser parser = Xml.newPullParser();
 
-        try
-        {
+        try {
             parser.setInput(is, null);
             int eventType = parser.getEventType();
             boolean done = false;
 
-            while (eventType != XmlPullParser.END_DOCUMENT && !done)
-            {
+            while (eventType != XmlPullParser.END_DOCUMENT && !done) {
                 String name = null;
 
-                switch (eventType)
-                {
+                switch (eventType) {
                     case XmlPullParser.START_DOCUMENT:
                         break;
                     case XmlPullParser.START_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(TAG_GLOBAL))
-                        {
-                            // ÊÇ·ñ´ò¿ªwifi½çÃæ
+                        if (name.equalsIgnoreCase(TAG_GLOBAL)) {
+                            // ï¿½Ç·ï¿½ï¿½wifiï¿½ï¿½ï¿½ï¿½
                             String prefToggleWifi = parser.getAttributeValue("", Constants.PREFS_TOGGLE_WIFI);
 
-                            if (prefToggleWifi != null)
-                            {
+                            if (prefToggleWifi != null) {
                                 editor.putBoolean(Constants.PREFS_TOGGLE_WIFI, Boolean.parseBoolean(prefToggleWifi))
                                         .commit();
                             }
 
-                            // ÊÇ·ñ´ò¿ªÀ¶ÑÀ½çÃæ
+                            // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             String prefToggleBt = parser.getAttributeValue("", Constants.PREFS_TOGGLE_BLUETOOTH);
 
-                            if (prefToggleBt != null)
-                            {
+                            if (prefToggleBt != null) {
                                 editor.putBoolean(Constants.PREFS_TOGGLE_BLUETOOTH, Boolean.parseBoolean(prefToggleBt))
                                         .commit();
                             }
 
-                            // ÊÇ·ñ´ò¿ªGPS½çÃæ
+                            // ï¿½Ç·ï¿½ï¿½GPSï¿½ï¿½ï¿½ï¿½
                             String prefToggleGPS = parser.getAttributeValue("", Constants.PREFS_TOGGLE_GPS);
 
-                            if (prefToggleGPS != null)
-                            {
+                            if (prefToggleGPS != null) {
                                 editor.putBoolean(Constants.PREFS_TOGGLE_GPS, Boolean.parseBoolean(prefToggleGPS))
                                         .commit();
                             }
 
-                            // ÊÇ·ñ´ò¿ªÍ¬²½½çÃæ
+                            // ï¿½Ç·ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             String prefToggleSync = parser.getAttributeValue("", Constants.PREFS_TOGGLE_SYNC);
 
-                            if (prefToggleSync != null)
-                            {
+                            if (prefToggleSync != null) {
                                 editor.putBoolean(Constants.PREFS_TOGGLE_SYNC, Boolean.parseBoolean(prefToggleSync))
                                         .commit();
                             }
 
-                            // ·ÉÐÐÄ£Ê½ÊÇ·ñ¹Ø±Õwifi
+                            // ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½Ç·ï¿½Ø±ï¿½wifi
                             String prefToggleAireWifi = parser.getAttributeValue("", Constants.PREFS_AIRPLANE_WIFI);
 
-                            if (prefToggleAireWifi != null)
-                            {
+                            if (prefToggleAireWifi != null) {
                                 editor.putBoolean(Constants.PREFS_AIRPLANE_WIFI,
                                         Boolean.parseBoolean(prefToggleAireWifi)).commit();
                             }
 
-                            // ÊÇ·ñÊ¹ÓÃÉÁ¹âµÆ
+                            // ï¿½Ç·ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             String prefToggleFlash = parser.getAttributeValue("", Constants.PREFS_TOGGLE_FLASH);
 
-                            if (prefToggleFlash != null)
-                            {
+                            if (prefToggleFlash != null) {
                                 editor.putBoolean(Constants.PREFS_TOGGLE_FLASH, Boolean.parseBoolean(prefToggleFlash))
                                         .commit();
                             }
 
-                            // ÊÇ·ñÏÔÊ¾Ê±¼äÑ¡ÔñÆ÷
+                            // ï¿½Ç·ï¿½ï¿½ï¿½Ê¾Ê±ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½
                             String prefToggleTime = parser.getAttributeValue("", Constants.PREFS_TOGGLE_TIMEOUT);
 
-                            if (prefToggleTime != null)
-                            {
+                            if (prefToggleTime != null) {
                                 editor.putBoolean(Constants.PREFS_TOGGLE_TIMEOUT, Boolean.parseBoolean(prefToggleTime))
                                         .commit();
                             }
 
-                            // ÊÇ·ñÊ¹ÓÃAPN
+                            // ï¿½Ç·ï¿½Ê¹ï¿½ï¿½APN
                             String prefApn = parser.getAttributeValue("", Constants.PREFS_USE_APN);
 
-                            if (prefApn != null)
-                            {
+                            if (prefApn != null) {
                                 editor.putBoolean(Constants.PREFS_USE_APN, Boolean.parseBoolean(prefApn)).commit();
                             }
 
-                            // ÊÇ·ñ¹Ø±ÕÃ½ÌåÒôÁ¿
+                            // ï¿½Ç·ï¿½Ø±ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             String prefMuteMedia = parser.getAttributeValue("", Constants.PREFS_MUTE_MEDIA);
 
-                            if (prefMuteMedia != null)
-                            {
+                            if (prefMuteMedia != null) {
                                 editor.putBoolean(Constants.PREFS_MUTE_MEDIA, Boolean.parseBoolean(prefMuteMedia))
                                         .commit();
                             }
 
-                            // ÊÇ·ñ¹Ø±Õ¾¯¸æÒôÁ¿
+                            // ï¿½Ç·ï¿½Ø±Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             String prefMuteAlarm = parser.getAttributeValue("", Constants.PREFS_MUTE_ALARM);
 
-                            if (prefMuteAlarm != null)
-                            {
+                            if (prefMuteAlarm != null) {
                                 editor.putBoolean(Constants.PREFS_MUTE_ALARM, Boolean.parseBoolean(prefMuteAlarm))
                                         .commit();
                             }
 
-                            // ÊÇ·ñ¹Ø±ÕÊÖ»úÐÅºÅ
+                            // ï¿½Ç·ï¿½Ø±ï¿½ï¿½Ö»ï¿½ï¿½Åºï¿½
                             String prefRadio = parser.getAttributeValue("", Constants.PREFS_AIRPLANE_RADIO);
 
-                            if (prefRadio != null)
-                            {
+                            if (prefRadio != null) {
                                 editor.putBoolean(Constants.PREFS_AIRPLANE_RADIO, Boolean.parseBoolean(prefRadio))
                                         .commit();
                             }
 
-                            // ÁÁ¶È¼¶±ð
+                            // ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½
                             String preBrightLevel = parser.getAttributeValue("", Constants.PREFS_BRIGHT_LEVEL);
 
-                            if (preBrightLevel != null)
-                            {
+                            if (preBrightLevel != null) {
                                 editor.putString(Constants.PREFS_BRIGHT_LEVEL, preBrightLevel).commit();
                             }
 
-                            // ¾²Òô°´Å¥
+                            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
                             String preSilentBtn = parser.getAttributeValue("", Constants.PREFS_SILENT_BTN);
 
-                            if (preSilentBtn != null)
-                            {
+                            if (preSilentBtn != null) {
                                 editor.putString(Constants.PREFS_SILENT_BTN, preSilentBtn).commit();
                             }
 
-                            // ÊÖ»úÀàÐÍ
+                            // ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½
                             String preDvieceType = parser.getAttributeValue("", Constants.PREFS_DEVICE_TYPE);
 
-                            if (preDvieceType != null)
-                            {
+                            if (preDvieceType != null) {
                                 editor.putString(Constants.PREFS_DEVICE_TYPE, preDvieceType).commit();
                             }
 
-                            // ÊÇ·ñÁ¢¼´Í¬²½
+                            // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½
                             String preSyncNow = parser.getAttributeValue("", Constants.PREFS_SYNC_NOW);
 
-                            if (preSyncNow != null)
-                            {
+                            if (preSyncNow != null) {
                                 editor.putBoolean(Constants.PREFS_SYNC_NOW, Boolean.parseBoolean(preSyncNow)).commit();
                             }
 
-                            for (int i = 0; i < Constants.ICON_COUNT; i++)
-                            {
+                            for (int i = 0; i < Constants.ICON_COUNT; i++) {
                                 String tmp = String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, i);
                                 String stored = parser.getAttributeValue("", tmp);
 
-                                // Èç¹ûÊôÐÔ´æÔÚ
-                                if (stored != null)
-                                {
+                                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
+                                if (stored != null) {
                                     editor.putString(tmp, stored).commit();
 
-                                    try
-                                    {
-                                        // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-                                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-                                        {
-                                            // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                                            // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+                                    try {
+                                        // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+                                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                                            // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                                            // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                                             File sdCardDir = Environment.getExternalStorageDirectory();
                                             File dir = new File(sdCardDir.getPath() + File.separator
                                                     + Constants.BACK_FILE_PATH);
 
-                                            if (!dir.exists())
-                                            {
+                                            if (!dir.exists()) {
                                                 dir.mkdir();
                                             }
 
                                             copyFile(dir.getPath() + File.separator + stored, context.getFilesDir()
                                                     + File.separator + stored);
                                         }
-                                    }
-                                    catch (Exception e)
-                                    {
+                                    } catch (Exception e) {
                                         e.printStackTrace();
 
                                     }
@@ -692,8 +589,7 @@ public class XmlUtil
                     case XmlPullParser.END_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(Constants.APP_NAME))
-                        {
+                        if (name.equalsIgnoreCase(Constants.APP_NAME)) {
                             done = true;
                         }
 
@@ -703,9 +599,7 @@ public class XmlUtil
             }
 
             is.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -713,50 +607,42 @@ public class XmlUtil
         return true;
     }
 
-    public static boolean parseProcessExcludeCfg(DatabaseOper ap)
-    {
+    public static boolean parseProcessExcludeCfg(DatabaseOper ap) {
         XmlPullParser parser = Xml.newPullParser();
         FileInputStream fis = null;
 
-        try
-        {
-            // ÔÚ±£´æÖ®Ç°ÐèÒªÅÐ¶Ï SDCard ÊÇ·ñ´æÔÚ,²¢ÇÒÊÇ·ñ¾ßÓÐ¿ÉÐ´È¨ÏÞ£º
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            {
-                // »ñÈ¡SDCardÄ¿Â¼,2.2µÄÊ±ºòÎª:/mnt/sdcart
-                // 2.1µÄÊ±ºòÎª£º/sdcard£¬ËùÒÔÊ¹ÓÃ¾²Ì¬·½·¨µÃµ½Â·¾¶»áºÃÒ»µã¡£
+        try {
+            // ï¿½Ú±ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Òªï¿½Ð¶ï¿½ SDCard ï¿½Ç·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð¿ï¿½Ð´È¨ï¿½Þ£ï¿½
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                // ï¿½ï¿½È¡SDCardÄ¿Â¼,2.2ï¿½ï¿½Ê±ï¿½ï¿½Îª:/mnt/sdcart
+                // 2.1ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½/sdcardï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ã¡£
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + Constants.IGNORED.TABLE_IGNORED);
 
-                if (file.exists())
-                {
+                if (file.exists()) {
                     fis = new FileInputStream(file);
                 }
             }
 
-            if (fis == null)
-            {
+            if (fis == null) {
                 return false;
             }
 
             parser.setInput(fis, null);
             int eventType = parser.getEventType();
             boolean done = false;
-            // É¾³ýÊý¾Ý¿âËùÓÐµÄÄÚÈÝ
+            // É¾ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
             ap.deleteAllIgnoredApp();
 
-            while (eventType != XmlPullParser.END_DOCUMENT && !done)
-            {
+            while (eventType != XmlPullParser.END_DOCUMENT && !done) {
                 String name = null;
 
-                switch (eventType)
-                {
+                switch (eventType) {
                     case XmlPullParser.START_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(TAG_APP_NAME))
-                        {
+                        if (name.equalsIgnoreCase(TAG_APP_NAME)) {
                             ContentValues values = new ContentValues(1);
                             values.put(Constants.IGNORED.COLUMN_NAME,
                                     parser.getAttributeValue("", Constants.IGNORED.COLUMN_NAME));
@@ -766,8 +652,7 @@ public class XmlUtil
                     case XmlPullParser.END_TAG:
                         name = parser.getName();
 
-                        if (name.equalsIgnoreCase(Constants.APP_NAME))
-                        {
+                        if (name.equalsIgnoreCase(Constants.APP_NAME)) {
                             done = true;
                         }
                         break;
@@ -776,9 +661,7 @@ public class XmlUtil
             }
 
             fis.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -14,8 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-public class AboutDlg extends Preference
-{
+public class AboutDlg extends Preference {
     private Activity parent;
     private AlertDialog dialog;
     private String s = "<html><body><b>In home, press \"Menu\" button and select \"Add\"-&gt;\"Widgets\"-&gt;\"SwitchPro\" to create widget. </b><br><br>"
@@ -26,39 +25,32 @@ public class AboutDlg extends Preference
             + "<b>5.</b> Please deactivate device administrator before uninstalling (Settings-&gt;Security-&gt;Device administration), otherwise it can not be uninstalled. "
             + "<br><br>Copyright &copy; 2011 Leo</body></html>";
 
-    public AboutDlg(Context context, AttributeSet attrs)
-    {
+    public AboutDlg(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public AboutDlg(Context context, AttributeSet attrs, int defStyle)
-    {
+    public AboutDlg(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    private void init(Context context)
-    {
+    private void init(Context context) {
         parent = (Activity) context;
-        try
-        {
+        try {
             setSummary(context.getText(R.string.app_name) + " "
                     + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName);
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void onClick()
-    {
-        // »ñÈ¡¶Ô»°¿òBuilder
+    public void onClick() {
+        // ï¿½ï¿½È¡ï¿½Ô»ï¿½ï¿½ï¿½Builder
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
         builder.setTitle(R.string.about);
 
-        // ÉèÖÃ¶Ô»°¿òµÄView
+        // ï¿½ï¿½ï¿½Ã¶Ô»ï¿½ï¿½ï¿½ï¿½View
         LayoutInflater inflater = parent.getLayoutInflater();
         View dlgView = inflater.inflate(R.layout.activity_about, null, false);
         TextView aboutTxt = ((TextView) dlgView.findViewById(R.id.about_txt));
@@ -66,25 +58,21 @@ public class AboutDlg extends Preference
         aboutTxt.setMovementMethod(LinkMovementMethod.getInstance());
         builder.setView(dlgView);
 
-        // ÏÔÊ¾°´Å¥
-        builder.setNeutralButton(R.string.button_apply, new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
-                if (dialog != null)
-                {
+        // ï¿½ï¿½Ê¾ï¿½ï¿½Å¥
+        builder.setNeutralButton(R.string.button_apply, new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                if (dialog != null) {
                     dialog.cancel();
                 }
             }
         });
 
-        // ´´½¨¶Ô»°¿ò²¢ÏÔÊ¾
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
         dialog = builder.create();
         dialog.show();
     }
 
-    public void setActivity(Activity parent)
-    {
+    public void setActivity(Activity parent) {
         this.parent = parent;
     }
 

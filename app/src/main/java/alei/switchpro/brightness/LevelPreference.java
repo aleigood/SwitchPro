@@ -1,9 +1,5 @@
 package alei.switchpro.brightness;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import alei.switchpro.Constants;
 import alei.switchpro.R;
 import android.app.Activity;
@@ -21,12 +17,15 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LevelPreference extends DialogPreference implements OnCheckedChangeListener
-{
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class LevelPreference extends DialogPreference implements OnCheckedChangeListener {
+    public static final String DEFAULT_LEVEL = "10,100,-1";
     private Activity parent;
     private TextView currentLevel;
     private List<Integer> lastLevel;
-    public static final String DEFAULT_LEVEL = "10,100,-1";
     private CheckBox level0;
     private CheckBox level10;
     private CheckBox level20;
@@ -40,28 +39,31 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
     private CheckBox level100;
     private CheckBox levelAuto;
 
-    public interface OnColorChangedListener
-    {
-        void colorChanged(int color);
-    }
-
-    public LevelPreference(Context context, AttributeSet attrs)
-    {
+    public LevelPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public LevelPreference(Context context, AttributeSet attrs, int defStyle)
-    {
+    public LevelPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
+    public static List<Integer> getLevelRealList(String realValue) {
+        String[] level = realValue.split(",");
+        List<Integer> list = new ArrayList<Integer>();
+
+        for (int i = 0; i < level.length; i++) {
+            list.add(Integer.parseInt(level[i]));
+        }
+
+        return list;
+    }
+
     /**
-     * Õâ¸ö·½·¨»áÔÚÕû¸öPreferenceÊµÀý»¯ÒÔºóµ÷ÓÃ
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PreferenceÊµï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½ï¿½
+     *
      * @param parent
      */
-    public void setActivity(Activity parent)
-    {
+    public void setActivity(Activity parent) {
         this.parent = parent;
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
         lastLevel = getLevelRealList(config.getString(Constants.PREFS_BRIGHT_LEVEL, DEFAULT_LEVEL));
@@ -69,12 +71,9 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
     }
 
     @Override
-    protected void onDialogClosed(boolean positiveResult)
-    {
-        if (positiveResult)
-        {
-            if (lastLevel.size() < 2)
-            {
+    protected void onDialogClosed(boolean positiveResult) {
+        if (positiveResult) {
+            if (lastLevel.size() < 2) {
                 Toast.makeText(parent, R.string.level_select_warning, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -87,8 +86,7 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
     }
 
     @Override
-    protected void onPrepareDialogBuilder(Builder builder)
-    {
+    protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
         lastLevel = getLevelRealList(config.getString(Constants.PREFS_BRIGHT_LEVEL, DEFAULT_LEVEL));
@@ -122,237 +120,153 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
         level100.setOnCheckedChangeListener(this);
         levelAuto.setOnCheckedChangeListener(this);
 
-        if (lastLevel.contains(0))
-        {
+        if (lastLevel.contains(0)) {
             level0.setChecked(true);
         }
-        if (lastLevel.contains(10))
-        {
+        if (lastLevel.contains(10)) {
             level10.setChecked(true);
         }
-        if (lastLevel.contains(20))
-        {
+        if (lastLevel.contains(20)) {
             level20.setChecked(true);
         }
-        if (lastLevel.contains(30))
-        {
+        if (lastLevel.contains(30)) {
             level30.setChecked(true);
         }
-        if (lastLevel.contains(40))
-        {
+        if (lastLevel.contains(40)) {
             level40.setChecked(true);
         }
-        if (lastLevel.contains(50))
-        {
+        if (lastLevel.contains(50)) {
             level50.setChecked(true);
         }
-        if (lastLevel.contains(60))
-        {
+        if (lastLevel.contains(60)) {
             level60.setChecked(true);
         }
-        if (lastLevel.contains(70))
-        {
+        if (lastLevel.contains(70)) {
             level70.setChecked(true);
         }
-        if (lastLevel.contains(80))
-        {
+        if (lastLevel.contains(80)) {
             level80.setChecked(true);
         }
-        if (lastLevel.contains(90))
-        {
+        if (lastLevel.contains(90)) {
             level90.setChecked(true);
         }
-        if (lastLevel.contains(100))
-        {
+        if (lastLevel.contains(100)) {
             level100.setChecked(true);
         }
-        if (lastLevel.contains(-1))
-        {
+        if (lastLevel.contains(-1)) {
             levelAuto.setChecked(true);
         }
         builder.setView(dlgView);
     }
 
     /*
-     * Ö»ÔÚÏÔÊ¾Ê±µ÷ÓÃ
+     * Ö»ï¿½ï¿½ï¿½ï¿½Ê¾Ê±ï¿½ï¿½ï¿½ï¿½
      * 
      * @see android.preference.Preference#onBindView(android.view.View)
      */
     @Override
-    protected void onBindView(View view)
-    {
+    protected void onBindView(View view) {
         super.onBindView(view);
     }
 
-    public void onCheckedChanged(CompoundButton paramCompoundButton, boolean paramBoolean)
-    {
+    public void onCheckedChanged(CompoundButton paramCompoundButton, boolean paramBoolean) {
         String txt = (String) paramCompoundButton.getText();
 
-        if (txt.equals("0%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(0))
-                {
+        if (txt.equals("0%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(0)) {
                     lastLevel.add(0);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(0));
             }
         }
-        if (txt.equals("10%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(10))
-                {
+        if (txt.equals("10%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(10)) {
                     lastLevel.add(10);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(10));
             }
-        }
-        else if (txt.equals("20%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(20))
-                {
+        } else if (txt.equals("20%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(20)) {
                     lastLevel.add(20);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(20));
             }
-        }
-        else if (txt.equals("30%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(30))
-                {
+        } else if (txt.equals("30%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(30)) {
                     lastLevel.add(30);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(30));
             }
-        }
-        else if (txt.equals("40%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(40))
-                {
+        } else if (txt.equals("40%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(40)) {
                     lastLevel.add(40);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(40));
             }
-        }
-        else if (txt.equals("50%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(50))
-                {
+        } else if (txt.equals("50%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(50)) {
                     lastLevel.add(50);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(50));
             }
-        }
-        else if (txt.equals("60%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(60))
-                {
+        } else if (txt.equals("60%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(60)) {
                     lastLevel.add(60);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(60));
             }
-        }
-        else if (txt.equals("70%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(70))
-                {
+        } else if (txt.equals("70%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(70)) {
                     lastLevel.add(70);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(70));
             }
-        }
-        else if (txt.equals("80%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(80))
-                {
+        } else if (txt.equals("80%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(80)) {
                     lastLevel.add(80);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(80));
             }
-        }
-        else if (txt.equals("90%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(90))
-                {
+        } else if (txt.equals("90%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(90)) {
                     lastLevel.add(90);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(90));
             }
-        }
-        else if (txt.equals("100%"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(100))
-                {
+        } else if (txt.equals("100%")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(100)) {
                     lastLevel.add(100);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(100));
             }
-        }
-        else if (txt.equals("Auto"))
-        {
-            if (paramBoolean)
-            {
-                if (!lastLevel.contains(-1))
-                {
+        } else if (txt.equals("Auto")) {
+            if (paramBoolean) {
+                if (!lastLevel.contains(-1)) {
                     lastLevel.add(-1);
                 }
-            }
-            else
-            {
+            } else {
                 lastLevel.remove(new Integer(-1));
             }
         }
@@ -360,34 +274,23 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
         currentLevel.setText(getLevelViewStr(lastLevel));
     }
 
-    private String getLevelViewStr(List<Integer> levels)
-    {
+    private String getLevelViewStr(List<Integer> levels) {
         String s = "";
         int pos = 0;
 
-        for (Iterator<Integer> iterator = levels.iterator(); iterator.hasNext();)
-        {
+        for (Iterator<Integer> iterator = levels.iterator(); iterator.hasNext(); ) {
             int level = (iterator.next()).intValue();
 
-            if (level != -1)
-            {
-                if (pos == 0)
-                {
+            if (level != -1) {
+                if (pos == 0) {
                     s = s + level;
-                }
-                else
-                {
+                } else {
                     s = s + "->" + level;
                 }
-            }
-            else
-            {
-                if (pos == 0)
-                {
+            } else {
+                if (pos == 0) {
                     s = s + "Auto";
-                }
-                else
-                {
+                } else {
                     s = s + "->" + "Auto";
                 }
             }
@@ -398,34 +301,23 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
         return s;
     }
 
-    private String getLevelRealStr()
-    {
+    private String getLevelRealStr() {
         String levelStr = "";
         int pos = 0;
 
-        for (Iterator<Integer> iterator = lastLevel.iterator(); iterator.hasNext();)
-        {
+        for (Iterator<Integer> iterator = lastLevel.iterator(); iterator.hasNext(); ) {
             int level = (iterator.next()).intValue();
 
-            if (level != -1)
-            {
-                if (pos == 0)
-                {
+            if (level != -1) {
+                if (pos == 0) {
                     levelStr = levelStr + level;
-                }
-                else
-                {
+                } else {
                     levelStr = levelStr + "," + level;
                 }
-            }
-            else
-            {
-                if (pos == 0)
-                {
+            } else {
+                if (pos == 0) {
                     levelStr = levelStr + "-1";
-                }
-                else
-                {
+                } else {
                     levelStr = levelStr + "," + "-1";
                 }
             }
@@ -436,16 +328,7 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
         return levelStr;
     }
 
-    public static List<Integer> getLevelRealList(String realValue)
-    {
-        String[] level = realValue.split(",");
-        List<Integer> list = new ArrayList<Integer>();
-
-        for (int i = 0; i < level.length; i++)
-        {
-            list.add(Integer.parseInt(level[i]));
-        }
-
-        return list;
+    public interface OnColorChangedListener {
+        void colorChanged(int color);
     }
 }

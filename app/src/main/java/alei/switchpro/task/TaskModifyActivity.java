@@ -1,7 +1,5 @@
 package alei.switchpro.task;
 
-import java.util.List;
-
 import alei.switchpro.DatabaseOper;
 import alei.switchpro.MyApplication;
 import alei.switchpro.R;
@@ -26,17 +24,20 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * Manages each alarm
  */
-public class TaskModifyActivity extends PreferenceActivity
-{
+public class TaskModifyActivity extends PreferenceActivity {
+    public DatabaseOper dbOper;
+    public Task alarm;
+    public List<Toggle> toggles;
     private EditTextPreference mLabel;
     private Preference mTimePref;
     private Preference mTimePref2;
     private RepeatPreference mRepeatPref;
     private MenuItem mDeleteAlarmItem;
-
     private MyRingtonePreference ringtonePref;
     private BaseTogglePreference radioPref;
     private BaseTogglePreference dataPref;
@@ -44,24 +45,18 @@ public class TaskModifyActivity extends PreferenceActivity
     private BaseTogglePreference syncPref;
     private BaseTogglePreference silentPref;
     private VolumePreference volumePref;
-
     private AudioManager mAudioManager;
     private int currentVolume;
     private int maxVolume;
-
     private int mId;
     private boolean mEnabled;
     private int mHour;
     private int mMinutes;
     private int mHour2;
     private int mMinutes2;
-    public DatabaseOper dbOper;
-    public Task alarm;
-    public List<Toggle> toggles;
 
     @Override
-    protected void onCreate(Bundle icicle)
-    {
+    protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
         mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
@@ -74,10 +69,8 @@ public class TaskModifyActivity extends PreferenceActivity
 
         // Get each preference so we can retrieve the value later.
         mLabel = (EditTextPreference) findPreference("label");
-        mLabel.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-        {
-            public boolean onPreferenceChange(Preference p, Object newValue)
-            {
+        mLabel.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference p, Object newValue) {
                 // Set the summary based on the new label.
                 p.setSummary((String) newValue);
                 return true;
@@ -104,55 +97,45 @@ public class TaskModifyActivity extends PreferenceActivity
 
         // Attach actions to each button.
         Button b = (Button) findViewById(R.id.button_apply);
-        b.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                // ÏÈÐ£Ñé£¬ÊÇ·ñ¿ªÊ¼Ê±¼äÐ¡ÓÚ½áÊøÊ±¼ä
-                if (mHour > mHour2 || (mHour == mHour2 && mMinutes >= mMinutes2))
-                {
+        b.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // ï¿½ï¿½Ð£ï¿½é£¬ï¿½Ç·ï¿½Ê¼Ê±ï¿½ï¿½Ð¡ï¿½Ú½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+                if (mHour > mHour2 || (mHour == mHour2 && mMinutes >= mMinutes2)) {
                     Toast.makeText(TaskModifyActivity.this, "Start time must be less than the End time.",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // ÏÈÉ¾³ýÈ«²¿µÄ¿ª¹Ø
+                // ï¿½ï¿½É¾ï¿½ï¿½È«ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½
                 TaskUtil.deleteSwitch(dbOper, mId);
 
-                // Èç¹ûÑ¡ÖÐÁË¾ÍÐÂÔö¿ª¹Ø,µ±Ç°µÄÁåÉùÔÚ´¥·¢ÈÎÎñÊ±ÉèÖÃ
-                if (ringtonePref.isChecked())
-                {
+                // ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+                if (ringtonePref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_RINGTONE, ringtonePref.getAlertString(), "");
                 }
 
-                if (radioPref.isChecked())
-                {
+                if (radioPref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_RADIO, radioPref.getValue(), "");
                 }
 
-                if (dataPref.isChecked())
-                {
+                if (dataPref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_DATA_CONN, dataPref.getValue(), "");
                 }
 
-                if (wifiPref.isChecked())
-                {
+                if (wifiPref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_WIFI, wifiPref.getValue(), "");
                 }
 
-                if (syncPref.isChecked())
-                {
+                if (syncPref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_SYNC, syncPref.getValue(), "");
                 }
 
-                if (silentPref.isChecked())
-                {
+                if (silentPref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_SILENT, silentPref.getValue(), "");
                 }
 
-                // ´æÒôÁ¿£¬µÚÒ»¸ö²ÎÊýÖ»´æ°Ù·Ö±È£¬µÚ¶þ¸ö²ÎÊý´æÖ®Ç°µÄÖµ,Õâ¸öÖµÔÚ´¥·¢ÈÎÎñÊÇÔÙ±£´æ
-                if (volumePref.isChecked())
-                {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ù·Ö±È£ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½Öµ,ï¿½ï¿½ï¿½Öµï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù±ï¿½ï¿½ï¿½
+                if (volumePref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_VOLUME, volumePref.getPercent() + "", "");
                 }
 
@@ -162,141 +145,122 @@ public class TaskModifyActivity extends PreferenceActivity
             }
         });
         b = (Button) findViewById(R.id.button_cancel);
-        b.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        b.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 finish();
             }
         });
     }
 
-    private void initToggleState()
-    {
+    private void initToggleState() {
         ringtonePref = (MyRingtonePreference) findPreference("ringtone");
         ringtonePref.setAlert(null);
 
         String trunOn = getResources().getString(R.string.turn_on);
         String trunOff = getResources().getString(R.string.turn_off);
         radioPref = (BaseTogglePreference) findPreference("radio");
-        radioPref.setEntries(new String[] { trunOff, trunOn });
-        radioPref.setEntryValues(new String[] { "0", "1" });
+        radioPref.setEntries(new String[]{trunOff, trunOn});
+        radioPref.setEntryValues(new String[]{"0", "1"});
         radioPref.setValue("0");
         radioPref.setSummary(trunOff);
         radioPref.initData();
 
         dataPref = (BaseTogglePreference) findPreference("data");
-        dataPref.setEntries(new String[] { trunOff, trunOn });
-        dataPref.setEntryValues(new String[] { "0", "1" });
+        dataPref.setEntries(new String[]{trunOff, trunOn});
+        dataPref.setEntryValues(new String[]{"0", "1"});
         dataPref.setValue("0");
         dataPref.setSummary(trunOff);
         dataPref.initData();
 
         wifiPref = (BaseTogglePreference) findPreference("wifi");
-        wifiPref.setEntries(new String[] { trunOff, trunOn });
-        wifiPref.setEntryValues(new String[] { "0", "1" });
+        wifiPref.setEntries(new String[]{trunOff, trunOn});
+        wifiPref.setEntryValues(new String[]{"0", "1"});
         wifiPref.setValue("0");
         wifiPref.setSummary(trunOff);
         wifiPref.initData();
 
         syncPref = (BaseTogglePreference) findPreference("sync");
-        syncPref.setEntries(new String[] { trunOff, trunOn });
-        syncPref.setEntryValues(new String[] { "0", "1" });
+        syncPref.setEntries(new String[]{trunOff, trunOn});
+        syncPref.setEntryValues(new String[]{"0", "1"});
         syncPref.setValue("0");
         syncPref.setSummary(trunOff);
         syncPref.initData();
 
         silentPref = (BaseTogglePreference) findPreference("silent");
-        silentPref.setEntries(new String[] { getResources().getString(R.string.silent),
-                getResources().getString(R.string.vibrate) });
-        silentPref.setEntryValues(new String[] { "0", "1" });
+        silentPref.setEntries(new String[]{getResources().getString(R.string.silent),
+                getResources().getString(R.string.vibrate)});
+        silentPref.setEntryValues(new String[]{"0", "1"});
         silentPref.setValue("0");
         silentPref.setSummary(getResources().getString(R.string.silent));
         silentPref.initData();
 
-        // ³õÊ¼»¯³Éµ±Ç°µÄ°Ù·Ö±È
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Éµï¿½Ç°ï¿½Ä°Ù·Ö±ï¿½
         int initPercent = (int) (((float) currentVolume / (float) maxVolume) * 100);
         volumePref = (VolumePreference) findPreference("volume");
         volumePref.setPercent(initPercent);
         volumePref.setSummary(initPercent + " %");
         volumePref.initData(this);
 
-        for (int i = 0; i < toggles.size(); i++)
-        {
+        for (int i = 0; i < toggles.size(); i++) {
             Toggle tmp = (Toggle) toggles.get(i);
 
-            if (tmp.switchId == Toggle.SWITCH_RINGTONE)
-            {
+            if (tmp.switchId == Toggle.SWITCH_RINGTONE) {
                 ringtonePref.setChecked(true);
 
-                if (tmp.param1 != null && tmp.param1.length() != 0)
-                {
+                if (tmp.param1 != null && tmp.param1.length() != 0) {
                     ringtonePref.setAlert(Uri.parse(tmp.param1));
-                }
-                else
-                {
+                } else {
                     ringtonePref.setAlert(null);
                 }
             }
 
-            if (tmp.switchId == Toggle.SWITCH_RADIO)
-            {
+            if (tmp.switchId == Toggle.SWITCH_RADIO) {
                 radioPref.setChecked(true);
 
-                if (tmp.param1.equals("1"))
-                {
+                if (tmp.param1.equals("1")) {
                     radioPref.setValue("1");
                     radioPref.setSummary(trunOn);
                 }
             }
 
-            if (tmp.switchId == Toggle.SWITCH_DATA_CONN)
-            {
+            if (tmp.switchId == Toggle.SWITCH_DATA_CONN) {
                 dataPref.setChecked(true);
 
-                if (tmp.param1.equals("1"))
-                {
+                if (tmp.param1.equals("1")) {
                     dataPref.setValue("1");
                     dataPref.setSummary(trunOn);
                 }
             }
 
-            if (tmp.switchId == Toggle.SWITCH_WIFI)
-            {
+            if (tmp.switchId == Toggle.SWITCH_WIFI) {
                 wifiPref.setChecked(true);
 
-                if (tmp.param1.equals("1"))
-                {
+                if (tmp.param1.equals("1")) {
                     wifiPref.setValue("1");
                     wifiPref.setSummary(trunOn);
                 }
             }
 
-            if (tmp.switchId == Toggle.SWITCH_SYNC)
-            {
+            if (tmp.switchId == Toggle.SWITCH_SYNC) {
                 syncPref.setChecked(true);
 
-                if (tmp.param1.equals("1"))
-                {
+                if (tmp.param1.equals("1")) {
                     syncPref.setValue("1");
                     syncPref.setSummary(trunOn);
                 }
             }
 
-            if (tmp.switchId == Toggle.SWITCH_SILENT)
-            {
+            if (tmp.switchId == Toggle.SWITCH_SILENT) {
                 silentPref.setChecked(true);
 
-                if (tmp.param1.equals("1"))
-                {
+                if (tmp.param1.equals("1")) {
                     silentPref.setValue("1");
                     silentPref.setSummary(getResources().getString(R.string.vibrate));
                 }
             }
 
-            if (tmp.switchId == Toggle.SWITCH_VOLUME)
-            {
-                // ³õÊ¼»¯³ÉÊµ¼ÊµÄ°Ù·Ö±È
+            if (tmp.switchId == Toggle.SWITCH_VOLUME) {
+                // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Êµï¿½ÊµÄ°Ù·Ö±ï¿½
                 int actual = Integer.parseInt(tmp.param1);
                 volumePref.setChecked(true);
                 volumePref.setSummary(actual + " %");
@@ -306,14 +270,10 @@ public class TaskModifyActivity extends PreferenceActivity
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference)
-    {
-        if (preference == mTimePref)
-        {
-            new TimePickerDialog(this, new OnTimeSetListener()
-            {
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute)
-                {
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == mTimePref) {
+            new TimePickerDialog(this, new OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     mHour = hourOfDay;
                     mMinutes = minute;
                     onTimeSet2(view, hourOfDay, minute);
@@ -321,12 +281,9 @@ public class TaskModifyActivity extends PreferenceActivity
             }, mHour, mMinutes, DateFormat.is24HourFormat(this)).show();
         }
 
-        if (preference == mTimePref2)
-        {
-            new TimePickerDialog(this, new OnTimeSetListener()
-            {
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute)
-                {
+        if (preference == mTimePref2) {
+            new TimePickerDialog(this, new OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     mHour2 = hourOfDay;
                     mMinutes2 = minute;
                     onTimeSet2(view, hourOfDay, minute);
@@ -337,21 +294,18 @@ public class TaskModifyActivity extends PreferenceActivity
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
-    public void onTimeSet2(TimePicker view, int hourOfDay, int minute)
-    {
+    public void onTimeSet2(TimePicker view, int hourOfDay, int minute) {
         updateTime();
         // If the time has been changed, enable the alarm.
         mEnabled = true;
     }
 
-    private void updateTime()
-    {
+    private void updateTime() {
         mTimePref.setSummary(TaskUtil.formatTime(this, mHour, mMinutes, mRepeatPref.getDaysOfWeek()));
         mTimePref2.setSummary(TaskUtil.formatTime(this, mHour2, mMinutes2, mRepeatPref.getDaysOfWeek()));
     }
 
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
         mDeleteAlarmItem = menu.add(0, 0, 0, R.string.delete_alarm);
@@ -360,10 +314,8 @@ public class TaskModifyActivity extends PreferenceActivity
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if (item == mDeleteAlarmItem)
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item == mDeleteAlarmItem) {
             TaskUtil.deleteAlarm(dbOper, mId);
             finish();
             return true;

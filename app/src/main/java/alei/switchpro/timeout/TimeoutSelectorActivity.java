@@ -10,31 +10,26 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.provider.Settings;
 
-public class TimeoutSelectorActivity extends Activity
-{
+public class TimeoutSelectorActivity extends Activity {
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         showDialog(0);
     }
 
     @Override
-    protected Dialog onCreateDialog(int id)
-    {
-        String[] items = new String[] { getString(R.string.screen_timeout_15sec),
+    protected Dialog onCreateDialog(int id) {
+        String[] items = new String[]{getString(R.string.screen_timeout_15sec),
                 getString(R.string.screen_timeout_30sec), getString(R.string.screen_timeout_1min),
                 getString(R.string.screen_timeout_2min), getString(R.string.screen_timeout_10min),
-                getString(R.string.screen_timeout_30min) };
+                getString(R.string.screen_timeout_30min)};
         int indexChecked = 0;
-        switch (getScreenTimeout())
-        {
+        switch (getScreenTimeout()) {
             case 15000:
                 indexChecked = 0;
                 break;
@@ -58,20 +53,15 @@ public class TimeoutSelectorActivity extends Activity
                 break;
         }
         return new AlertDialog.Builder(this).setTitle(R.string.screen_timeout)
-                .setOnCancelListener(new OnCancelListener()
-                {
-                    public void onCancel(DialogInterface arg0)
-                    {
+                .setOnCancelListener(new OnCancelListener() {
+                    public void onCancel(DialogInterface arg0) {
                         finish();
                     }
-                }).setSingleChoiceItems(items, indexChecked, new OnClickListener()
-                {
+                }).setSingleChoiceItems(items, indexChecked, new OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
+                    public void onClick(DialogInterface dialog, int which) {
 
-                        switch (which)
-                        {
+                        switch (which) {
                             case 0:
                                 setScreenTimeout(15000);
                                 break;
@@ -99,34 +89,31 @@ public class TimeoutSelectorActivity extends Activity
                 }).show();
     }
 
-    // Ò»¶¨ÒªÔÚpauseµÄÊ±ºò½áÊø±¾activity
+    // Ò»ï¿½ï¿½Òªï¿½ï¿½pauseï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½activity
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         dismissDialog(0);
         finish();
     }
 
     /**
-     * ÉèÖÃÆÁÄ»³¬Ê±
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½Ä»ï¿½ï¿½Ê±
+     *
      * @param context
      */
-    public void setScreenTimeout(int time)
-    {
-        Settings.System.putInt(this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, time);
+    public int getScreenTimeout() {
+        int screenTimeOut = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, 30000);
+        return screenTimeOut;
     }
 
     /**
-     * »ñÈ¡ÆÁÄ»³¬Ê±
-     * 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Ê±
+     *
      * @param context
      */
-    public int getScreenTimeout()
-    {
-        int screenTimeOut = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, 30000);
-        return screenTimeOut;
+    public void setScreenTimeout(int time) {
+        Settings.System.putInt(this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, time);
     }
 
 }

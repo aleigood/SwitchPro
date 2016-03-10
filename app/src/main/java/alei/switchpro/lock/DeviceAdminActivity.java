@@ -7,13 +7,11 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class DeviceAdminActivity extends Activity
-{
+public class DeviceAdminActivity extends Activity {
     static final int RESULT_ENABLE = 1;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ComponentName mDeviceAdminSample = new ComponentName(this, MainBrocastReceiver.class);
 

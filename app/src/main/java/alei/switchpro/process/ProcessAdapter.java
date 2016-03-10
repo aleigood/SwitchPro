@@ -1,7 +1,5 @@
 package alei.switchpro.process;
 
-import java.util.ArrayList;
-
 import alei.switchpro.R;
 import android.content.ContentValues;
 import android.view.LayoutInflater;
@@ -13,40 +11,35 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ProcessAdapter extends BaseAdapter
-{
+import java.util.ArrayList;
+
+public class ProcessAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private ArrayList<ProcessData> mDataList;
     private ProcessMainActivity mContext;
 
-    public ProcessAdapter(ProcessMainActivity context, ArrayList<ProcessData> list)
-    {
+    public ProcessAdapter(ProcessMainActivity context, ArrayList<ProcessData> list) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
         mDataList = list;
     }
 
-    public int getCount()
-    {
+    public int getCount() {
         return mDataList.size();
     }
 
-    public Object getItem(int position)
-    {
+    public Object getItem(int position) {
         return mDataList.get(position);
     }
 
-    public long getItemId(int position)
-    {
+    public long getItemId(int position) {
         return position;
     }
 
-    public View getView(final int position, View convertView, ViewGroup parent)
-    {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        if (convertView == null)
-        {
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_process, null);
 
             holder = new ViewHolder();
@@ -57,9 +50,7 @@ public class ProcessAdapter extends BaseAdapter
             holder.check_box = (CheckBox) convertView.findViewById(R.id.check_box);
 
             convertView.setTag(holder);
-        }
-        else
-        {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -72,21 +63,16 @@ public class ProcessAdapter extends BaseAdapter
         holder.check_box.setChecked(mContext.dbOper.isIgnored(processData.name));
 
         final String name = processData.name;
-        holder.check_box.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        holder.check_box.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
                 CheckBox checkBox = (CheckBox) v;
 
-                if (checkBox.isChecked())
-                {
+                if (checkBox.isChecked()) {
                     checkBox.setChecked(true);
                     ContentValues initialValues = new ContentValues();
                     initialValues.put("name", name);
                     mContext.dbOper.insertIgnoredApp(initialValues);
-                }
-                else
-                {
+                } else {
                     checkBox.setChecked(false);
                     mContext.dbOper.deleteIgnoredApp(name);
                 }
@@ -96,8 +82,7 @@ public class ProcessAdapter extends BaseAdapter
         return convertView;
     }
 
-    private static class ViewHolder
-    {
+    private static class ViewHolder {
         CheckBox check_box;
         ImageView icon;
         TextView text_name;

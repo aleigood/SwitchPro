@@ -1,8 +1,5 @@
 package alei.switchpro.load;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import alei.switchpro.R;
 import alei.switchpro.WidgetProviderUtil;
 import android.app.Activity;
@@ -14,44 +11,28 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
-public class LoadConfigAdapter extends BaseAdapter
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class LoadConfigAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private final ArrayList<ListItem> mItems = new ArrayList<ListItem>();
     private Context context;
 
-    /**
-     * Specific item in our list.
-     */
-    public class ListItem
-    {
-        public XmlEntity entity;
-        public RemoteViews widgetView;
-
-        public ListItem(XmlEntity entity, RemoteViews widgetView)
-        {
-            this.entity = entity;
-            this.widgetView = widgetView;
-        }
-    }
-
-    public LoadConfigAdapter(Activity activity, List<XmlEntity> list)
-    {
+    public LoadConfigAdapter(Activity activity, List<XmlEntity> list) {
         super();
         context = activity;
         mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        for (XmlEntity entity : list)
-        {
+        for (XmlEntity entity : list) {
             RemoteViews remoteView = WidgetProviderUtil.buildAndUpdateButtons(activity, entity);
             ListItem item = new ListItem(entity, remoteView);
             mItems.add(item);
         }
     }
 
-    // 返回每一个选项的view
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    // 锟斤拷锟斤拷每一锟斤拷选锟斤拷锟絭iew
+    public View getView(int position, View convertView, ViewGroup parent) {
         final ListItem item = (ListItem) getItem(position);
         convertView = mInflater.inflate(R.layout.item_widget, parent, false);
 
@@ -142,26 +123,35 @@ public class LoadConfigAdapter extends BaseAdapter
         return convertView;
     }
 
-    // 返回条目的个数
-    public int getCount()
-    {
+    // 锟斤拷锟斤拷锟斤拷目锟侥革拷锟斤拷
+    public int getCount() {
         return mItems.size();
     }
 
-    // 根据条目的位置获取条目的内容
-    public Object getItem(int position)
-    {
+    // 锟斤拷锟斤拷锟斤拷目锟斤拷位锟矫伙拷取锟斤拷目锟斤拷锟斤拷锟斤拷
+    public Object getItem(int position) {
         return mItems.get(position);
     }
 
-    // 获取某一位置的Id
-    public long getItemId(int position)
-    {
+    // 锟斤拷取某一位锟矫碉拷Id
+    public long getItemId(int position) {
         return position;
     }
 
-    public List<ListItem> getItems()
-    {
+    public List<ListItem> getItems() {
         return mItems;
+    }
+
+    /**
+     * Specific item in our list.
+     */
+    public class ListItem {
+        public XmlEntity entity;
+        public RemoteViews widgetView;
+
+        public ListItem(XmlEntity entity, RemoteViews widgetView) {
+            this.entity = entity;
+            this.widgetView = widgetView;
+        }
     }
 }

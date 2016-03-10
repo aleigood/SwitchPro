@@ -1,8 +1,5 @@
 package alei.switchpro;
 
-import java.io.InputStream;
-import java.lang.reflect.Field;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,12 +20,14 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.PowerManager;
 import android.os.Build.VERSION;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
-public class Utils
-{
+import java.io.InputStream;
+import java.lang.reflect.Field;
+
+public class Utils {
     public static final int PRIORITY_MAX = 2;
     public static final int PRIORITY_MIN = -2;
     public static final int ICON_DP_WIDTH = 32;
@@ -36,78 +35,63 @@ public class Utils
     public static final int IND_DP_WIDTH = 8;
     public static final int IND_DP_HEIGHT = 8;
 
-    public static Bitmap getBitmapFromResource(Context context, int resId)
-    {
+    public static Bitmap getBitmapFromResource(Context context, int resId) {
         InputStream is = context.getResources().openRawResource(resId);
         BitmapDrawable bmpDraw = new BitmapDrawable(is);
         return bmpDraw.getBitmap();
     }
 
-    public static Bitmap setIconColor(Context context, int source, Integer alpha, Integer color)
-    {
+    public static Bitmap setIconColor(Context context, int source, Integer alpha, Integer color) {
         return setBitmapColor(context, source, alpha, color, ICON_DP_WIDTH, ICON_DP_HEIGHT);
     }
 
-    public static Bitmap setIconColor(Context context, Drawable source, Integer alpha, Integer color)
-    {
+    public static Bitmap setIconColor(Context context, Drawable source, Integer alpha, Integer color) {
         return setBitmapColor(context, source, alpha, color, ICON_DP_WIDTH, ICON_DP_HEIGHT);
     }
 
-    public static Bitmap setIconColor(Context context, Bitmap source, Integer alpha, Integer color)
-    {
+    public static Bitmap setIconColor(Context context, Bitmap source, Integer alpha, Integer color) {
         return setBitmapColor(context, source, alpha, color, ICON_DP_WIDTH, ICON_DP_HEIGHT);
     }
 
-    public static Bitmap setIndColor(Context context, int source, Integer alpha, Integer color)
-    {
+    public static Bitmap setIndColor(Context context, int source, Integer alpha, Integer color) {
         return setBitmapColor(context, source, alpha, color, IND_DP_WIDTH, IND_DP_HEIGHT);
     }
 
-    public static Bitmap setIndColor(Context context, Bitmap source, Integer alpha, Integer color)
-    {
+    public static Bitmap setIndColor(Context context, Bitmap source, Integer alpha, Integer color) {
         return setBitmapColor(context, source, alpha, color, IND_DP_WIDTH, IND_DP_HEIGHT);
     }
 
     /**
-     * Color ¿ÉÒÔÎª¿Õ£¬Îª¿ÕÊ±±íÊ¾²»¼ÓÑÕÉ«ÂË¾µ
+     * Color ï¿½ï¿½ï¿½ï¿½Îªï¿½Õ£ï¿½Îªï¿½ï¿½Ê±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½Ë¾ï¿½
      */
     private static Bitmap setBitmapColor(Context context, int source, Integer alpha, Integer color, int width,
-            int height)
-    {
+                                         int height) {
         return setBitmapColor(context, context.getResources().getDrawable(source), alpha, color, width, height);
     }
 
     private static Bitmap setBitmapColor(Context context, Bitmap source, Integer alpha, Integer color, int width,
-            int height)
-    {
+                                         int height) {
         return setBitmapColor(context, new BitmapDrawable(source), alpha, color, width, height);
     }
 
     private static Bitmap setBitmapColor(Context context, Drawable drawable, Integer alpha, Integer color, int width,
-            int height)
-    {
+                                         int height) {
         int iWidth = dip2px(context, width);
         int iHeight = dip2px(context, height);
 
         Bitmap newBitmap = Bitmap.createBitmap(iWidth, iHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
 
-        if (color != null)
-        {
+        if (color != null) {
             ColorFilter filter = new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
             drawable.setColorFilter(filter);
-        }
-        else
-        {
+        } else {
             drawable.clearColorFilter();
         }
 
-        if (alpha != null)
-        {
+        if (alpha != null) {
             drawable.setAlpha(alpha);
-        }
-        else
-        {
+        } else {
             drawable.setAlpha(255);
         }
 
@@ -116,14 +100,12 @@ public class Utils
         return newBitmap;
     }
 
-    public static Bitmap createBitmap(int color)
-    {
+    public static Bitmap createBitmap(int color) {
         Bitmap.Config localConfig = Bitmap.Config.ARGB_8888;
-        return Bitmap.createBitmap(new int[] { color }, 1, 1, localConfig);
+        return Bitmap.createBitmap(new int[]{color}, 1, 1, localConfig);
     }
 
-    public static int setAlpha(int color, boolean trans)
-    {
+    public static int setAlpha(int color, boolean trans) {
         int alpha = Color.alpha(trans ? 0x00000000 : 0xFF000000);
         int red = Color.red(color);
         int green = Color.green(color);
@@ -131,54 +113,44 @@ public class Utils
         return Color.argb(alpha, red, green, blue);
     }
 
-    public static void updateWidget(Context context)
-    {
-        // Í¨Öªwidget¸üÐÂ
+    public static void updateWidget(Context context) {
+        // Í¨Öªwidgetï¿½ï¿½ï¿½ï¿½
         Intent intent = new Intent("alei.switchpro.APPWIDGET_UPDATE");
         PendingIntent newIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        try
-        {
+        try {
             newIntent.send();
-        }
-        catch (CanceledException e)
-        {
+        } catch (CanceledException e) {
             e.printStackTrace();
         }
 
-        // ¸üÐÂÍ¨ÖªÀ¸ÖÐµÄwidget
+        // ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½ï¿½Ðµï¿½widget
         updateAllNotification(context);
     }
 
-    public static int dip2px(Context context, float dipValue)
-    {
+    public static int dip2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
 
-    public static int px2dip(Context context, float pxValue)
-    {
+    public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
-    public static void updateAllNotification(Context context)
-    {
+    public static void updateAllNotification(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         String[] notificationWidgetIds = config.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "").split(",");
 
-        for (int i = 0; i < notificationWidgetIds.length; i++)
-        {
-            if (!notificationWidgetIds[i].equals(""))
-            {
+        for (int i = 0; i < notificationWidgetIds.length; i++) {
+            if (!notificationWidgetIds[i].equals("")) {
                 int widgetId = Integer.parseInt(notificationWidgetIds[i]);
                 Utils.updateNotification(context, widgetId);
             }
         }
     }
 
-    public static void updateNotification(Context context, int widgetId)
-    {
+    public static void updateNotification(Context context, int widgetId) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         NotificationManager notificationManager = (NotificationManager) context.getApplicationContext()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -186,17 +158,13 @@ public class Utils
         Notification notification = SwitchUtils.notifications.get(widgetId) != null ? SwitchUtils.notifications
                 .get(widgetId) : new Notification();
 
-        if (VERSION.SDK_INT >= 16)
-        {
+        if (VERSION.SDK_INT >= 16) {
             int priority = Integer.parseInt(config.getString(Constants.PREFS_NOTIFY_PRIORITY, "1"));
 
-            try
-            {
+            try {
                 Field field = notification.getClass().getDeclaredField("priority");
                 field.set(notification, priority == 1 ? PRIORITY_MAX : PRIORITY_MIN);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -208,44 +176,36 @@ public class Utils
         notification.when = 0;
 
         if (config.getBoolean(Constants.PREFS_SHOW_NOTIFY_ICON, true)
-                && (widgetId + "").equals(config.getString(Constants.PREFS_LASE_NOTIFY_WIDGET, "")))
-        {
+                && (widgetId + "").equals(config.getString(Constants.PREFS_LASE_NOTIFY_WIDGET, ""))) {
             notification.icon = config.getString(Constants.PREFS_NOTIFY_ICON_COLOR, "1").equals("1") ? R.drawable.notify_battery_white_icon
                     : R.drawable.notify_battery_icon;
             notification.iconLevel = config.getInt(Constants.PREFS_BATTERY_LEVEL, 0);
-        }
-        else
-        {
+        } else {
             notification.icon = R.drawable.ic_notify;
         }
 
         notification.contentView = WidgetProviderUtil.buildAndUpdateButtons(context, widgetId, config, null);
 
-        // Èç¹ûÊÇnobgµÄ»°¾Í¸ü¸Ä±³¾°£¬ÉèÖÃÎªÎÞ¿òµÄ±³¾°
+        // ï¿½ï¿½ï¿½ï¿½ï¿½nobgï¿½Ä»ï¿½ï¿½Í¸ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Þ¿ï¿½Ä±ï¿½ï¿½ï¿½
         String layoutName = config.getString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, widgetId),
                 context.getString(R.string.list_pre_bg_default));
         int layoutId = WidgetProviderUtil.getLayoutId(context, layoutName);
 
         if ((layoutId == R.layout.view_widget_nobg || layoutId == R.layout.view_widget_custom)
-                && notification.contentView != null)
-        {
+                && notification.contentView != null) {
             notification.contentView.setInt(R.id.top, "setBackgroundResource", R.drawable.bg_none);
         }
 
-        try
-        {
+        try {
             notificationManager.notify(widgetId, notification);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         SwitchUtils.notifications.put(widgetId, notification);
     }
 
-    public static Bitmap createUsageIcon(Context context, float percentage)
-    {
+    public static Bitmap createUsageIcon(Context context, float percentage) {
         int offset = dip2px(context, 6);
         int iWidth = dip2px(context, ICON_DP_WIDTH);
         int iHeight = dip2px(context, ICON_DP_HEIGHT);
@@ -264,26 +224,20 @@ public class Utils
         return bitmap;
     }
 
-    public static PowerManager.WakeLock getWakeLock(Context context)
-    {
+    public static PowerManager.WakeLock getWakeLock(Context context) {
         PowerManager pm = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
         return pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "SwitchPro");
     }
 
-    public static boolean isAppExist(Context context, String packageName)
-    {
-        if (packageName == null || "".equals(packageName))
-        {
+    public static boolean isAppExist(Context context, String packageName) {
+        if (packageName == null || "".equals(packageName)) {
             return false;
         }
 
-        try
-        {
+        try {
             context.getPackageManager().getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
             return true;
-        }
-        catch (NameNotFoundException e)
-        {
+        } catch (NameNotFoundException e) {
             return false;
         }
     }

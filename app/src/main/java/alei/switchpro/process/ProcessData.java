@@ -2,8 +2,7 @@ package alei.switchpro.process;
 
 import android.graphics.drawable.Drawable;
 
-public class ProcessData
-{
+public class ProcessData {
     public Drawable icon;
     public int importance;
     public String importanceText;

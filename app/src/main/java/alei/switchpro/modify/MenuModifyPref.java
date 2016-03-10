@@ -1,7 +1,5 @@
 package alei.switchpro.modify;
 
-import java.util.List;
-
 import alei.switchpro.R;
 import alei.switchpro.WidgetProviderX1;
 import alei.switchpro.WidgetProviderX2;
@@ -22,86 +20,69 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.widget.Toast;
 
-public class MenuModifyPref extends Preference
-{
+import java.util.List;
+
+public class MenuModifyPref extends Preference {
     private Activity parent;
     private AlertDialog dialog;
     private MenuModifyAdapter adapter;
 
-    public MenuModifyPref(Context context, AttributeSet attrs)
-    {
+    public MenuModifyPref(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MenuModifyPref(Context context, AttributeSet attrs, int defStyle)
-    {
+    public MenuModifyPref(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public void onClick()
-    {
+    public void onClick() {
         final String pkgName = WidgetProviderX4.class.getPackage().getName();
 
-        // »ñÈ¡µ±Ç°ÒÑ¾­´´½¨µÄ²¿¼þ
+        // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
         List<AppWidgetProviderInfo> itemList = AppWidgetManager.getInstance(parent).getInstalledProviders();
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
         builder.setTitle(R.string.custom_menu);
         adapter = new MenuModifyAdapter(parent, itemList);
 
-        builder.setAdapter(adapter, new OnClickListener()
-        {
-            public void onClick(DialogInterface arg0, int arg1)
-            {
+        builder.setAdapter(adapter, new OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
             }
         });
 
-        builder.setNeutralButton(parent.getResources().getString(R.string.button_apply), new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
-                if (dialog != null)
-                {
+        builder.setNeutralButton(parent.getResources().getString(R.string.button_apply), new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                if (dialog != null) {
                     List<ListItem> list = adapter.getItems();
 
-                    for (int i = 0; i < list.size(); i++)
-                    {
+                    for (int i = 0; i < list.size(); i++) {
                         ListItem item = (ListItem) list.get(i);
 
-                        if (item.size == 4)
-                        {
+                        if (item.size == 4) {
                             parent.getPackageManager().setComponentEnabledSetting(
                                     new ComponentName(pkgName, WidgetProviderX4.class.getName()),
                                     item.isSelected ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                     PackageManager.DONT_KILL_APP);
-                        }
-                        else if (item.size == 1)
-                        {
+                        } else if (item.size == 1) {
                             parent.getPackageManager().setComponentEnabledSetting(
                                     new ComponentName(pkgName, WidgetProviderX1.class.getName()),
                                     item.isSelected ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                     PackageManager.DONT_KILL_APP);
-                        }
-                        else if (item.size == 2)
-                        {
+                        } else if (item.size == 2) {
                             parent.getPackageManager().setComponentEnabledSetting(
                                     new ComponentName(pkgName, WidgetProviderX2.class.getName()),
                                     item.isSelected ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                     PackageManager.DONT_KILL_APP);
-                        }
-                        else if (item.size == 3)
-                        {
+                        } else if (item.size == 3) {
                             parent.getPackageManager().setComponentEnabledSetting(
                                     new ComponentName(pkgName, WidgetProviderX3.class.getName()),
                                     item.isSelected ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                                             : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                     PackageManager.DONT_KILL_APP);
-                        }
-                        else if (item.size == 5)
-                        {
+                        } else if (item.size == 5) {
                             parent.getPackageManager().setComponentEnabledSetting(
                                     new ComponentName(pkgName, WidgetProviderX5.class.getName()),
                                     item.isSelected ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
@@ -115,12 +96,9 @@ public class MenuModifyPref extends Preference
             }
         });
 
-        builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
-                if (dialog != null)
-                {
+        builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                if (dialog != null) {
                     dialog.dismiss();
                 }
             }
@@ -130,13 +108,11 @@ public class MenuModifyPref extends Preference
         dialog.show();
     }
 
-    public void setActivity(Activity parent)
-    {
+    public void setActivity(Activity parent) {
         this.parent = parent;
     }
 
-    public AlertDialog getAlertDlg()
-    {
+    public AlertDialog getAlertDlg() {
         return dialog;
     }
 

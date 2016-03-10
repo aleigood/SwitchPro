@@ -12,31 +12,24 @@ import android.graphics.SweepGradient;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class ColorPickerView extends View
-{
+public class ColorPickerView extends View {
+    private static final float PI = 3.1415926f;
     private Paint ringPaint;
-    // µã»÷ÖÐ¼äÔ²ÐÎ³öÏÖµÄÔ²»·
+    // ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Ô²ï¿½Î³ï¿½ï¿½Öµï¿½Ô²ï¿½ï¿½
     private Paint centerPaint;
     private Paint grayBarPaint;
     private Paint transBarPaint;
-
     private int[] transBarColors;
     private int[] grayBarColors;
     private int[] mColors;
-
-    // ±ê¼Ç£¬·ÀÖ¹ÔÚ»¬¶¯»Ò¶Èµ÷½ÚµÄÊ±ºò¸Ä±äÁË»Ò¶ÈÌõ±¾ÉíµÄÑÕÉ«
+    // ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ö¹ï¿½Ú»ï¿½ï¿½ï¿½ï¿½Ò¶Èµï¿½ï¿½Úµï¿½Ê±ï¿½ï¿½Ä±ï¿½ï¿½Ë»Ò¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
     private boolean changeGrayBar;
     private boolean changeTransBar;
     private boolean needTransBar;
-
     private OnColorChangedListener mListener;
-
     private boolean mTrackingCenter;
     private boolean mHighlightCenter;
-
-    private static final float PI = 3.1415926f;
-
-    // Ô²ÐÎÓë³¤ÌõÖ±½ÓµÄ¾àÀë
+    // Ô²ï¿½ï¿½ï¿½ë³¤ï¿½ï¿½Ö±ï¿½ÓµÄ¾ï¿½ï¿½ï¿½
     private int SEPARATOR_HIGH = 10;
 
     private float paintWidth;
@@ -44,67 +37,61 @@ public class ColorPickerView extends View
     private float r;
     private onColorChangingListener mOnColorChangingListener;
 
-    public ColorPickerView(Context c, OnColorChangedListener l, int color, int x, boolean needTransBar)
-    {
+    public ColorPickerView(Context c, OnColorChangedListener l, int color, int x, boolean needTransBar) {
         super(c);
         this.needTransBar = needTransBar;
-        // Í¨ÓÃ»­±Ê¿í¶È
+        // Í¨ï¿½Ã»ï¿½ï¿½Ê¿ï¿½ï¿½
         paintWidth = x / 3f;
-        // ×Ü¿í¶È
+        // ï¿½Ü¿ï¿½ï¿½
         width = x;
-        // ´óÔ²µÄ°ë¾¶ °ë¾¶ = ×Ü¿í¶È - Ò»¸ö»­±ÊµÄ¿í¶È - Ò»¸ö¼ä¸ô - °ë¸ö»­±ÊµÄ¿í¶È
+        // ï¿½ï¿½Ô²ï¿½Ä°ë¾¶ ï¿½ë¾¶ = ï¿½Ü¿ï¿½ï¿½ - Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÊµÄ¿ï¿½ï¿½ - Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÊµÄ¿ï¿½ï¿½
         r = width - paintWidth / 2f;
 
         mListener = l;
 
-        // ´óÔ²»­±Ê
-        mColors = new int[] { 0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000 };
+        // ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½
+        mColors = new int[]{0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000};
         ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         ringPaint.setShader(new SweepGradient(0, 0, mColors, null));
         ringPaint.setStyle(Paint.Style.STROKE);
         ringPaint.setStrokeWidth(paintWidth);
 
-        // ÖÐ¼äÐ¡Ô²»­±Ê£¬StrokeWidthÎªµã»÷Ê±ÏÔÊ¾µÄÔ²»·µÄ°ë¾¶
+        // ï¿½Ð¼ï¿½Ð¡Ô²ï¿½ï¿½ï¿½Ê£ï¿½StrokeWidthÎªï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ê¾ï¿½ï¿½Ô²ï¿½ï¿½ï¿½Ä°ë¾¶
         centerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         centerPaint.setColor(color);
-        // »­±ÊµÄ¿í¶ÈÔÚ»­ÊµÐÄÔ²µÄÊ±ºò²»Æð×÷ÓÃ£¬»­»·µÄÊ±ºòÓÃ
+        // ï¿½ï¿½ï¿½ÊµÄ¿ï¿½ï¿½ï¿½Ú»ï¿½Êµï¿½ï¿½Ô²ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
         centerPaint.setStrokeWidth(3f);
 
-        // ¶¨ÒåÏ¸ÌõµÄbar ÑÕÉ«´Ó ºÚÉ«¹ý¶ÉÖ÷Ãæ°åÑ¡ÖÐµÄÑÕÉ«ÔÙ¹ý¶Éµ½°×É« Ö÷Òª½â¾ö Ã»ÓÐ°×É«ºÍºÚÉ«µÄÎÊÌâ
-        grayBarColors = new int[] { 0xFF000000, Utils.setAlpha(color, false), 0xFFFFFFFF };
+        // ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½bar ï¿½ï¿½É«ï¿½ï¿½ ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½Ðµï¿½ï¿½ï¿½É«ï¿½Ù¹ï¿½ï¿½Éµï¿½ï¿½ï¿½É« ï¿½ï¿½Òªï¿½ï¿½ï¿½ Ã»ï¿½Ð°ï¿½É«ï¿½Íºï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        grayBarColors = new int[]{0xFF000000, Utils.setAlpha(color, false), 0xFFFFFFFF};
         grayBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         grayBarPaint.setStrokeWidth(paintWidth);
         changeGrayBar = true;
 
-        // ÉèÖÃÍ¸Ã÷¶ÈµÄbar
-        transBarColors = new int[] { Utils.setAlpha(color, false), Utils.setAlpha(color, true) };
+        // ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½Èµï¿½bar
+        transBarColors = new int[]{Utils.setAlpha(color, false), Utils.setAlpha(color, true)};
         transBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         transBarPaint.setStrokeWidth(paintWidth);
         changeTransBar = true;
     }
 
     @Override
-    protected void onDraw(Canvas canvas)
-    {
-        // ÏÈÉèÖÃÍ¸Ã÷
+    protected void onDraw(Canvas canvas) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½
         canvas.translate(width, width);
         canvas.drawOval(new RectF(-r, -r, r, r), ringPaint);
 
-        // »­ÖÐ¼äµÄÔ²ÐÎ£¬°ë¾¶¾ÍÊÇÒ»¸ö»­±ÊµÄ¿í¶È
+        // ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½Ô²ï¿½Î£ï¿½ï¿½ë¾¶ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÊµÄ¿ï¿½ï¿½
         canvas.drawCircle(0, 0, paintWidth, centerPaint);
 
-        // ÖÐ¼äµÄÔ²±»µã»÷Ê±»æÖÆÖÐ¼äµÄÔ²»·
-        if (mTrackingCenter)
-        {
+        // ï¿½Ð¼ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½Ô²ï¿½ï¿½
+        if (mTrackingCenter) {
             int c = centerPaint.getColor();
             centerPaint.setStyle(Paint.Style.STROKE);
 
-            if (mHighlightCenter)
-            {
+            if (mHighlightCenter) {
                 centerPaint.setAlpha(0xFF);
-            }
-            else
-            {
+            } else {
                 centerPaint.setAlpha(0x80);
             }
 
@@ -113,27 +100,25 @@ public class ColorPickerView extends View
             centerPaint.setColor(c);
         }
 
-        // »æÖÆ»Ò¶ÈÏ¸µ÷µÄBAR
+        // ï¿½ï¿½ï¿½Æ»Ò¶ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½BAR
 
-        // ±ê¼Ç£¬·ÀÖ¹ÔÚ»¬¶¯»Ò¶Èµ÷½ÚµÄÊ±ºò¸Ä±äÁË»Ò¶ÈÌõ±¾ÉíµÄÑÕÉ«
-        if (changeGrayBar)
-        {
+        // ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ö¹ï¿½Ú»ï¿½ï¿½ï¿½ï¿½Ò¶Èµï¿½ï¿½Úµï¿½Ê±ï¿½ï¿½Ä±ï¿½ï¿½Ë»Ò¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+        if (changeGrayBar) {
             grayBarColors[1] = Utils.setAlpha(centerPaint.getColor(), false);
             grayBarPaint.setShader(new LinearGradient(-width, 0, width, 0, grayBarColors, null, Shader.TileMode.CLAMP));
         }
         canvas.drawRect(new RectF(-width, width + SEPARATOR_HIGH, width, width + SEPARATOR_HIGH + paintWidth),
                 grayBarPaint);
 
-        // ±ê¼Ç£¬·ÀÖ¹ÔÚ»¬¶¯Í¸Ã÷¶È¶Èµ÷½ÚµÄÊ±ºò¸Ä±äÁË»Ò¶ÈÌõ±¾ÉíµÄÑÕÉ«
-        if (changeTransBar)
-        {
+        // ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ö¹ï¿½Ú»ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½È¶Èµï¿½ï¿½Úµï¿½Ê±ï¿½ï¿½Ä±ï¿½ï¿½Ë»Ò¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+        if (changeTransBar) {
             transBarColors[0] = Utils.setAlpha(centerPaint.getColor(), false);
             transBarColors[1] = Utils.setAlpha(centerPaint.getColor(), true);
             transBarPaint
                     .setShader(new LinearGradient(-width, 0, width, 0, transBarColors, null, Shader.TileMode.CLAMP));
         }
 
-        // »æÖÆÍ¸Ã÷¶ÈÏ¸µ÷µÄBAR
+        // ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½BAR
         canvas.drawRect(new RectF(-width, width + SEPARATOR_HIGH * 2 + paintWidth, width, width + SEPARATOR_HIGH * 2
                 + paintWidth * 2), transBarPaint);
 
@@ -142,32 +127,24 @@ public class ColorPickerView extends View
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
-        // ÉèÖÃÕû¸öÍ¼ÐÎµÄ·¶Î§Òª¼ÓÉÏ·½ÐÎµÄ¿í¶È
-        if (needTransBar)
-        {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ÎµÄ·ï¿½Î§Òªï¿½ï¿½ï¿½Ï·ï¿½ï¿½ÎµÄ¿ï¿½ï¿½
+        if (needTransBar) {
             setMeasuredDimension((int) (width * 2), (int) (width * 2 + SEPARATOR_HIGH * 2 + paintWidth * 2));
-        }
-        else
-        {
+        } else {
             setMeasuredDimension((int) (width * 2), (int) (width * 2 + SEPARATOR_HIGH + paintWidth));
         }
     }
 
-    private int ave(int s, int d, float p)
-    {
+    private int ave(int s, int d, float p) {
         return s + java.lang.Math.round(p * (d - s));
     }
 
-    private int interpColor(int colors[], float unit)
-    {
-        if (unit <= 0)
-        {
+    private int interpColor(int colors[], float unit) {
+        if (unit <= 0) {
             return colors[0];
         }
-        if (unit >= 1)
-        {
+        if (unit >= 1) {
             return colors[colors.length - 1];
         }
 
@@ -187,27 +164,23 @@ public class ColorPickerView extends View
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX() - width;
         float y = event.getY() - width;
         boolean inCenter = java.lang.Math.sqrt(x * x + y * y) <= paintWidth;
 
-        // ³¬³ö·¶Î§ÍâµÄ²»ÏìÓ¦
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½ï¿½Ä²ï¿½ï¿½ï¿½Ó¦
         if ((x < -width || x > width || y < -width)
                 || (y > width && y < width + SEPARATOR_HIGH)
-                || (y > width + SEPARATOR_HIGH + paintWidth && y < width + SEPARATOR_HIGH + paintWidth + SEPARATOR_HIGH))
-        {
+                || (y > width + SEPARATOR_HIGH + paintWidth && y < width + SEPARATOR_HIGH + paintWidth + SEPARATOR_HIGH)) {
             return false;
         }
 
-        switch (event.getAction())
-        {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mTrackingCenter = inCenter;
 
-                if (inCenter)
-                {
+                if (inCenter) {
                     mHighlightCenter = true;
                     invalidate();
                     break;
@@ -215,29 +188,23 @@ public class ColorPickerView extends View
             case MotionEvent.ACTION_MOVE:
                 attemptClaimDrag();
 
-                if (mTrackingCenter)
-                {
-                    if (mHighlightCenter != inCenter)
-                    {
+                if (mTrackingCenter) {
+                    if (mHighlightCenter != inCenter) {
                         mHighlightCenter = inCenter;
                         invalidate();
                     }
                 }
-                // »Ò¶È»¬¿é
+                // ï¿½Ò¶È»ï¿½ï¿½ï¿½
                 else if ((x >= -width && x <= width)
-                        && (y >= width + SEPARATOR_HIGH && y <= width + SEPARATOR_HIGH + paintWidth))
-                {
+                        && (y >= width + SEPARATOR_HIGH && y <= width + SEPARATOR_HIGH + paintWidth)) {
                     int a, r, g, b, c0, c1;
                     float p;
 
-                    if (x < 0)
-                    {
+                    if (x < 0) {
                         c0 = grayBarColors[0];
                         c1 = grayBarColors[1];
                         p = (x + width) / width;
-                    }
-                    else
-                    {
+                    } else {
                         c0 = grayBarColors[1];
                         c1 = grayBarColors[2];
                         p = x / width;
@@ -247,52 +214,44 @@ public class ColorPickerView extends View
                     r = ave(Color.red(c0), Color.red(c1), p);
                     g = ave(Color.green(c0), Color.green(c1), p);
                     b = ave(Color.blue(c0), Color.blue(c1), p);
-                    // °ÑÏ¸µ÷ÑÕÉ«ÉèÖÃµ½ÏÔÊ¾Ãæ°åÖÐ
+                    // ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½
                     centerPaint.setColor(Color.argb(a, r, g, b));
                     changeTransBar = true;
                     changeGrayBar = false;
                     invalidate();
-                }
-                else if ((x >= -width && x <= width)
+                } else if ((x >= -width && x <= width)
                         && (y >= width + SEPARATOR_HIGH + paintWidth + SEPARATOR_HIGH && y <= width + SEPARATOR_HIGH
-                                + paintWidth + SEPARATOR_HIGH + paintWidth))
-                {
+                        + paintWidth + SEPARATOR_HIGH + paintWidth)) {
                     int c0 = transBarColors[0];
                     int c1 = transBarColors[1];
                     float p = (x + width) / (width * 2);
                     int a = ave(Color.alpha(c0), Color.alpha(c1), p);
 
-                    // °ÑÏ¸µ÷ÑÕÉ«ÉèÖÃµ½ÏÔÊ¾Ãæ°åÖÐ
+                    // ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½
                     centerPaint.setColor(Color.argb(a, Color.red(c0), Color.green(c0), Color.blue(c0)));
                     changeGrayBar = false;
                     changeTransBar = false;
                     invalidate();
-                }
-                else if ((x >= -width & x <= width) && (y <= width && y >= -width))
-                {
+                } else if ((x >= -width & x <= width) && (y <= width && y >= -width)) {
                     float angle = (float) java.lang.Math.atan2(y, x);
                     // need to turn angle [-PI ... PI] into unit [0....1]
                     float unit = angle / (2 * PI);
 
-                    if (unit < 0)
-                    {
+                    if (unit < 0) {
                         unit += 1;
                     }
                     centerPaint.setColor(interpColor(mColors, unit));
                     invalidate();
                 }
 
-                if (mOnColorChangingListener != null)
-                {
+                if (mOnColorChangingListener != null) {
                     mOnColorChangingListener.onChange(centerPaint.getColor());
                 }
                 break;
             case MotionEvent.ACTION_UP:
 
-                if (mTrackingCenter)
-                {
-                    if (inCenter)
-                    {
+                if (mTrackingCenter) {
+                    if (inCenter) {
                         mListener.colorChanged(centerPaint.getColor());
                     }
                     mTrackingCenter = false; // so we draw w/o halo
@@ -307,37 +266,30 @@ public class ColorPickerView extends View
      * Tries to claim the user's drag motion, and requests disallowing any
      * ancestors from stealing events in the drag.
      */
-    private void attemptClaimDrag()
-    {
-        if (getParent() != null)
-        {
+    private void attemptClaimDrag() {
+        if (getParent() != null) {
             getParent().requestDisallowInterceptTouchEvent(true);
         }
     }
 
-    public int getColor()
-    {
+    public int getColor() {
         return centerPaint.getColor();
     }
 
-    public interface OnColorChangedListener
-    {
-        void colorChanged(int color);
-    }
-
-    public void setColor(int color)
-    {
+    public void setColor(int color) {
         centerPaint.setColor(color);
         invalidate();
     }
 
-    public void setOnColorChangingListener(onColorChangingListener listener)
-    {
+    public void setOnColorChangingListener(onColorChangingListener listener) {
         mOnColorChangingListener = listener;
     }
 
-    public interface onColorChangingListener
-    {
+    public interface OnColorChangedListener {
+        void colorChanged(int color);
+    }
+
+    public interface onColorChangingListener {
         void onChange(int color);
     }
 

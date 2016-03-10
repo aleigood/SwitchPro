@@ -28,36 +28,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-public class DividerCustomPreference extends Preference
-{
+public class DividerCustomPreference extends Preference {
     private WidgetConfigBaseActivity parent;
     private ImageView preview_img;
     private int lastColor;
     private Dialog dlg;
 
-    public DividerCustomPreference(Context context, AttributeSet attrs, int defStyle)
-    {
+    public DividerCustomPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    public DividerCustomPreference(Context context, AttributeSet attrs)
-    {
+    public DividerCustomPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public DividerCustomPreference(Context context)
-    {
+    public DividerCustomPreference(Context context) {
         super(context);
         init(context);
     }
 
-    public void init(Context context)
-    {
+    public void init(Context context) {
         this.parent = (WidgetConfigBaseActivity) context;
 
-        // ×îºóÒ»´ÎÑÕÉ«
+        // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½É«
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
         lastColor = config.getInt(
                 String.format(Constants.PREFS_DIVIDER_COLOR_FIELD_PATTERN, this.parent.getWidgetId()),
@@ -66,41 +61,35 @@ public class DividerCustomPreference extends Preference
     }
 
     @Override
-    public boolean isPersistent()
-    {
+    public boolean isPersistent() {
         return false;
     }
 
     @Override
-    protected void onBindView(View view)
-    {
+    protected void onBindView(View view) {
         super.onBindView(view);
         preview_img = (ImageView) view.findViewById(R.id.pref_current_img);
         updateView();
     }
 
     @Override
-    protected void onClick()
-    {
+    protected void onClick() {
         super.onClick();
         dlg = createDialog();
         dlg.show();
     }
 
-    private Dialog createDialog()
-    {
+    private Dialog createDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
         builder.setTitle(R.string.divider_color);
 
-        OnColorChangedListener listener = new OnColorChangedListener()
-        {
-            public void colorChanged(int color)
-            {
+        OnColorChangedListener listener = new OnColorChangedListener() {
+            public void colorChanged(int color) {
                 applyAction(color);
             }
         };
 
-        // Ö÷ÒªÊÇÉèÖÃ µ÷É«°åµÄ²¼¾Ö
+        // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½É«ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
         LinearLayout layout = new LinearLayout(getContext());
         layout.setPadding(0, 0, 0, 0);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -108,8 +97,7 @@ public class DividerCustomPreference extends Preference
         Display display = parent.getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
 
-        if (display.getWidth() > display.getHeight())
-        {
+        if (display.getWidth() > display.getHeight()) {
             width = display.getHeight();
         }
 
@@ -124,13 +112,13 @@ public class DividerCustomPreference extends Preference
         mCPView.setFocusable(true);
         layout.addView(mCPView);
 
-        // Ìí¼ÓÒ»¸öÒþ²ØµÄ±à¼­¿ò£¬ÎªÁË¿ÉÒÔ´ò¿ª¼üÅÌ£¬·ñÔòÎÞ·¨ÏÔÊ¾Èí¼üÅÌ
+        // ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄ±à¼­ï¿½ï¿½Îªï¿½Ë¿ï¿½ï¿½Ô´ò¿ª¼ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½
         EditText hideEdit = new EditText(parent);
         hideEdit.setVisibility(View.GONE);
         layout.addView(hideEdit);
         layout.setId(android.R.id.widget_frame);
 
-        // ÉèÖÃ¶Ô»°¿òµÄ±³¾°Í¼Æ¬
+        // ï¿½ï¿½ï¿½Ã¶Ô»ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½Í¼Æ¬
         Bitmap bitmap = BitmapFactory.decodeResource(parent.getResources(), R.drawable.trans_bg);
         BitmapDrawable drawable = new BitmapDrawable(bitmap);
         drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
@@ -143,20 +131,16 @@ public class DividerCustomPreference extends Preference
         hsv.setMinimumWidth(width);
         builder.setView(hsv);
 
-        builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
-                // ±£´æÉèÖÃºÃµÄÑÕÉ«
+        builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÃºÃµï¿½ï¿½ï¿½É«
                 applyAction(mCPView.getColor());
             }
         });
-        builder.setNeutralButton(parent.getResources().getString(R.string.hide), new OnClickListener()
-        {
-            // Èç¹ûÒªÒþ²ØÖ¸Ê¾Æ÷£¬ÉèÖÃÑÕÉ«ÎªConstants.NOT_SHOW_FLAG£¬Õâ¸öÖµÊÇ°²È«µÄ£¬ÒòÎªÕâÊÇÍ¸Ã÷ÑÕÉ«£¬ÔÚ½çÃæÉÏÊÇÎÞ·¨»ñµÃÕâ¸öÑÕÉ«µÄ
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
-                // ±£´æ×îºóÒ»´ÎÅäÖÃµÄÑÕÉ«
+        builder.setNeutralButton(parent.getResources().getString(R.string.hide), new OnClickListener() {
+            // ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ÎªConstants.NOT_SHOW_FLAGï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ç°ï¿½È«ï¿½Ä£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½É«
                 PreferenceManager.getDefaultSharedPreferences(parent).edit()
                         .putInt(Constants.PREFS_LAST_DIVIDER_COLOR, Constants.NOT_SHOW_FLAG).commit();
                 lastColor = Constants.NOT_SHOW_FLAG;
@@ -164,10 +148,8 @@ public class DividerCustomPreference extends Preference
                 parent.updatePreView();
             }
         });
-        builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener()
-        {
-            public void onClick(DialogInterface paramDialogInterface, int paramInt)
-            {
+        builder.setNegativeButton(parent.getResources().getString(R.string.button_cancel), new OnClickListener() {
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 dlg.dismiss();
             }
         });
@@ -177,41 +159,31 @@ public class DividerCustomPreference extends Preference
         final EditText editText = (EditText) dlgView.findViewById(R.id.color_code_editor);
         editText.setText((Integer.toHexString(lastColor) + "").toUpperCase());
 
-        mCPView.setOnColorChangingListener(new ColorPickerView.onColorChangingListener()
-        {
-            public void onChange(int color)
-            {
+        mCPView.setOnColorChangingListener(new ColorPickerView.onColorChangingListener() {
+            public void onChange(int color) {
                 editText.setText((Integer.toHexString(color) + "").toUpperCase());
             }
         });
 
-        // ÔÚÊäÈë¿òÊäÈëÑÕÉ«Ê±¶¯Ì¬¸Ä±äÑ¡ÔñÆ÷ÑÕÉ«
-        editText.addTextChangedListener(new TextWatcher()
-        {
-            public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
-            {
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«Ê±ï¿½ï¿½Ì¬ï¿½Ä±ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
+        editText.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                 setColor();
             }
 
-            public void beforeTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
-            {
+            public void beforeTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                 setColor();
             }
 
-            public void afterTextChanged(Editable paramEditable)
-            {
+            public void afterTextChanged(Editable paramEditable) {
                 setColor();
             }
 
-            private void setColor()
-            {
-                try
-                {
+            private void setColor() {
+                try {
                     int color = Color.parseColor("#" + editText.getText().toString());
                     mCPView.setColor(color);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                 }
             }
         });
@@ -220,37 +192,30 @@ public class DividerCustomPreference extends Preference
         return dialog;
     }
 
-    private void applyAction(int currentColor)
-    {
+    private void applyAction(int currentColor) {
         lastColor = currentColor;
         updateView();
         dlg.dismiss();
         parent.updatePreView();
     }
 
-    public void updateView()
-    {
-        if (lastColor == Constants.NOT_SHOW_FLAG)
-        {
+    public void updateView() {
+        if (lastColor == Constants.NOT_SHOW_FLAG) {
             if (preview_img != null)
                 preview_img.setBackgroundColor(Color.TRANSPARENT);
             setSummary(parent.getResources().getString(R.string.hide));
-        }
-        else
-        {
+        } else {
             if (preview_img != null)
                 preview_img.setBackgroundColor(lastColor);
             setSummary("#" + (Integer.toHexString(lastColor) + "").toUpperCase());
         }
     }
 
-    public int getLastColor()
-    {
+    public int getLastColor() {
         return lastColor;
     }
 
-    public void setLastColor(int lastColor)
-    {
+    public void setLastColor(int lastColor) {
         this.lastColor = lastColor;
         updateView();
     }

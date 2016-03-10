@@ -12,33 +12,27 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 
-public class BatteryIndicatorUtils
-{
+public class BatteryIndicatorUtils {
 
     /**
      * Returns a bitmap with digits for the specified level
-     * 
-     * @param resources
-     *            the resources of the application. (e.g. getResources() in the
-     *            activity class)
-     * @param level
-     *            the level of the battery
+     *
+     * @param resources the resources of the application. (e.g. getResources() in the
+     *                  activity class)
+     * @param level     the level of the battery
      * @return the generated image
      */
-    public static Bitmap getBitmap(Resources resources, int level)
-    {
-        if (level < 0 || level > 100)
-        {
+    public static Bitmap getBitmap(Resources resources, int level) {
+        if (level < 0 || level > 100) {
             return BitmapFactory.decodeResource(resources, R.drawable.batterynumber_blank);
         }
 
         // Return the "F" bitmap in case of a fully loaded battery
-        if (level >= 100)
-        {
+        if (level >= 100) {
             return BitmapFactory.decodeResource(resources, R.drawable.icon_battery_full);
         }
 
-        // inMutableÊôÐÔlevel 11²ÅÖ§³Ö£¬ÕâÀïÖ»ÄÜ¸´ÖÆ
+        // inMutableï¿½ï¿½ï¿½ï¿½level 11ï¿½ï¿½Ö§ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½Ü¸ï¿½ï¿½ï¿½
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         Bitmap scaledBitmap = BitmapFactory.decodeResource(resources, R.drawable.batterynumber_blank, options);
@@ -46,8 +40,7 @@ public class BatteryIndicatorUtils
         scaledBitmap.recycle();
 
         // for a level less than 10, only add one digit
-        if (level < 10)
-        {
+        if (level < 10) {
             // get the bitmap for the digit
             Bitmap insertedBitmap = getBitmapForNumber(resources, level);
             // create an array as buffer for the colors
@@ -60,9 +53,7 @@ public class BatteryIndicatorUtils
                     insertedBitmap.getHeight());
 
             insertedBitmap.recycle();
-        }
-        else
-        {
+        } else {
             int firstnumber = level / 10;
             int secondnumber = level % 10;
 
@@ -95,19 +86,15 @@ public class BatteryIndicatorUtils
 
     /**
      * Returns the bitmap for the given digit
-     * 
-     * @param resources
-     *            the resource of the application
-     * @param number
-     *            the number to return the bitmap for
+     *
+     * @param resources the resource of the application
+     * @param number    the number to return the bitmap for
      * @return the bitmap for the number (or null of not in 0..9)
      */
-    private static Bitmap getBitmapForNumber(Resources resources, int number)
-    {
+    private static Bitmap getBitmapForNumber(Resources resources, int number) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
-        switch (number)
-        {
+        switch (number) {
             case 0:
                 return BitmapFactory.decodeResource(resources, R.drawable.batterynumber_0, options);
             case 1:
@@ -132,15 +119,14 @@ public class BatteryIndicatorUtils
         return null;
     }
 
-    // ×Ô¶¨ÒåÍ¼±êÊ±Ê¹ÓÃ¡£´Ë·½·¨Ö±½Ó°ÑÎÄ×Ö»­ÔÚÍ¼Æ¬ÉÏ
-    public static Bitmap getIcon(Context paramContext, Bitmap srcBitmap, int level)
-    {
+    // ï¿½Ô¶ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ê±Ê¹ï¿½Ã¡ï¿½ï¿½Ë·ï¿½ï¿½ï¿½Ö±ï¿½Ó°ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½
+    public static Bitmap getIcon(Context paramContext, Bitmap srcBitmap, int level) {
         int width = srcBitmap.getWidth();
         int height = srcBitmap.getHeight();
         int[] pixels = new int[width * height];
         srcBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
 
-        // ´ÓÔ­Î»Í¼ÖÐ¸´ÖÆÏñËØ
+        // ï¿½ï¿½Ô­Î»Í¼ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Bitmap newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         newBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
@@ -148,7 +134,7 @@ public class BatteryIndicatorUtils
 
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
-        // ¿¹¾â³Ý
+        // ï¿½ï¿½ï¿½ï¿½ï¿½
         paint.setAntiAlias(true);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         paint.setTypeface(Typeface.DEFAULT_BOLD);

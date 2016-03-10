@@ -1,9 +1,5 @@
 package alei.switchpro.modify;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import alei.switchpro.R;
 import android.app.Activity;
 import android.appwidget.AppWidgetProviderInfo;
@@ -18,29 +14,15 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MenuModifyAdapter extends BaseAdapter
-{
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class MenuModifyAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private final ArrayList<ListItem> mItems = new ArrayList<ListItem>();
 
-    /**
-     * Specific item in our list.
-     */
-    public class ListItem
-    {
-        public int size;
-        public String title;
-        public boolean isSelected;
-
-        public ListItem(int size, String title)
-        {
-            this.size = size;
-            this.title = title;
-        }
-    }
-
-    public MenuModifyAdapter(Activity activity, List<AppWidgetProviderInfo> itemList)
-    {
+    public MenuModifyAdapter(Activity activity, List<AppWidgetProviderInfo> itemList) {
         super();
         mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mItems.add(new ListItem(1, activity.getResources().getString(R.string.app_nameX1)));
@@ -49,40 +31,27 @@ public class MenuModifyAdapter extends BaseAdapter
         mItems.add(new ListItem(4, activity.getResources().getString(R.string.app_nameX4)));
         mItems.add(new ListItem(5, activity.getResources().getString(R.string.app_nameX5)));
 
-        for (Iterator<AppWidgetProviderInfo> iterator = itemList.iterator(); iterator.hasNext();)
-        {
+        for (Iterator<AppWidgetProviderInfo> iterator = itemList.iterator(); iterator.hasNext(); ) {
             AppWidgetProviderInfo menuInfo = iterator.next();
 
-            if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX1)))
-            {
+            if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX1))) {
                 mItems.get(0).isSelected = true;
-            }
-            else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX2)))
-            {
+            } else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX2))) {
                 mItems.get(1).isSelected = true;
-            }
-            else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX3)))
-            {
+            } else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX3))) {
                 mItems.get(2).isSelected = true;
-            }
-            else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX4)))
-            {
+            } else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX4))) {
                 mItems.get(3).isSelected = true;
-            }
-            else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX5)))
-            {
+            } else if (menuInfo.label.equals(activity.getResources().getString(R.string.app_nameX5))) {
                 mItems.get(4).isSelected = true;
-            }
-            else
-            {
+            } else {
                 continue;
             }
         }
     }
 
-    // ·µ»ØÃ¿Ò»¸öÑ¡ÏîµÄview
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    // ï¿½ï¿½ï¿½ï¿½Ã¿Ò»ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½view
+    public View getView(int position, View convertView, ViewGroup parent) {
         final ListItem item = (ListItem) getItem(position);
         convertView = mInflater.inflate(R.layout.item_image_checkbox, parent, false);
         ImageView imgView = (ImageView) convertView.findViewById(R.id.pref_img);
@@ -92,10 +61,8 @@ public class MenuModifyAdapter extends BaseAdapter
         CheckBox boxView = (CheckBox) convertView.findViewById(R.id.pref_checkbox);
         boxView.setChecked(item.isSelected);
 
-        boxView.setOnCheckedChangeListener(new OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(CompoundButton arg0, boolean arg1)
-            {
+        boxView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
                 item.isSelected = arg1;
             }
         });
@@ -103,26 +70,36 @@ public class MenuModifyAdapter extends BaseAdapter
         return convertView;
     }
 
-    // ·µ»ØÌõÄ¿µÄ¸öÊý
-    public int getCount()
-    {
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ä¸ï¿½ï¿½ï¿½
+    public int getCount() {
         return mItems.size();
     }
 
-    // ¸ù¾ÝÌõÄ¿µÄÎ»ÖÃ»ñÈ¡ÌõÄ¿µÄÄÚÈÝ
-    public Object getItem(int position)
-    {
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Î»ï¿½Ã»ï¿½È¡ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Object getItem(int position) {
         return mItems.get(position);
     }
 
-    // »ñÈ¡Ä³Ò»Î»ÖÃµÄId
-    public long getItemId(int position)
-    {
+    // ï¿½ï¿½È¡Ä³Ò»Î»ï¿½Ãµï¿½Id
+    public long getItemId(int position) {
         return position;
     }
 
-    public List<ListItem> getItems()
-    {
+    public List<ListItem> getItems() {
         return mItems;
+    }
+
+    /**
+     * Specific item in our list.
+     */
+    public class ListItem {
+        public int size;
+        public String title;
+        public boolean isSelected;
+
+        public ListItem(int size, String title) {
+            this.size = size;
+            this.title = title;
+        }
     }
 }
