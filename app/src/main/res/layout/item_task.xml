@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="5dip" >
+
+    <alei.switchpro.task.DigitalClock
+        android:id="@+id/digitalClock"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/timeDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:id="@+id/am_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="4dip"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/am"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight=".5"
+                    android:gravity="bottom"
+                    android:includeFontPadding="false"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/pm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight=".5"
+                    android:gravity="top"
+                    android:includeFontPadding="false"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" - "
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/timeDisplay2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:id="@+id/am_pm2"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="4dip"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/am2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight=".5"
+                    android:gravity="bottom"
+                    android:includeFontPadding="false"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/pm2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight=".5"
+                    android:gravity="top"
+                    android:includeFontPadding="false"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/daysOfWeek"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold|italic" />
+    </alei.switchpro.task.DigitalClock>
+
+    <CheckBox
+        android:id="@+id/alarmButton"
+        android:layout_width="60dip"
+        android:layout_height="76dip"
+        android:layout_gravity="center_vertical"
+        android:focusable="false" />
+
+</LinearLayout>

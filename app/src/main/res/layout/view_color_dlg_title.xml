@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/title_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="5dip">
+
+        <TextView
+            android:id="@android:id/title"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingBottom="5dip"
+            android:paddingRight="5dip"
+            android:text="@string/color_code" />
+
+        <EditText
+            android:id="@+id/color_code_editor"
+            android:layout_width="120dip"
+            android:layout_height="40dip"
+            android:maxLength="8" />
+    </LinearLayout>
+
+</LinearLayout>

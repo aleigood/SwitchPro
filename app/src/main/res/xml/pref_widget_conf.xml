@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="background_category" >
+
+    <ListPreference
+        android:key="list_layout"
+        android:title="@string/list_pre_bg" />
+
+    <alei.switchpro.color.BackCustomPreference
+        android:key="back_color"
+        android:title="@string/back_color"
+        android:widgetLayout="@layout/view_pref_image" />
+
+    <alei.switchpro.color.IconCustomPreference
+        android:key="icon_color"
+        android:title="@string/icon_color"
+        android:widgetLayout="@layout/view_pref_image" />
+
+    <alei.switchpro.color.IndCustomPreference
+        android:key="ind_color"
+        android:title="@string/indicator_color"
+        android:widgetLayout="@layout/view_pref_image" />
+
+    <alei.switchpro.color.DividerCustomPreference
+        android:key="divider_color"
+        android:title="@string/divider_color"
+        android:widgetLayout="@layout/view_pref_image" />
+
+</PreferenceScreen>

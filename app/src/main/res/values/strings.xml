@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwitchPro Widget</string>
+    <string name="app_nameX1">SwitchPro (Size 1)</string>
+    <string name="app_nameX2">SwitchPro (Size 2)</string>
+    <string name="app_nameX3">SwitchPro (Size 3)</string>
+    <string name="app_nameX4">SwitchPro (Size 4)</string>
+    <string name="app_nameX5">SwitchPro (Size 5)</string>
+    <string name="need_open_backdata">Please enable Background Data first.</string>
+    <string name="update_buetooth">Updating bluetooth settings</string>
+    <string name="update_data">Updating data settings</string>
+    <string name="update_data_conn_err">Wi-Fi is enabled. Disable it before enabling the Data Connection.</string>
+    <string name="button_apply">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_category">Toggles</string>
+    <string name="style_category">Style</string>
+    <string name="media_scanner_finished">Scan media complete</string>
+    <string name="media_scanner_start">Scanning media&#8230;</string>
+    <string name="update_state">Updating status&#8230;</string>
+    <string name="keep_awake_off">Keep Awake OFF.</string>
+    <string name="keep_awake_on">Keep Awake ON.</string>
+    <string name="auto_rotate_on">Auto Rotate ON.</string>
+    <string name="auto_rotate_off">Auto Rotate OFF.</string>
+
+    <string name="wifi">Wi-Fi</string>
+    <string name="edge">Data Connection</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="gps">GPS</string>
+    <string name="sync">Auto-sync</string>
+    <string name="gravity">Auto-Rotate</string>
+    <string name="brightness">Brightness</string>
+    <string name="autobrightness">Auto Brightness</string>
+    <string name="screenTimeout">Screen Timeout</string>
+    <string name="airplane">Airplane Mode</string>
+    <string name="scanmedia">Scan Media</string>
+    <string name="vibrate">Vibration Mode</string>
+    <string name="silent">Silent Mode</string>
+    <string name="normal">Normal</string>
+    <string name="vsmode">Vibration/Silent</string>
+    <string name="netSwitch">3G-2G</string>
+    <string name="battery">Battery Indicator</string>
+    <string name="unlock">Unlock Pattern</string>
+    <string name="reboot">Reboot (Rooted)</string>
+    <string name="flashlight">Flashlight</string>
+    <string name="wimax">4G Toggle</string>
+    <string name="speaker">Speaker Mode</string>
+    <string name="autolock">Auto-screen Lock</string>
+    <string name="wifiap">Wi-Fi Hotspot</string>
+    <string name="mount">Mount Storage</string>
+    <string name="usbte">USB Tether</string>
+    <string name="volume">Volume</string>
+    <string name="ring_volume">Ringtone Volume</string>
+    <string name="lockScreen">Lock Screen</string>
+    <string name="wifiSleep">Wi-Fi Sleep Policy</string>
+    <string name="killprocess">Task Manager</string>
+    <string name="memory_usage">Memory Usage</string>
+    <string name="storage_usage">Storage Usage</string>
+    <string name="bluetooth_te">Bluetooth Tether</string>
+    <string name="nfc">NFC</string>
+
+    <string name="list_pre_bg">Style</string>
+    <string name="list_pre_bg_default">Default</string>
+    <string name="list_pre_bg_white">White</string>
+    <string name="list_pre_bg_custom">Custom</string>
+    <string name="list_pre_bg_custom_shadow">Custom with shadow</string>
+    <string name="list_pre_bg_none">No Background</string>
+    <string name="custom_color">Color</string>
+    <string name="custom_image">Image</string>
+    <string name="indicator_color">Indicator color</string>
+    <string name="back_color">Background</string>
+    <string name="back_trans">Background transparency</string>
+    <string name="icon_color">Icon color</string>
+    <string name="divider_color">Divider color</string>
+    <string name="flash_color">Flashlight color</string>
+    <string name="button_already_exists">The button already exists.</string>
+    <string name="button_max">I\'m full :(</string>
+    
+    <string name="notification_widget">Notification bar widget</string>
+    <string name="notification_widget_summary">Add/remove widget on notification bar.</string>
+    <string name="show_notify_icon">Show battery level</string>
+    <string name="show_notify_icon_summary">Show battery level on notification bar instead of the blank image.</string>
+    <string name="notification_add">Add new widget</string>
+    <string name="notification_remove">Clear notification</string>
+    <string name="notification_created">The widget of the notification bar has been created.</string>
+    <string name="notify_add_err_title">Sorry</string>
+    <string name="notify_add_err">Notification bar widget need Android 3.0 or above.</string>
+    <string name="notify_priority">Notify priority</string>
+    <string name="notify_priority_summary">The maximum will keep notification on top, the minimum priority will hide status bar icon. (Android 4.1)</string>
+    <string name="notify_icon_color">Notification icon color</string>
+  
+    <string name="other">Other</string>
+    <string name="other_option">Other options</string>
+    <string name="global_option">This configuration will be applied to all widgets.</string>
+  
+    <string name="bright_level">Level of brightness</string>
+    <string name="bright_level_auto">Auto</string>
+    
+    <string name="device_type">Select device type</string>
+    <string name="type1">Default</string>
+    <string name="type2">Motorola</string>
+    <string name="type3">HTC</string>
+    <string name="type4">LG</string>
+    <string name="type5">Samsung</string>
+    <string name="type6">Other</string>
+    <string name="type7">Final</string>
+    
+    <string name="screen_timeout_15sec">15 sec</string>
+    <string name="screen_timeout_30sec">30 sec</string>
+    <string name="screen_timeout_1min">1 min</string>
+    <string name="screen_timeout_2min">2 min</string>
+    <string name="screen_timeout_10min">10 min</string>
+    <string name="screen_timeout_30min">30 min</string>
+    
+    <string name="wifi_sleep_off">Wi-Fi should go to sleep when the screen turns off.</string>
+    <string name="wifi_sleep_on">Wi-Fi never go to sleep.</string>
+    
+    <string name="auto_screen_lock_tip">The screen will not be locked automatically (but still will be turn off).</string>
+   
+    <string name="settings_panel">Settings Panel</string>
+    <string name="show_settings_panel">Show settings panel</string>
+    <string name="open_wifi_panel">Show Wi-Fi panel</string>
+    <string name="open_sync_panel">Show Auto-sync panel</string>
+    <string name="open_gps_panel">Show GPS panel</string>
+    <string name="open_bluetooth_panel">Show bluetooth panel</string>
+    <string name="bluetooth_discover">Make bluetooth discoverable</string>
+    
+    <string name="haptic_feedback">Haptic feedback</string>
+    <string name="haptic_feedback_summary">Vibrate when pressing the buttons.</string>
+    
+    <string name="airplane_close_wifi_summary">All wireless connections will be disabled.</string>
+    <string name="airplane_close_wifi">Turn off Wi-Fi</string>
+    <string name="only_close_phone_network">Turn off signal only</string>
+    <string name="only_close_phone_network_summary">Airplane mode will only turn off the mobile network.</string>
+  
+    <string name="open_screen_light_summary">Not all camera flashes are supported.</string>
+    <string name="open_screen_light">Use the camera flash</string>
+    <string name="close_screen_light_info">Tap To Close</string>
+  
+    <string name="toggle_timeout">Screen Always On</string>
+    <string name="open_time_selector">Show time selector</string>
+    <string name="open_time_selector_summary">Use the time selector instead of screen always on.</string>
+  
+    <string name="silent_mode">Vibration/Silent Mode</string>
+    <string name="silent_btn">Select Mode</string>
+    <string name="mute_media">Mute media volume</string>
+    <string name="mute_media_summary">Also mute the media volume, when Vibration/Silent Mode is enabled.</string>
+    <string name="mute_alarm">Mute alarm volume</string>
+    <string name="mute_alarm_summary">Also mute the alarm volume, when Vibration/Silent Mode is enabled.</string>
+  
+    <string name="data_connection">Data connection</string>
+    <string name="use_apn">Use APN toggle</string>
+    <string name="use_apn_summary">If the data connection toggle doesn\'t work, you can try this.</string>
+  
+    <string name="modify_widget">Modify existing widgets</string>
+    <string name="no_widget_to_modify">There is no widget to modify.</string>
+    <string name="select_widget">Select the widget</string>
+    
+    <string name="custom_menu">Custom widget list</string>
+    <string name="need_reboot">Configuration will take effect after reboot.</string>
+    <string name="custom_ico">Custom icons</string>
+    <string name="ico_settings">Icon settings</string>
+    <string name="ico_theme">Icon theme</string>
+    
+    <string name="no_saved_conf">There is no saved widget.</string>
+    <string name="load_conf_summary">Restore widgets from SD card.</string>
+    <string name="load_conf">Load</string>
+    <string name="load_conf_error">The selected widget can\'t be applied to the current size.</string>
+    <string name="save_conf_error">Can\'t save widget, make sure the SD card has been mounted.</string>
+    <string name="clear_conf">Clear</string>
+    <string name="clear_conf_succ">Configuration has been cleared.</string>
+    
+    <string name="refresh">Refresh</string>
+    <string name="confirm">Confirm</string>
+    <string name="reboot_confirm">What do you want to do?</string>
+    <string name="dlg_reboot">Reboot</string>
+    <string name="dlg_cancel">Cancel</string>
+    <string name="screen_timeout">Screen Timeout</string>
+    <string name="open_camera_info">If the camera flash is not open, it means I can\'t drive it.</string>
+    <string name="func_error">This feature does not support the current system version.</string>
+   
+    <string name="no_color">No color</string>
+    <string name="color_code">Code: #</string>
+    <string name="color_default">Default</string>
+    <string name="color_green">Green</string>
+    <string name="color_lightblue">Light Blue</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_purple">Purple</string>
+    <string name="color_yellow">Yellow</string>
+    <string name="color_red">Red</string>
+    <string name="color_pink">Pink</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_gray">Gray</string>
+    <string name="hide">Not show</string>
+    <string name="the_transparency_when_disabled">The transparency when disabled</string>
+    
+    <string name="usb_tethering_storage_active_subtext">Can\'t tether when USB storage in use</string>
+    <string name="usb_tethering_errored_subtext">USB tethering error</string>
+
+    <string name="trans_when_disabled">Translucent when disabled</string>
+    <string name="level_select_warning">Please select two levels at least.</string>
+    
+    <string name="sync_now">Sync now</string>
+    <string name="sync_now_summary">Force sync when Auto-sync is on.</string>
+    
+    <string name="task_settings">Ignore List</string>
+    <string name="task_settings_summary">Select the exclude task.</string>
+    <string name="task_killed_tip_part3">tasks, remaining memory</string>
+    <string name="task_killed_tip_part2">task, remaining memory</string>
+    <string name="task_killed_tip_part1">Killed</string>
+
+    <string name="toggle_settings">Toggle settings</string>
+    <string name="about">About</string>
+    
+    <string name="timer_settings">Timer settings</string>
+    <string name="new_timer">New timer</string>
+    <string name="turn_off">Turn off</string>
+    <string name="turn_on">Turn on</string>
+    <string name="backup_succ">A backup was successfully created on your SD card.</string>
+    <string name="backup_error">Can not read SD card, please make sure the SD card is available.</string>
+    <string name="continue_confirm">Would you like to continue?</string>
+    <string name="restore_succ">Restore settings successfully.</string>
+    <string name="restore_error">Can not read SD card, please make sure the SD card is available.</string>
+    <string name="never">Never</string>
+    <string name="every_day">Every day</string>
+    <string name="day_concat">", "</string>
+    <string name="silent_alarm_summary">Silent</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="alert">Ringtone</string>
+    <string name="alarm_vibrate">Vibrate</string>
+    <string name="alarm_repeat">Repeat</string>
+    <string name="label">Label</string>
+    <string name="delete_alarm">Delete</string>
+    <string name="delete_alarm_confirm">This task will be deleted.</string>
+    
+    <string name="save_cfg">Backup settings</string>
+    <string name="load_cfg">Restore backup</string>
+    <string name="activate_admin_Warning">WARNING: Please deactivate before uninstalling (Settings-\>Security-\>Device administration), otherwise it can not be uninstalled.</string>
+    <string name="select_img_error">An error was encountered while trying to open the selected image.</string>
+    <string name="download_app">Need download the app from Google Play.</string>
+    <string name="download">Download</string>
+    <string name="restore">Restore</string>
+    <string name="volume_ringtone">Ringtone</string>
+    <string name="volume_media">Media</string>
+    <string name="volume_alarm">Alarm</string>
+    <string name="volume_system">System</string>
+    <string name="volume_voice">Voice</string>
+    <string name="volume_notification_option">Use incoming call volume for notifications</string>
+    <string name="volume_notification">Notification</string>
+    <string name="show_brightness_bar">Show brightness bar</string>
+    <string name="is_it_work">Is it work?</string>
+    <string name="goto_settings">If not, you can only go to the settings panel and check \"Show GPS panel\" on.</string>
+</resources>

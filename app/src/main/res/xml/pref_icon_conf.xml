@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:switchpro="http://schemas.android.com/apk/res/alei.switchpro"
+    android:title="@string/custom_ico" >
+
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_wifi"
+        android:title="@string/wifi"
+        switchpro:customicon="@drawable/icon_wifi_on"
+        switchpro:iconid="0" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_edge"
+        android:title="@string/edge"
+        switchpro:customicon="@drawable/icon_edge_on"
+        switchpro:iconid="1" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_bluetooth"
+        android:title="@string/bluetooth"
+        switchpro:customicon="@drawable/icon_bluetooth_on"
+        switchpro:iconid="2" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_gps"
+        android:title="@string/gps"
+        switchpro:customicon="@drawable/icon_gps_on"
+        switchpro:iconid="3" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_sync"
+        android:title="@string/sync"
+        switchpro:customicon="@drawable/icon_sync_on"
+        switchpro:iconid="4" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_gravity"
+        android:title="@string/gravity"
+        switchpro:customicon="@drawable/icon_gravity_on"
+        switchpro:iconid="5" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_brightness"
+        android:title="@string/brightness"
+        switchpro:customicon="@drawable/icon_brightness_on"
+        switchpro:iconid="6" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_autobrightness"
+        android:title="@string/autobrightness"
+        switchpro:customicon="@drawable/icon_brightness_auto_on"
+        switchpro:iconid="24" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_screenTimeout"
+        android:title="@string/screenTimeout"
+        switchpro:customicon="@drawable/icon_screen_on"
+        switchpro:iconid="8" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_airplane"
+        android:title="@string/airplane"
+        switchpro:customicon="@drawable/icon_airplane_on"
+        switchpro:iconid="9" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_scanmedia"
+        android:title="@string/scanmedia"
+        switchpro:customicon="@drawable/icon_media_on"
+        switchpro:iconid="10" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_vibrate"
+        android:title="@string/vibrate"
+        switchpro:customicon="@drawable/icon_vibrate_on"
+        switchpro:iconid="11" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_silent"
+        android:title="@string/silent"
+        switchpro:customicon="@drawable/icon_cilent_on"
+        switchpro:iconid="25" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_netSwitch"
+        android:title="@string/netSwitch"
+        switchpro:customicon="@drawable/icon_netswitch_on"
+        switchpro:iconid="12" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_battery"
+        android:title="@string/battery"
+        switchpro:customicon="@drawable/batterynumber_blank"
+        switchpro:iconid="7" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_unlock"
+        android:title="@string/unlock"
+        switchpro:customicon="@drawable/icon_unlock_on"
+        switchpro:iconid="13" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_reboot"
+        android:title="@string/reboot"
+        switchpro:customicon="@drawable/icon_reboot_on"
+        switchpro:iconid="14" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_flashlight"
+        android:title="@string/flashlight"
+        switchpro:customicon="@drawable/icon_flashlight_on"
+        switchpro:iconid="15" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_wimax"
+        android:title="@string/wimax"
+        switchpro:customicon="@drawable/icon_wimax_on"
+        switchpro:iconid="16" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_speaker"
+        android:title="@string/speaker"
+        switchpro:customicon="@drawable/icon_speaker_on"
+        switchpro:iconid="17" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_autolock"
+        android:title="@string/autolock"
+        switchpro:customicon="@drawable/icon_autolock_on"
+        switchpro:iconid="18" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_wifiap"
+        android:title="@string/wifiap"
+        switchpro:customicon="@drawable/icon_wifite_on"
+        switchpro:iconid="19" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_mount"
+        android:title="@string/mount"
+        switchpro:customicon="@drawable/icon_sdcard_on"
+        switchpro:iconid="20" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_usbte"
+        android:title="@string/usbte"
+        switchpro:customicon="@drawable/icon_usbte_on"
+        switchpro:iconid="21" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_bluetooth_te"
+        android:title="@string/bluetooth_te"
+        switchpro:customicon="@drawable/icon_blutoothte_on"
+        switchpro:iconid="30" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_lockScreen"
+        android:title="@string/lockScreen"
+        switchpro:customicon="@drawable/icon_lockscreen_on"
+        switchpro:iconid="22" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_wifiSleep"
+        android:title="@string/wifiSleep"
+        switchpro:customicon="@drawable/icon_wifi_sleep"
+        switchpro:iconid="23" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_volume"
+        android:title="@string/volume"
+        switchpro:customicon="@drawable/icon_volume"
+        switchpro:iconid="26" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_killProcess"
+        android:title="@string/killprocess"
+        switchpro:customicon="@drawable/icon_killprocess_on"
+        switchpro:iconid="27" />
+    <alei.switchpro.icon.IconPreferenceScreen
+        android:key="custom_ico_nfc"
+        android:title="@string/nfc"
+        switchpro:customicon="@drawable/icon_nfc_on"
+        switchpro:iconid="31" />
+
+</PreferenceScreen>

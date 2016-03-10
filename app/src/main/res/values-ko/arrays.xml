@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="notify_priority_value">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="notify_priority_entry">
+        <item>Max</item>
+        <item>Min</item>
+    </string-array>
+    <string-array name="icon_theme_value">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="icon_theme_entry">
+        <item>Default</item>
+        <item>Holo</item>
+    </string-array>
+    <string-array name="notify_icon_color_value">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="notify_icon_color_entry">
+        <item>White</item>
+        <item>Holo style</item>
+    </string-array>
+</resources>

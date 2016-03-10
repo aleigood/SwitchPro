@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:switchpro="http://schemas.android.com/apk/res/alei.switchpro"
+    android:key="app_config" >
+
+    <PreferenceScreen
+        android:summary="@string/notification_widget_summary"
+        android:title="@string/notification_widget" >
+        <Preference
+            android:key="add_notification"
+            android:title="@string/notification_add" />
+        <Preference
+            android:key="clear_notification"
+            android:title="@string/notification_remove" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/notify_priority_entry"
+            android:entryValues="@array/notify_priority_value"
+            android:key="notify_priority"
+            android:summary="@string/notify_priority_summary"
+            android:title="@string/notify_priority" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_notify_icon"
+            android:summary="@string/show_notify_icon_summary"
+            android:title="@string/show_notify_icon" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/notify_icon_color_entry"
+            android:entryValues="@array/notify_icon_color_value"
+            android:key="notify_icon_color"
+            android:title="@string/notify_icon_color" />
+    </PreferenceScreen>
+
+    <alei.switchpro.modify.ConfigModifyPref
+        android:key="widget_modify"
+        android:title="@string/modify_widget" />
+
+    <PreferenceScreen android:title="@string/toggle_settings" >
+        <intent
+            android:targetClass="alei.switchpro.ToggleConfigActivity"
+            android:targetPackage="alei.switchpro" />
+    </PreferenceScreen>
+    <PreferenceScreen android:title="@string/timer_settings" >
+        <intent
+            android:targetClass="alei.switchpro.task.TaskMainActivity"
+            android:targetPackage="alei.switchpro" />
+    </PreferenceScreen>
+    <PreferenceScreen android:title="@string/ico_settings" >
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/icon_theme_entry"
+            android:entryValues="@array/icon_theme_value"
+            android:key="icon_theme"
+            android:title="@string/ico_theme" />
+
+        <PreferenceScreen android:title="@string/custom_ico" >
+            <intent
+                android:targetClass="alei.switchpro.icon.IconPrefActivity"
+                android:targetPackage="alei.switchpro" />
+        </PreferenceScreen>
+    </PreferenceScreen>
+
+    <alei.switchpro.modify.MenuModifyPref
+        android:key="menu_modify"
+        android:title="@string/custom_menu" />
+
+    <PreferenceCategory android:title="@string/other" >
+        <Preference
+            android:key="save_cfg"
+            android:title="@string/save_cfg" />
+        <Preference
+            android:key="load_cfg"
+            android:title="@string/load_cfg" />
+
+        <alei.switchpro.AboutDlg
+            android:key="about"
+            android:title="@string/about" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

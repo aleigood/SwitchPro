@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/timer_settings" >
+
+    <Preference
+        android:key="time"
+        android:title="@string/start_time" />
+
+    <Preference
+        android:key="time2"
+        android:title="@string/end_time" />
+
+    <alei.switchpro.task.RepeatPreference
+        android:key="setRepeat"
+        android:title="@string/alarm_repeat" />
+
+    <EditTextPreference
+        android:dialogTitle="@string/label"
+        android:key="label"
+        android:title="@string/label" />
+
+    <PreferenceCategory
+        android:key="button_category"
+        android:title="@string/button_category" >
+
+        <alei.switchpro.task.pref.MyRingtonePreference
+            android:key="ringtone"
+            android:ringtoneType="ringtone"
+            android:showDefault="false"
+            android:showSilent="true"
+            android:title="@string/alert"
+            android:widgetLayout="@layout/view_pref_check" />
+
+        <alei.switchpro.task.pref.VolumePreference
+            android:key="volume"
+            android:title="@string/ring_volume"
+            android:widgetLayout="@layout/view_pref_check" />
+
+        <alei.switchpro.task.pref.BaseTogglePreference
+            android:key="silent"
+            android:title="@string/vsmode"
+            android:widgetLayout="@layout/view_pref_check" />
+
+        <alei.switchpro.task.pref.BaseTogglePreference
+            android:key="radio"
+            android:title="@string/airplane"
+            android:widgetLayout="@layout/view_pref_check" />
+
+        <alei.switchpro.task.pref.BaseTogglePreference
+            android:key="data"
+            android:title="@string/edge"
+            android:widgetLayout="@layout/view_pref_check" />
+
+        <alei.switchpro.task.pref.BaseTogglePreference
+            android:key="wifi"
+            android:title="@string/wifi"
+            android:widgetLayout="@layout/view_pref_check" />
+
+        <alei.switchpro.task.pref.BaseTogglePreference
+            android:key="sync"
+            android:title="@string/sync"
+            android:widgetLayout="@layout/view_pref_check" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

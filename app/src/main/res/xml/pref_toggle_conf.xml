@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:switchpro="http://schemas.android.com/apk/res/alei.switchpro"
+    android:title="@string/toggle_settings" >
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="haptic_feedback"
+        android:summary="@string/haptic_feedback_summary"
+        android:title="@string/haptic_feedback" />
+
+    <PreferenceCategory android:title="@string/killprocess" >
+        <PreferenceScreen
+            android:summary="@string/task_settings_summary"
+            android:title="@string/task_settings" >
+            <intent
+                android:targetClass="alei.switchpro.process.ProcessMainActivity"
+                android:targetPackage="alei.switchpro" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/data_connection" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="use_apn"
+            android:summary="@string/use_apn_summary"
+            android:title="@string/use_apn" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/sync" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sync_now"
+            android:summary="@string/sync_now_summary"
+            android:title="@string/sync_now" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/brightness" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="show_brightness_bar"
+            android:title="@string/show_brightness_bar" />
+
+        <alei.switchpro.brightness.LevelPreference
+            android:dialogTitle="bright_level"
+            android:key="bright_level"
+            android:title="@string/bright_level" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/flashlight" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="toggle_usecamera"
+            android:summary="@string/open_screen_light_summary"
+            android:title="@string/open_screen_light" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:key="device_type"
+            android:summary="@string/type1"
+            android:title="@string/device_type" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/toggle_timeout" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="toggle_timeout"
+            android:summary="@string/open_time_selector_summary"
+            android:title="@string/open_time_selector" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/vsmode" >
+        <ListPreference
+            android:key="silent_btn"
+            android:title="@string/silent_btn" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="mute_media"
+            android:summary="@string/mute_media_summary"
+            android:title="@string/mute_media" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="mute_alarm"
+            android:summary="@string/mute_alarm_summary"
+            android:title="@string/mute_alarm" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/airplane" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="airplane_radio"
+            android:summary="@string/only_close_phone_network_summary"
+            android:title="@string/only_close_phone_network" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="airplane_wifi"
+            android:summary="@string/airplane_close_wifi_summary"
+            android:title="@string/airplane_close_wifi" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/bluetooth" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="bluetooth_discover"
+            android:title="@string/bluetooth_discover" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/show_settings_panel" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="toggle_wifi"
+            android:title="@string/open_wifi_panel" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="toggle_bluetooth"
+            android:title="@string/open_bluetooth_panel" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="toggle_gps"
+            android:title="@string/open_gps_panel" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="toggle_sync"
+            android:title="@string/open_sync_panel" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
