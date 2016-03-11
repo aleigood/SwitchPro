@@ -31,7 +31,7 @@ public class SyncUtilsV4 {
             e1.printStackTrace();
         }
 
-        // ֪ͨwidget����
+        // 通知widget更新
         Utils.updateWidget(context);
     }
 

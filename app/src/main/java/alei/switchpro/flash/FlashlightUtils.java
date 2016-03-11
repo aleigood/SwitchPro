@@ -51,7 +51,7 @@ public class FlashlightUtils {
 
     public static void setFlashlightDroid2(boolean b) {
         try {
-            // ��һ�ε��û�ȡ����������û������ƣ�����false
+            // 第一次调用获取不到参数则没打开闪光灯，返回false
             iHardwareService.getClass().getMethod("setFlashlightEnabled", boolean.class).invoke(iHardwareService, b);
         } catch (Exception e) {
             Log.d("setFlashlightDroid2", "fail");

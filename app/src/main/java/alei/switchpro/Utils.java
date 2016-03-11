@@ -62,7 +62,7 @@ public class Utils {
     }
 
     /**
-     * Color ����Ϊ�գ�Ϊ��ʱ��ʾ������ɫ�˾�
+     * Color 可以为空，为空时表示不加颜色滤镜
      */
     private static Bitmap setBitmapColor(Context context, int source, Integer alpha, Integer color, int width,
                                          int height) {
@@ -114,7 +114,7 @@ public class Utils {
     }
 
     public static void updateWidget(Context context) {
-        // ֪ͨwidget����
+        // 通知widget更新
         Intent intent = new Intent("alei.switchpro.APPWIDGET_UPDATE");
         PendingIntent newIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -124,7 +124,7 @@ public class Utils {
             e.printStackTrace();
         }
 
-        // ����֪ͨ���е�widget
+        // 更新通知栏中的widget
         updateAllNotification(context);
     }
 
@@ -186,7 +186,7 @@ public class Utils {
 
         notification.contentView = WidgetProviderUtil.buildAndUpdateButtons(context, widgetId, config, null);
 
-        // �����nobg�Ļ��͸��ı���������Ϊ�޿�ı���
+        // 如果是nobg的话就更改背景，设置为无框的背景
         String layoutName = config.getString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, widgetId),
                 context.getString(R.string.list_pre_bg_default));
         int layoutId = WidgetProviderUtil.getLayoutId(context, layoutName);

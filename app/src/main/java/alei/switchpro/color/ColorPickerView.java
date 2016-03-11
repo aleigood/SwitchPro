@@ -12,24 +12,25 @@ import android.graphics.SweepGradient;
 import android.view.MotionEvent;
 import android.view.View;
 
+
 public class ColorPickerView extends View {
     private static final float PI = 3.1415926f;
     private Paint ringPaint;
-    // ����м�Բ�γ��ֵ�Բ��
+    // 点击中间圆形出现的圆环
     private Paint centerPaint;
     private Paint grayBarPaint;
     private Paint transBarPaint;
     private int[] transBarColors;
     private int[] grayBarColors;
     private int[] mColors;
-    // ��ǣ���ֹ�ڻ����Ҷȵ��ڵ�ʱ��ı��˻Ҷ����������ɫ
+    // 标记，防止在滑动灰度调节的时候改变了灰度条本身的颜色
     private boolean changeGrayBar;
     private boolean changeTransBar;
     private boolean needTransBar;
     private OnColorChangedListener mListener;
     private boolean mTrackingCenter;
     private boolean mHighlightCenter;
-    // Բ���볤��ֱ�ӵľ���
+    // 圆形与长条直接的距离
     private int SEPARATOR_HIGH = 10;
 
     private float paintWidth;
@@ -40,35 +41,35 @@ public class ColorPickerView extends View {
     public ColorPickerView(Context c, OnColorChangedListener l, int color, int x, boolean needTransBar) {
         super(c);
         this.needTransBar = needTransBar;
-        // ͨ�û��ʿ��
+        // 通用画笔宽度
         paintWidth = x / 3f;
-        // �ܿ��
+        // 总宽度
         width = x;
-        // ��Բ�İ뾶 �뾶 = �ܿ�� - һ�����ʵĿ�� - һ����� - ������ʵĿ��
+        // 大圆的半径 半径 = 总宽度 - 一个画笔的宽度 - 一个间隔 - 半个画笔的宽度
         r = width - paintWidth / 2f;
 
         mListener = l;
 
-        // ��Բ����
+        // 大圆画笔
         mColors = new int[]{0xFFFF0000, 0xFFFF00FF, 0xFF0000FF, 0xFF00FFFF, 0xFF00FF00, 0xFFFFFF00, 0xFFFF0000};
         ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         ringPaint.setShader(new SweepGradient(0, 0, mColors, null));
         ringPaint.setStyle(Paint.Style.STROKE);
         ringPaint.setStrokeWidth(paintWidth);
 
-        // �м�СԲ���ʣ�StrokeWidthΪ���ʱ��ʾ��Բ���İ뾶
+        // 中间小圆画笔，StrokeWidth为点击时显示的圆环的半径
         centerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         centerPaint.setColor(color);
-        // ���ʵĿ���ڻ�ʵ��Բ��ʱ�������ã�������ʱ����
+        // 画笔的宽度在画实心圆的时候不起作用，画环的时候用
         centerPaint.setStrokeWidth(3f);
 
-        // ����ϸ����bar ��ɫ�� ��ɫ���������ѡ�е���ɫ�ٹ��ɵ���ɫ ��Ҫ��� û�а�ɫ�ͺ�ɫ������
+        // 定义细条的bar 颜色从 黑色过渡主面板选中的颜色再过渡到白色 主要解决 没有白色和黑色的问题
         grayBarColors = new int[]{0xFF000000, Utils.setAlpha(color, false), 0xFFFFFFFF};
         grayBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         grayBarPaint.setStrokeWidth(paintWidth);
         changeGrayBar = true;
 
-        // ����͸���ȵ�bar
+        // 设置透明度的bar
         transBarColors = new int[]{Utils.setAlpha(color, false), Utils.setAlpha(color, true)};
         transBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         transBarPaint.setStrokeWidth(paintWidth);
@@ -77,14 +78,14 @@ public class ColorPickerView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // ������͸��
+        // 先设置透明
         canvas.translate(width, width);
         canvas.drawOval(new RectF(-r, -r, r, r), ringPaint);
 
-        // ���м��Բ�Σ��뾶����һ�����ʵĿ��
+        // 画中间的圆形，半径就是一个画笔的宽度
         canvas.drawCircle(0, 0, paintWidth, centerPaint);
 
-        // �м��Բ�����ʱ�����м��Բ��
+        // 中间的圆被点击时绘制中间的圆环
         if (mTrackingCenter) {
             int c = centerPaint.getColor();
             centerPaint.setStyle(Paint.Style.STROKE);
@@ -100,9 +101,9 @@ public class ColorPickerView extends View {
             centerPaint.setColor(c);
         }
 
-        // ���ƻҶ�ϸ����BAR
+        // 绘制灰度细调的BAR
 
-        // ��ǣ���ֹ�ڻ����Ҷȵ��ڵ�ʱ��ı��˻Ҷ����������ɫ
+        // 标记，防止在滑动灰度调节的时候改变了灰度条本身的颜色
         if (changeGrayBar) {
             grayBarColors[1] = Utils.setAlpha(centerPaint.getColor(), false);
             grayBarPaint.setShader(new LinearGradient(-width, 0, width, 0, grayBarColors, null, Shader.TileMode.CLAMP));
@@ -110,7 +111,7 @@ public class ColorPickerView extends View {
         canvas.drawRect(new RectF(-width, width + SEPARATOR_HIGH, width, width + SEPARATOR_HIGH + paintWidth),
                 grayBarPaint);
 
-        // ��ǣ���ֹ�ڻ���͸���ȶȵ��ڵ�ʱ��ı��˻Ҷ����������ɫ
+        // 标记，防止在滑动透明度度调节的时候改变了灰度条本身的颜色
         if (changeTransBar) {
             transBarColors[0] = Utils.setAlpha(centerPaint.getColor(), false);
             transBarColors[1] = Utils.setAlpha(centerPaint.getColor(), true);
@@ -118,7 +119,7 @@ public class ColorPickerView extends View {
                     .setShader(new LinearGradient(-width, 0, width, 0, transBarColors, null, Shader.TileMode.CLAMP));
         }
 
-        // ����͸����ϸ����BAR
+        // 绘制透明度细调的BAR
         canvas.drawRect(new RectF(-width, width + SEPARATOR_HIGH * 2 + paintWidth, width, width + SEPARATOR_HIGH * 2
                 + paintWidth * 2), transBarPaint);
 
@@ -128,7 +129,7 @@ public class ColorPickerView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // ��������ͼ�εķ�ΧҪ���Ϸ��εĿ��
+        // 设置整个图形的范围要加上方形的宽度
         if (needTransBar) {
             setMeasuredDimension((int) (width * 2), (int) (width * 2 + SEPARATOR_HIGH * 2 + paintWidth * 2));
         } else {
@@ -169,7 +170,7 @@ public class ColorPickerView extends View {
         float y = event.getY() - width;
         boolean inCenter = java.lang.Math.sqrt(x * x + y * y) <= paintWidth;
 
-        // ������Χ��Ĳ���Ӧ
+        // 超出范围外的不响应
         if ((x < -width || x > width || y < -width)
                 || (y > width && y < width + SEPARATOR_HIGH)
                 || (y > width + SEPARATOR_HIGH + paintWidth && y < width + SEPARATOR_HIGH + paintWidth + SEPARATOR_HIGH)) {
@@ -194,7 +195,7 @@ public class ColorPickerView extends View {
                         invalidate();
                     }
                 }
-                // �ҶȻ���
+                // 灰度滑块
                 else if ((x >= -width && x <= width)
                         && (y >= width + SEPARATOR_HIGH && y <= width + SEPARATOR_HIGH + paintWidth)) {
                     int a, r, g, b, c0, c1;
@@ -214,7 +215,7 @@ public class ColorPickerView extends View {
                     r = ave(Color.red(c0), Color.red(c1), p);
                     g = ave(Color.green(c0), Color.green(c1), p);
                     b = ave(Color.blue(c0), Color.blue(c1), p);
-                    // ��ϸ����ɫ���õ���ʾ�����
+                    // 把细调颜色设置到显示面板中
                     centerPaint.setColor(Color.argb(a, r, g, b));
                     changeTransBar = true;
                     changeGrayBar = false;
@@ -227,7 +228,7 @@ public class ColorPickerView extends View {
                     float p = (x + width) / (width * 2);
                     int a = ave(Color.alpha(c0), Color.alpha(c1), p);
 
-                    // ��ϸ����ɫ���õ���ʾ�����
+                    // 把细调颜色设置到显示面板中
                     centerPaint.setColor(Color.argb(a, Color.red(c0), Color.green(c0), Color.blue(c0)));
                     changeGrayBar = false;
                     changeTransBar = false;

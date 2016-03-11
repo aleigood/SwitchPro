@@ -46,11 +46,11 @@ public class AboutDlg extends Preference {
     }
 
     public void onClick() {
-        // ��ȡ�Ի���Builder
+        // 获取对话框Builder
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
         builder.setTitle(R.string.about);
 
-        // ���öԻ����View
+        // 设置对话框的View
         LayoutInflater inflater = parent.getLayoutInflater();
         View dlgView = inflater.inflate(R.layout.activity_about, null, false);
         TextView aboutTxt = ((TextView) dlgView.findViewById(R.id.about_txt));
@@ -58,7 +58,7 @@ public class AboutDlg extends Preference {
         aboutTxt.setMovementMethod(LinkMovementMethod.getInstance());
         builder.setView(dlgView);
 
-        // ��ʾ��ť
+        // 显示按钮
         builder.setNeutralButton(R.string.button_apply, new OnClickListener() {
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 if (dialog != null) {
@@ -67,7 +67,7 @@ public class AboutDlg extends Preference {
             }
         });
 
-        // �����Ի�����ʾ
+        // 创建对话框并显示
         dialog = builder.create();
         dialog.show();
     }

@@ -52,7 +52,7 @@ public class ProcessMainActivity extends Activity {
     }
 
     /**
-     * ��ӵ����˵�
+     * 添加弹出菜单
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,7 +62,7 @@ public class ProcessMainActivity extends Activity {
     }
 
     /**
-     * �����˵�����Ӧ�¼�
+     * 弹出菜单的响应事件
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

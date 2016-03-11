@@ -25,20 +25,20 @@ public class ConfigModifyActivity extends WidgetConfigBaseActivity {
         widgetId = launchIntent.getIntExtra("widgetId", 0);
         size = launchIntent.getIntExtra("size", 0);
 
-        // ֪ͨ���еĲ���size��0
+        // 通知栏中的部件size是0
         if (widgetId == 0 || size < 0 || size > 5) {
             return;
         }
 
-        // ��ʼ������
+        // 初始化界面
         setContentView(R.layout.activity_widget_conf);
         addPreferencesFromResource(R.xml.pref_widget_conf);
 
-        // ��ȡ��ǰ����������
+        // 获取当前部件的配置
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
-        // ��ȡ��ť��˳��
+        // 获取按钮的顺序
         btnIds = config.getString(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetId), DEFAULT_BUTTON_IDS);
-        // ���ø��෽������ʼ������ͳ�ʼֵ
+        // 调用父类方法，初始化界面和初始值
         if (config.contains(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId))) {
             backBitmap = WidgetProviderUtil.getBackgroundBitmap(this, widgetId, config);
         }
@@ -51,7 +51,7 @@ public class ConfigModifyActivity extends WidgetConfigBaseActivity {
         Intent launchIntent = new Intent();
         launchIntent.setClassName(this, "alei.switchpro.WidgetProviderX" + size);
         launchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        // ͨ�����ò�ͬ��Data�����ÿ��Intent����Ψһ�ģ����ᱻ�໥����
+        // 通过设置不同的Data来标记每个Intent都是唯一的，不会被相互覆盖
         launchIntent.setData(Uri.withAppendedPath(Uri.parse(WidgetProviderUtil.URI_SCHEME + "://widget/id/"),
                 String.valueOf(appWidgetId)));
         PendingIntent newIntent = PendingIntent.getBroadcast(this, 0, launchIntent, 0);
@@ -64,7 +64,7 @@ public class ConfigModifyActivity extends WidgetConfigBaseActivity {
     }
 
     /**
-     * ��ȡ���һ�����õİ�ť˳�����û�еĻ�����һ��Ĭ��˳������Ҫ����
+     * 获取最后一次配置的按钮顺序，如果没有的话返回一个默认顺序，子类要覆盖
      *
      * @return
      */
@@ -94,7 +94,7 @@ public class ConfigModifyActivity extends WidgetConfigBaseActivity {
         }
 
         if (!isExist) {
-            // ת������Ӧ��widget���и���
+            // 转交给相应的widget进行更新
             updateWidget(widgetId);
         } else {
             Utils.updateNotification(this, widgetId);

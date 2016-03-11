@@ -80,7 +80,7 @@ public class VolumeActivity extends Activity implements OnCheckedChangeListener 
                 finish();
             }
         });
-        // һ��Ҫ��ȡ����ʱ��رձ�ACTIVITY��������޷���������,�ڵ����Back����ť�����
+        // 一定要在取消的时候关闭本ACTIVITY，否则会无法操作界面,在点击“Back”按钮会调用
         alert.setOnCancelListener(new OnCancelListener() {
             public void onCancel(DialogInterface arg0) {
                 finish();
@@ -89,7 +89,7 @@ public class VolumeActivity extends Activity implements OnCheckedChangeListener 
         alert.show();
     }
 
-    // һ��Ҫ��pause��ʱ�������activity
+    // 一定要在pause的时候结束本activity
     @Override
     protected void onPause() {
         super.onPause();

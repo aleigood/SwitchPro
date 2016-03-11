@@ -37,12 +37,12 @@ public class ApnUtils {
      */
     public static void switchAndNotify(Context context) {
         try {
-            // ������������ǹرյ�Ҫ�ȴ�
+            // 如果数据连接是关闭的要先打开
             if (!NetUtils.getMobileNetworkState(context)) {
                 NetUtils.setMobileNetworkState(context, true);
             }
 
-            // ���������ʱ��֧��
+            // 这个参数暂时不支持
             ApnDao dao = new ApnDao(context.getContentResolver());
             dao.setDisableAllApns(false);
             int currentState = dao.getApnState();
@@ -59,7 +59,7 @@ public class ApnUtils {
 
     public static void setApnState(Context context, boolean b) {
         try {
-            // ���������ʱ��֧��
+            // 这个参数暂时不支持
             ApnDao dao = new ApnDao(context.getContentResolver());
             dao.setDisableAllApns(false);
             switchAndNotify(b ? ON : OFF, ON, context, dao);

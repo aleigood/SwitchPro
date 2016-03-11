@@ -50,7 +50,7 @@ public class GoToSettingsActivity extends Activity {
         return dlg;
     }
 
-    // һ��Ҫ��pause��ʱ�������activity
+    // 一定要在pause的时候结束本activity
     @Override
     protected void onPause() {
         super.onPause();

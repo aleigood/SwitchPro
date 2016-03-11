@@ -38,7 +38,7 @@ public class MenuModifyPref extends Preference {
     public void onClick() {
         final String pkgName = WidgetProviderX4.class.getPackage().getName();
 
-        // ��ȡ��ǰ�Ѿ������Ĳ���
+        // 获取当前已经创建的部件
         List<AppWidgetProviderInfo> itemList = AppWidgetManager.getInstance(parent).getInstalledProviders();
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);

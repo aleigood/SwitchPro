@@ -50,7 +50,7 @@ public class TaskUtil {
     private static final String TAG_SWITCH = "switch";
 
     /**
-     * �����ݿ������һ����¼
+     * 往数据库中添加一个记录
      */
     public static int addAlarm(DatabaseOper ap) {
         ContentValues values = new ContentValues(2);
@@ -60,7 +60,7 @@ public class TaskUtil {
     }
 
     /**
-     * ��ȡָ����Alarm,�п��ܷ���Null
+     * 获取指定的Alarm,有可能返回Null
      */
     public static Task getAlarmById(DatabaseOper ap, int alarmId) {
         Cursor cursor = ap.queryTaskById(alarmId);
@@ -122,7 +122,7 @@ public class TaskUtil {
     }
 
     /**
-     * ɾ��һ�����񣬵�����Ҫ������һ������
+     * 删除一个任务，但是需要设置下一个任务
      */
     public static void deleteAlarm(DatabaseOper ap, int alarmId) {
         ap.deleteTask(alarmId);
@@ -140,8 +140,8 @@ public class TaskUtil {
         long startTime = 0;
         long endTime = 0;
 
-        // ֻ���ڲ����ظ������ʱ����������Ĵ���ʱ�䣬�ô��ж���������������ʱ��������������
-        // �������ֻ����������󣬼�����һ����������ʱ��֪������������Ѿ���������û����
+        // 只有在不是重复任务的时候才设置它的触发时间，用此判断如果过了这个触发时间就设置任务过期
+        // 否则在手机重新启动后，计算下一个触发任务时不知道这个任务是已经触发还是没触发
         if (!daysOfWeek.isRepeatSet()) {
             startTime = calculateAlarm(startHour, startMinutes, daysOfWeek).getTimeInMillis();
             endTime = calculateAlarm(endHour, endMinutes, daysOfWeek).getTimeInMillis();
@@ -176,7 +176,7 @@ public class TaskUtil {
         ContentValues values = new ContentValues(3);
         values.put(Constants.TASK.COLUMN_ENABLED, enabled ? 1 : 0);
 
-        // ������һ������ʱ��Ҫ�������Ĵ���ʱ��
+        // 当激活一个任务时需要更新它的触发时间
         if (enabled) {
             long startTime = 0;
             long endTime = 0;
@@ -194,7 +194,7 @@ public class TaskUtil {
     }
 
     /**
-     * ����һ����������ڣ���ϵͳ���������
+     * 设置一次性任务过期，在系统重启后调用
      */
     public static void disableExpiredAlarms(DatabaseOper ap) {
         Cursor cur = getEnabledAlarm(ap);
@@ -204,8 +204,8 @@ public class TaskUtil {
             do {
                 Task alarm = new Task(cur);
 
-                // ��ʼ�ͽ���ʱ�䲻Ϊ0��˵�������ظ�����
-                // ����ʼ�ͽ���ʱ�䶼����ʱ��˵���������Ѿ�������
+                // 开始和结束时间不为0，说明不是重复任务
+                // 当开始和结束时间都过期时，说明此任务已经过期了
                 if (alarm.startTime != 0 && alarm.startTime < now && alarm.endTime != 0 && alarm.endTime < now) {
                     enableAlarmInternal(ap, alarm, false);
                 }
@@ -218,7 +218,7 @@ public class TaskUtil {
     /**
      * Called at system startup, on time/timezone change, and whenever the user
      * changes alarm settings. Activates snooze if set, otherwise loads all
-     * alarms, activates next alert. �����渽��ֵ������ʱ�Եģ�������뵽���ݿ��У����ᴫ�ݵ�Intent��Receiver
+     * alarms, activates next alert. 这里面附的值都是临时性的，不会存入到数据库中，但会传递到Intent的Receiver
      */
     public static void setNextAlert(DatabaseOper ap) {
         Task alarm = null;
@@ -231,28 +231,28 @@ public class TaskUtil {
                 do {
                     Task a = new Task(cursor);
 
-                    // �����ظ�������
+                    // 当是重复的任务
                     if (a.startTime == 0 && a.endTime == 0) {
                         a.startTime = calculateAlarm(a.startHour, a.startMinutes, a.daysOfWeek).getTimeInMillis();
                         a.endTime = calculateAlarm(a.endHour, a.endMinutes, a.daysOfWeek).getTimeInMillis();
                     }
-                    // �����ظ������������ʼʱ��ͽ���ʱ�䶼�����ˣ������������
+                    // 不是重复的任务，如果开始时间和结束时间都过期了，设置任务过期
                     else if (a.startTime < now && a.endTime < now) {
                         enableAlarmInternal(ap, a, false);
                         continue;
                     }
 
-                    // �ߵ�һ�µ����̵����ظ������񣬺Ϳ�ʼʱ������ʱ��û���ڵ�����
-                    // �����ظ�������������Ŀ�ʼ�ͽ�������ʱ�䣬���￪ʼʱ���п��ܴ��ڽ���ʱ�䣬��Ϊ�����ʼʱ������ˣ�������ľ�����һ����ʼʱ��
-                    // ����һ���Ե����񣬿�ʼʱ��ʼ��С�ڽ���ʱ�䣬���ҿ�ʼʱ���п����Ѿ�����
+                    // 走到一下的流程的是重复的任务，和开始时间或结束时间没过期的任务
+                    // 对于重复的任务计算它的开始和结束触发时间，这里开始时间有可能大于结束时间，因为如果开始时间过期了，计算出的就是下一个开始时间
+                    // 对于一次性的任务，开始时间始终小于结束时间，而且开始时间有肯能已经过期
 
-                    // �����ʼʱ��û���ڣ�����С
+                    // 如果开始时间没过期，且最小
                     if (a.startTime > now && a.startTime < minTime) {
                         minTime = a.startTime;
                         alarm = a;
                     }
 
-                    // �п���ĳ����ʼʱ���Ѿ������ˣ���ʼʱ���Ǵ��ڽ���ʱ��ģ��������жϽ���ʱ��
+                    // 有可能某个开始时间已经过期了，或开始时间是大于结束时间的，所以再判断结束时间
                     if (a.endTime < minTime) {
                         minTime = a.endTime;
                         alarm = a;
@@ -263,15 +263,15 @@ public class TaskUtil {
             cursor.close();
         }
 
-        // �����õ���Alarm������������������ʱ��
+        // 这里拿到的Alarm就是有最近触发任务的时间
         if (alarm != null) {
-            // ��ʼʱ���п����Ѿ�������(һ��������)
+            // 开始时间有可能已经过期了(一次性任务)
             if (alarm.startTime < now) {
-                // ˵���ǽ�������
+                // 说明是结束任务
                 alarm.type = 1;
                 enableAlert(ap, alarm, alarm.endTime);
             } else {
-                // ���߿�ʼʱ���Ǵ��ڽ���ʱ��ģ���������
+                // 或者开始时间是大于结束时间的（周期任务）
                 if (alarm.startTime > alarm.endTime) {
                     alarm.type = 1;
                     enableAlert(ap, alarm, alarm.endTime);
@@ -383,17 +383,17 @@ public class TaskUtil {
     }
 
     /**
-     * �����ݿ��е����ñ�����xml�ļ���
+     * 把数据库中的配置保存至xml文件中
      *
      * @param ap
      * @return
      */
     public static boolean saveTaskConf(DatabaseOper ap) {
         try {
-            // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+            // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File dir = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH);
 
@@ -469,10 +469,10 @@ public class TaskUtil {
         FileInputStream fis = null;
 
         try {
-            // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+            // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + Constants.TASK.TABLE_TASK);
@@ -490,7 +490,7 @@ public class TaskUtil {
             parser.setInput(fis, null);
             int eventType = parser.getEventType();
             boolean done = false;
-            // taskId ÿ��ѭ����Task��ǩʱ�ᱻ���¸�ֵ
+            // taskId 每次循环到Task标签时会被重新赋值
             int taskId = -1;
 
             while (eventType != XmlPullParser.END_DOCUMENT && !done) {

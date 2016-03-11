@@ -20,7 +20,7 @@ public class WidgetConfigActivityNotify extends WidgetConfigBaseActivity {
     }
 
     /**
-     * ��ȡ���һ�����õİ�ť˳�����û�еĻ�����һ��Ĭ��˳������Ҫ����
+     * 获取最后一次配置的按钮顺序，如果没有的话返回一个默认顺序，子类要覆盖
      *
      * @return
      */

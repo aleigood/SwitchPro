@@ -46,7 +46,7 @@ public class ToggleConfigActivity extends PreferenceActivity implements OnShared
     }
 
     /**
-     * ��Ϊ��onCreate������onResume����ֱ����onResume�г�ʼ��
+     * 因为在onCreate后会调用onResume所以直接在onResume中初始化
      */
     private void initUI() {
         aireplaneWifi = (CheckBoxPreference) findPreference(Constants.PREFS_AIRPLANE_WIFI);
@@ -63,51 +63,51 @@ public class ToggleConfigActivity extends PreferenceActivity implements OnShared
         deviceType.setEntries(deviceSummary);
         deviceType.setEntryValues(deviceValues);
 
-        // ������Ѿ����õĲ���Ҫ���������õĳ�ʼ��
+        // 如果有已经设置的参数要根据已设置的初始化
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         String silentValue = config.getString(Constants.PREFS_SILENT_BTN, Constants.BTN_VS);
         silentBtn.setValue(silentValue);
         silentBtn.setSummary(getSilentSummary(silentValue));
 
-        // ���radioѡ���ˣ���wifi�Ͳ�����
+        // 如果radio选中了，则wifi就不可用
         aireplaneWifi.setEnabled(!config.getBoolean(Constants.PREFS_AIRPLANE_RADIO, false));
 
-        // �����豸���
+        // 设置设备类别
         deviceType.setEnabled(config.getBoolean(Constants.PREFS_TOGGLE_FLASH, true));
         String deviceValue = config.getString(Constants.PREFS_DEVICE_TYPE, Constants.DEVICE_TYPE1);
         deviceType.setValue(deviceValue);
         deviceType.setSummary(getDeviceSummary(deviceValue));
 
-        // ��ʾ��������������ʱ���������ò�����
+        // 显示亮度条件进度条时，级别设置不可用
         brightLevel.setActivity(this);
 
-        // ע��ѡ��仯������
+        // 注册选项变化监听器
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
-     * ���任ѡ��ʱҪ��̬���������ؼ��п�ѡ����Ŀ
+     * 当变换选项时要动态更新其他控件中可选的条目
      *
      * @param btnName
      * @return
      */
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         if (key.equals(Constants.PREFS_AIRPLANE_RADIO)) {
-            // ���ѡ����ֻ�ر��ƶ�����
+            // 如果选中了只关闭移动网络
             if (aireplaneRadio.isChecked()) {
                 aireplaneWifi.setEnabled(false);
             } else {
                 aireplaneWifi.setEnabled(true);
             }
 
-            // �����ǰ�İ�ť�ǿ��ŵ�
+            // 如果当前的按钮是开着的
             if (SwitchUtils.getNetworkState(this)) {
-                // �������ģʽ�Ѿ���
+                // 如果飞行模式已经打开
                 if (SwitchUtils.getAirplaneState(this)) {
-                    // �ȹرշ���ģʽ
+                    // 先关闭飞行模式
                     SwitchUtils.setAirplaneState(this, false);
                 } else {
-                    // �ȴ��ֻ�����
+                    // 先打开手机网络
                     NetUtils.setSignalState(this, true);
                 }
             }
@@ -124,30 +124,30 @@ public class ToggleConfigActivity extends PreferenceActivity implements OnShared
                 Utils.updateWidget(this);
             }
         } else if (key.equals(Constants.PREFS_USE_APN)) {
-            // �����ǰѡ����ʹ��APN
+            // 如果当前选择了使用APN
             if (useApn.isChecked()) {
-                // �����ǰ������������û�򿪵�
+                // 如果当前的数据连接是没打开的�
                 if (!NetUtils.getMobileNetworkState(this)) {
-                    // �ȴ��������ӣ��ڹر�APN
+                    // 先打开数据连接，在关闭APN
                     NetUtils.setMobileNetworkState(this, true);
                     ApnUtils.setApnState(this, false);
                 }
-                // ����Ǵ򿪵ģ�ֱ��Ҳ��APN
+                // 如果是打开的，直接也打开APNN
                 else {
                     ApnUtils.setApnState(this, true);
                 }
 
                 useApn.setSummary(R.string.use_apn_summary);
             }
-            // ����õ�����������
+            // 如果用的是数据连接
             else {
-                // �����ǰAPNû��
+                // 如果当前APN没打开
                 if (!ApnUtils.getApnState(this)) {
-                    // �ȴ�APN���ڹر���������
+                    // 先打开APN，在关闭数据连接
                     ApnUtils.setApnState(this, true);
                     NetUtils.setMobileNetworkState(this, false);
                 } else {
-                    // ���APN�Ѿ����ˣ���ֱ�Ӵ���������
+                    // 如果APN已经打开了，就直接打开数据连接
                     NetUtils.setMobileNetworkState(this, true);
                 }
             }

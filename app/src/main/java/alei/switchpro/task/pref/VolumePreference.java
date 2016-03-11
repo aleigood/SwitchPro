@@ -33,7 +33,7 @@ public class VolumePreference extends DialogPreference implements OnClickListene
         LayoutInflater inflater = parent.getLayoutInflater();
         View dlgView = inflater.inflate(R.layout.view_task_seekbar, null, false);
         seekBar = (SeekBar) dlgView.findViewById(R.id.seek_bar);
-        // ���ó�ʼֵ
+        // 设置初始值
         seekBar.setProgress(percent);
         builder.setView(dlgView);
     }

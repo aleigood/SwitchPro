@@ -30,7 +30,7 @@ public final class Task {
     public long endTime;
     public boolean enabled;
     /**
-     * ���ڱ�Ǵ�Task�ǿ�ʼ�����ǽ������񣬲��������ݿ�
+     * 用于标记此Task是开始任务还是结束任务，不存入数据库
      */
     public int type;
     public String message;

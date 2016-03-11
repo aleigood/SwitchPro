@@ -46,7 +46,7 @@ import java.util.List;
 public abstract class WidgetConfigBaseActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
     public static final String DEFAULT_BUTTON_IDS = "0,2,3,4,6";
     public static final int PREVIEW_ICON_COLOR = 0xFF4D4D4D;
-    // ���пؼ���key
+    // 所有控件的key
     private static final String KEY_LAYOUT = "list_layout";
     private static final String KEY_IND_COLOR_PICKER = "ind_color";
     private static final String KEY_ICON_COLOR_PICKER = "icon_color";
@@ -54,7 +54,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     private static final String KEY_DIVIDER_COLOR_PICKER = "divider_color";
     private final float ALPHA_VALUE = 0.8F;
     public String btnIds = DEFAULT_BUTTON_IDS;
-    // ����ѡ���ؼ�
+    // 下拉选择框控件
     public LinearLayout preView;
     public IndCustomPreference indColorPicker;
     public IconCustomPreference iconColorPicker;
@@ -81,25 +81,25 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
     protected void createAction(int appWidgetId) {
         widgetId = appWidgetId;
-        // ��ʼ�����ý���ؼ�
+        // 初始化配置界面控件
         initUI();
-        // ��ʼ����������
+        // 初始化界面数据
         initUIData();
-        // ��ʼ����ť��Ӧ�¼�
+        // 初始化按钮响应事件
         initBtnAction();
-        // ��ʼ��Ԥ��
+        // 初始化预览
         updatePreView();
     }
 
     protected void createAction(int appWidgetId, XmlEntity entity) {
         widgetId = appWidgetId;
-        // ��ʼ�����ý���ؼ�
+        // 初始化配置界面控件
         initUI();
-        // ��ʼ����������
+        // 初始化界面数据
         initUIData(entity);
-        // ��ʼ����ť��Ӧ�¼�
+        // 初始化按钮响应事件
         initBtnAction();
-        // ��ʼ��Ԥ��
+        // 初始化预览
         updatePreView();
     }
 
@@ -107,7 +107,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         Button cancelButton = (Button) findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(new OnClickListener() {
             public void onClick(View paramView) {
-                // ��widgetId�ͷ���ȡ�������û��ֱ�ӽ���
+                // 有widgetId就返回取消结果，没有直接结束
                 if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                     Intent resultValue = new Intent();
                     resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
@@ -156,7 +156,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             }
         });
 
-        // ȷ����ť
+        // 确定按钮
         Button saveButton = (Button) findViewById(R.id.button_apply);
         saveButton.setOnClickListener(new OnClickListener() {
             public void onClick(View paramView) {
@@ -170,30 +170,30 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * ȷ����ť�¼�
+     * 确定按钮事件
      */
     protected void saveBtnAction() {
-        // ��ÿ��WidgetId��Ӧ�İ�ť���ô��빲�����
+        // 把每个WidgetId对应的按钮配置存入共享参数
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor configEditor = config.edit();
 
-        // ��ť˳����֯���ַ�������
+        // 按钮顺序组织成字符串存入
         configEditor.putString(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetId), btnIds);
 
-        // ʹ�õĲ��ֵ�����,����ֱ������Դid,����������ʱ������
+        // 使用的布局的名称,不能直接用资源id,否则在升级时有问题
         configEditor.putString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, widgetId), listLayout.getValue());
 
-        // ��ȡͼ�����õ���ɫ
+        // 获取图标配置的颜色
         configEditor.putInt(String.format(Constants.PREFS_ICON_COLOR_FIELD_PATTERN, widgetId),
                 iconColorPicker.getLastColor());
         configEditor.putInt(String.format(Constants.PREFS_ICON_TRANS_FIELD_PATTERN, widgetId),
                 iconColorPicker.getLastTrans());
 
-        // ��ȡָʾ�����õ���ɫ
+        // 获取指示器配置的颜色
         configEditor.putInt(String.format(Constants.PREFS_IND_COLOR_FIELD_PATTERN, widgetId),
                 indColorPicker.getLastColor());
 
-        // ��ȡ�������õ���ɫ
+        // 获取背景配置的颜色
         if (backBitmap != null) {
             try {
                 String fileName = widgetId + "_back.png";
@@ -202,7 +202,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
                 fileOutputStream.close();
                 configEditor.putString(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId), fileName);
 
-                // ���������б�Ŀǰû�и��õĸ��·���
+                // 更新整个列表，目前没有更好的更新方法
                 getListView().invalidateViews();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -211,36 +211,36 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             configEditor.putInt(String.format(Constants.PREFS_BACK_COLOR_FIELD_PATTERN, widgetId),
                     backColorPicker.getLastColor());
 
-            // ɾ������ͼƬ�����ú�ͼƬ�ļ�
+            // 删除背景图片的配置和图片文件
             if (config.contains(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId))) {
                 String fileName = config.getString(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId),
                         "");
                 configEditor.remove(String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId));
 
-                // ɾ������ͼƬ�ļ�
+                // 删除背景图片文件
                 deleteFile(fileName);
             }
         }
 
-        // ��ȡ�ָ��ߵ���ɫ
+        // 获取分隔线的颜色
         configEditor.putInt(String.format(Constants.PREFS_DIVIDER_COLOR_FIELD_PATTERN, widgetId),
                 dividerColorPicker.getLastColor());
 
-        // �������һ������
+        // 保存最后一次配置
         configEditor.putString(Constants.PREFS_LAST_BUTTONS_ORDER, btnIds);
         configEditor.putString(Constants.PREFS_LAST_BACKGROUND, listLayout.getValue());
         configEditor.putInt(Constants.PREFS_LAST_ICON_COLOR, iconColorPicker.getLastColor());
         configEditor.putInt(Constants.PREFS_LAST_ICON_TRANS, iconColorPicker.getLastTrans());
         configEditor.putInt(Constants.PREFS_LAST_IND_COLOR, indColorPicker.getLastColor());
         configEditor.putInt(Constants.PREFS_LAST_DIVIDER_COLOR, dividerColorPicker.getLastColor());
-        // ������û��ʹ�ñ���ͼƬ�����汳����ɫ
+        // 不管有没有使用背景图片都保存背景颜色
         configEditor.putInt(Constants.PREFS_LAST_BACK_COLOR, backColorPicker.getLastColor());
 
         configEditor.commit();
     }
 
     /**
-     * �������õ�SD���ϣ�ÿ�ε��ȷ��ʱ�������������½������޸�
+     * 保存配置到SD卡上，每次点击确定时触发，无论是新建还是修改
      *
      * @param config
      * @param widgetId
@@ -264,13 +264,13 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         boolean hasSameConf = theSameEntity == null ? false : true;
         boolean saveSuccess = false;
 
-        // ������½���Widget,���Ƿ��Ѿ��������widget���������ж�
+        // 如果是新建的Widget,用是否已经存在这个widget的配置来判断
         if (!isModify) {
-            // ����ǵ�һ�δ���widget���ߴ�����һ����ͬ��Widget
+            // 如果是第一次创建widget或者创建了一个不同的Widget
             if (list.size() == 0 || !hasSameConf) {
                 list.add(entity);
             }
-            // ���������һ����ͬ��widget(����ֻ��˳��ͬ)���򸲸��Ѿ����ڵ����ã�������ť��˳��
+            // 如果创建了一个相同的widget(或者只是顺不同)，则覆盖已经存在的配置（包括按钮的顺序）�
             else {
                 theSameEntity.setBtnIds(newIds);
                 theSameEntity.setIconColor(iconColorPicker.getLastColor());
@@ -281,7 +281,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
                 theSameEntity.setDividerColor(dividerColorPicker.getLastColor());
             }
         }
-        // ������޸Ľ���ʱ���ҵ�ԭ����������ò��޸�
+        // 如果是修改界面时，找到原来保存的配置并修改
         else {
             XmlEntity tmpEntity = getSameConf(list, oldIds);
 
@@ -299,7 +299,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             tmpEntity.setDividerColor(dividerColorPicker.getLastColor());
         }
 
-        // ���浽"data"�ļ���
+        // 保存到"data"文件中
         saveSuccess = XmlUtil.writeWidgetXml(list, "data");
 
         if (!saveSuccess) {
@@ -330,7 +330,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     protected abstract void updateWidget(int appWidgetId);
 
     /**
-     * ��ʼ�����ý��������
+     * 初始化配置界面的数据
      *
      * @param appWidgetId
      */
@@ -346,7 +346,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         listLayout.setEntries(buildBackgroundEntries());
         listLayout.setEntryValues(buildBackgroundEntries());
 
-        // ��ʼ����ɫѡ����
+        // 初始化颜色选择器
         backColorPicker = (BackCustomPreference) findPreference(KEY_BACK_COLOR_PICKER);
         indColorPicker = (IndCustomPreference) findPreference(KEY_IND_COLOR_PICKER);
         iconColorPicker = (IconCustomPreference) findPreference(KEY_ICON_COLOR_PICKER);
@@ -534,12 +534,12 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         btNfc.setTag(Constants.BUTTON_NFC);
         btNfc.setOnClickListener(btnOnClickListener);
 
-        // ע��ѡ��仯������
+        // 注册选项变化监听器
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
-     * ��ȡ���һ�����õİ�ť˳�����û�еĻ�����һ��Ĭ��˳������Ҫ����
+     * 获取最后一次配置的按钮顺序，如果没有的话返回一个默认顺序，子类要覆盖
      *
      * @return
      */
@@ -559,7 +559,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         dividerColorPicker.setLastColor(entity.getDividerColor());
 
         PreferenceScreen cate = (PreferenceScreen) findPreference("background_category");
-        // ��ʼ���������ж�����ޱ�����Ҫɾ��ѡ��
+        // 初始化完成最后判断如果无背景，要删除选项
         if (layoutName.equals(layoutNoBack)) {
             cate.removePreference(backColorPicker);
             cate.removePreference(dividerColorPicker);
@@ -571,7 +571,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     private void initUIData() {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // ��ȡ��ǰwidget�ı����������ȡ������ʹ�����һ�α���
+        // 获取当前widget的背景，如果获取不到就使用最后一次背景
         String layoutName = config.getString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, widgetId), null);
 
         if (layoutName == null) {
@@ -581,7 +581,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         listLayout.setValue(layoutName);
         listLayout.setSummary(layoutName);
 
-        // ���һ�����õİ�ť˳��
+        // 最后一次配置的按钮顺序
         btnIds = getLastBtnOrder();
         backColorPicker.updateView();
         indColorPicker.updateView();
@@ -589,7 +589,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         dividerColorPicker.updateView();
 
         PreferenceScreen cate = (PreferenceScreen) findPreference("background_category");
-        // ��ʼ���������ж�����ޱ�����Ҫɾ��ѡ��
+        // 初始化完成最后判断如果无背景，要删除选项
         if (layoutName.equals(layoutNoBack)) {
             cate.removePreference(backColorPicker);
             cate.removePreference(dividerColorPicker);
@@ -607,7 +607,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * ���任ѡ��ʱҪ��̬���������ؼ��п�ѡ����Ŀ
+     * 当变换选项时要动态更新其他控件中可选的条目
      *
      * @param btnName
      * @return
@@ -635,7 +635,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
             }
         }
 
-        // ����Ԥ��
+        // 更新预览
         updatePreView();
     }
 
@@ -669,7 +669,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
                 int size = getWidgetSize();
                 int y = 0;
 
-                // ����С129600����
+                // 最大大小129600像素
                 switch (size) {
                     case 1:
                         y = 360;
@@ -727,7 +727,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         final String[] btnId = btnIds.split(",");
         for (int i = 0; i < btnId.length; i++) {
             int pos = -1;
-            // �ӵڶ�����ť��ʼƫ��
+            // 从第二个按钮开始偏移
             if (i != 0) {
                 switch (btnId.length) {
                     case 2:
@@ -812,7 +812,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
                                 v.setDrawingCacheEnabled(true);
                                 startDrag(v, Bitmap.createBitmap(v.getDrawingCache()));
 
-                                // �������������»�ȡ��������Ч��
+                                // 长按后立即更新会取消长按震动效果
                                 updatePreView();
                                 return true;
                             }
@@ -834,7 +834,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         String newIds = "";
 
         for (int i = 0; i < btnId.length; i++) {
-            // Ҫ��toString()������������Ч
+            // 要用toString()方法，否则无效
             if (!view.getTag().toString().equals(btnId[i])) {
                 if (newIds.equals("")) {
                     newIds += btnId[i];
@@ -849,17 +849,17 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * ׼���϶�����ʼ���϶����ͼ��
+     * 准备拖动，初始化拖动项的图像
      */
     private void startDrag(View v, Bitmap bm) {
-        // �ͷ�Ӱ����׼��Ӱ���ʱ�򣬷�ֹӰ��û�ͷţ�ÿ�ζ�ִ��һ��
+        // 释放影像，在准备影像的时候，防止影像没释放，每次都执行一下�
         if (mDragImage != null) {
             mWindowManager.removeView(mDragImage);
             mDragImage = null;
         }
 
         mWindowParams = new WindowManager.LayoutParams();
-        // ���ϵ��¼���y�����ϵ����λ�ã�
+        // 从上到下计算y方向上的相对位置，
         mWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
         mWindowParams.x = mDragPointX;
         mWindowParams.y = mDragPointY;
@@ -867,14 +867,14 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         mWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         mWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        // ������Щ�����ܹ�����׼ȷ��λ��ѡ������λ�ã��ճ�����
+        // 下面这些参数能够帮助准确定位到选中项点击位置，照抄即可
         mWindowParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         mWindowParams.format = PixelFormat.TRANSLUCENT;
         mWindowParams.windowAnimations = 0;
 
-        // ��Ӱ��ImagView��ӵ���ǰ��ͼ��
+        // 把影像ImagView添加到当前视图中
         mDragImage = new ImageView(this);
         mDragImage.setImageBitmap(bm);
         mDragImage.setPadding(0, 0, 0, 0);
@@ -883,7 +883,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         mWindowManager = (WindowManager) getSystemService("window");
         mWindowManager.addView(mDragImage, mWindowParams);
 
-        // ��
+        // 震动
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         vibrator.vibrate(25);
     }
@@ -895,11 +895,11 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
             switch (action) {
                 case MotionEvent.ACTION_UP:
-                    // �ͷ��϶�Ӱ��
+                    // 释放拖动影像
                     onDrop();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    // �϶�Ӱ��
+                    // 拖动影像
                     onMove((int) ev.getRawX(), (int) ev.getRawY());
                     break;
                 default:
@@ -912,14 +912,14 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * �϶�ִ�У���Move������ִ��
+     * 拖动执行，在Move方法中执行
      */
     public void onMove(final int x, final int y) {
         if (mDragImage != null) {
-            // ����һ����͸����
+            // 设置一点点的透明度
             mWindowParams.alpha = ALPHA_VALUE;
 
-            // ��������λ��
+            // 更新坐标位置
             int[] location = new int[2];
             preView.getLocationOnScreen(location);
             int maxHeight = location[1] + preView.getHeight() - mDragImage.getHeight();
@@ -927,7 +927,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
             mWindowParams.y = tmp > maxHeight ? maxHeight : tmp;
             mWindowParams.x = x - mXOffset;
-            // ���½���
+            // 更新界面
             mWindowManager.updateViewLayout(mDragImage, mWindowParams);
         }
 
@@ -952,12 +952,12 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
         String[] srcBtnId = btnIds.split(",");
         String dragId = mDragImage.getTag().toString();
 
-        // ���ҵ������ť��λ�ã������ж�����ǰ�ƶ����������ƶ�
+        // 先找到这个按钮的位置，用于判断是往前移动还是往后移动
         int pos = 0;
 
-        // �������ɾ��
+        // 如果有先删除
         for (int i = 0; i < srcBtnId.length; i++) {
-            // Ҫ��toString()������������Ч
+            // 要用toString()方法，否则无效
             if (dragId.equals(srcBtnId[i])) {
                 pos = i;
             } else {
@@ -971,7 +971,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
         final String[] btnId = tmpIds.split(",");
 
-        // �ҵ�Ҫ�滻�İ�ť��id
+        // 找到要替换的按钮的id
         for (int i = 0; i < btnId.length; i++) {
             View childView = preView.findViewWithTag(btnId[i]);
 
@@ -981,22 +981,22 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
 
             String childId = childView.getTag().toString();
 
-            // ��Ҫ�滻�İ�ť�����귶Χ�ڶ��Ҳ�������
+            // 在要替换的按钮的坐标范围内而且不是自身
             if (x < childView.getRight() && x > childView.getLeft() && !dragId.equals(childId)) {
                 String newIds = "";
 
                 for (int j = 0; j < btnId.length; j++) {
-                    // �����Ҫ�滻�İ�ť
+                    // 如果是要替换的按钮
                     if (childId.equals(btnId[j])) {
                         if (newIds.equals("")) {
-                            // ��ǰ���ƶ�
+                            // 往前面移动
                             if (j < pos) {
                                 newIds += dragId + "," + btnId[j];
                             } else {
                                 newIds += btnId[j] + "," + dragId;
                             }
                         } else {
-                            // ��ǰ���ƶ�
+                            // 往前面移动
                             if (j < pos) {
                                 newIds += "," + dragId + "," + btnId[j];
                             } else {
@@ -1020,7 +1020,7 @@ public abstract class WidgetConfigBaseActivity extends PreferenceActivity implem
     }
 
     /**
-     * ֹͣ�϶�
+     * 停止拖动
      */
     public void onDrop() {
         if (mDragImage != null) {

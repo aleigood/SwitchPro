@@ -99,17 +99,17 @@ public class TaskModifyActivity extends PreferenceActivity {
         Button b = (Button) findViewById(R.id.button_apply);
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // ��У�飬�Ƿ�ʼʱ��С�ڽ���ʱ��
+                // 先校验，是否开始时间小于结束时间
                 if (mHour > mHour2 || (mHour == mHour2 && mMinutes >= mMinutes2)) {
                     Toast.makeText(TaskModifyActivity.this, "Start time must be less than the End time.",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // ��ɾ��ȫ���Ŀ���
+                // 先删除全部的开关
                 TaskUtil.deleteSwitch(dbOper, mId);
 
-                // ���ѡ���˾���������,��ǰ�������ڴ�������ʱ����
+                // 如果选中了就新增开关,当前的铃声在触发任务时设置
                 if (ringtonePref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_RINGTONE, ringtonePref.getAlertString(), "");
                 }
@@ -134,7 +134,7 @@ public class TaskModifyActivity extends PreferenceActivity {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_SILENT, silentPref.getValue(), "");
                 }
 
-                // ����������һ������ֻ��ٷֱȣ��ڶ���������֮ǰ��ֵ,���ֵ�ڴ����������ٱ���
+                // 存音量，第一个参数只存百分比，第二个参数存之前的值,这个值在触发任务是再保存
                 if (volumePref.isChecked()) {
                     TaskUtil.addSwitch(dbOper, mId, Toggle.SWITCH_VOLUME, volumePref.getPercent() + "", "");
                 }
@@ -194,7 +194,7 @@ public class TaskModifyActivity extends PreferenceActivity {
         silentPref.setSummary(getResources().getString(R.string.silent));
         silentPref.initData();
 
-        // ��ʼ���ɵ�ǰ�İٷֱ�
+        // 初始化成当前的百分比
         int initPercent = (int) (((float) currentVolume / (float) maxVolume) * 100);
         volumePref = (VolumePreference) findPreference("volume");
         volumePref.setPercent(initPercent);
@@ -260,7 +260,7 @@ public class TaskModifyActivity extends PreferenceActivity {
             }
 
             if (tmp.switchId == Toggle.SWITCH_VOLUME) {
-                // ��ʼ����ʵ�ʵİٷֱ�
+                // 初始化成实际的百分比
                 int actual = Integer.parseInt(tmp.param1);
                 volumePref.setChecked(true);
                 volumePref.setSummary(actual + " %");

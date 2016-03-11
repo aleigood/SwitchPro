@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingLeft="15dip"
-    android:paddingRight="15dip" >
+    android:paddingRight="15dip">
 
     <ImageView
         android:id="@+id/pref_current_img"
@@ -16,7 +16,7 @@
         android:background="#ffffff"
         android:clickable="false"
         android:focusable="false"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/pref_current_txt"
@@ -28,6 +28,6 @@
         android:paddingLeft="15dip"
         android:paddingRight="15dip"
         android:textAppearance="?android:attr/textAppearanceLargeInverse"
-        android:textColor="#FF000000" />
+        android:textColor="#FF000000"/>
 
 </LinearLayout>

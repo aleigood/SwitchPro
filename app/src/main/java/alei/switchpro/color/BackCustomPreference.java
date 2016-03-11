@@ -120,7 +120,7 @@ public class BackCustomPreference extends Preference {
             }
         };
 
-        // ��Ҫ������ ��ɫ��Ĳ���
+        // 主要是设置 调色板的布局
         LinearLayout layout = new LinearLayout(getContext());
         layout.setPadding(0, 0, 0, 0);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -142,13 +142,13 @@ public class BackCustomPreference extends Preference {
         mCPView.setFocusable(true);
         layout.addView(mCPView);
 
-        // ���һ�����صı༭��Ϊ�˿��Դ򿪼��̣������޷���ʾ�����
+        // 添加一个隐藏的编辑框，为了可以打开键盘，否则无法显示软键盘�
         EditText hideEdit = new EditText(parent);
         hideEdit.setVisibility(View.GONE);
         layout.addView(hideEdit);
         layout.setId(android.R.id.widget_frame);
 
-        // ���öԻ���ı���ͼƬ
+        // 设置对话框的背景图片
         Bitmap bitmap = BitmapFactory.decodeResource(parent.getResources(), R.drawable.trans_bg);
         BitmapDrawable drawable = new BitmapDrawable(bitmap);
         drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
@@ -163,7 +163,7 @@ public class BackCustomPreference extends Preference {
 
         builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener() {
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                // �������úõ���ɫ
+                // 保存设置好的颜色
                 applyColorAction(mCPView.getColor());
             }
         });
@@ -184,7 +184,7 @@ public class BackCustomPreference extends Preference {
             }
         });
 
-        // �������������ɫʱ��̬�ı�ѡ������ɫ
+        // 在输入框输入颜色时动态改变选择器颜色
         editText.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                 setColor();
@@ -212,7 +212,7 @@ public class BackCustomPreference extends Preference {
     }
 
     private void applyColorAction(int currentColor) {
-        // ������ɫʱ�ѱ���ͼֵ�գ���ֹ������ʾ����ͼ
+        // 设置颜色时把背景图值空，防止优先显示背景图
         parent.backBitmap = null;
         lastColor = currentColor;
         updateView();
@@ -235,7 +235,7 @@ public class BackCustomPreference extends Preference {
             } else {
                 lastColor = (lastColor >= 0 && lastColor <= 255) ? Constants.DEFAULT_BACKGROUND_COLOR : lastColor;
 
-                // ����б���ͼ��������ʾ
+                // 如果有背景图，优先显示
                 if (parent.backBitmap != null) {
                     if (preview_img != null)
                         preview_img.setBackgroundColor(Color.TRANSPARENT);

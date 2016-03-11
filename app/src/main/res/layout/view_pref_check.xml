@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pref_check"
+<CheckBox android:id="@+id/pref_check"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:clickable="true"
-    android:focusable="false" />
+    android:focusable="false"/>

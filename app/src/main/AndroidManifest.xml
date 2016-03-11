@@ -1,307 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
     package="alei.switchpro"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionCode="44"
-    android:versionName="2.2.9" >
+    android:versionName="2.2.9">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
-    <uses-permission android:name="android.permission.BATTERY_STATS" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIMAX_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIMAX_STATE" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
-    <uses-permission android:name="android.permission.BIND_DEVICE_ADMIN" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
-    <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="14" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIMAX_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIMAX_STATE"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
+    <uses-permission android:name="android.permission.BIND_DEVICE_ADMIN"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <uses-feature
         android:name="android.hardware.telephony"
-        android:required="false" />
+        android:required="false"/>
     <uses-feature
         android:name="android.hardware.location"
-        android:required="false" />
+        android:required="false"/>
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="false"/>
     <uses-feature
         android:name="android.hardware.bluetooth"
-        android:required="false" />
+        android:required="false"/>
     <uses-feature
         android:name="android.hardware.wifi"
-        android:required="false" />
+        android:required="false"/>
 
     <application
         android:name=".MyApplication"
-        android:debuggable="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:persistent="true" >
+        android:persistent="true">
         <activity
             android:name=".MainConfigActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".modify.ConfigModifyActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:theme="@style/theme_light_noTitleBar" />
+            android:theme="@style/theme_light_noTitleBar"/>
         <activity
             android:name=".WidgetConfigActivityX1"
             android:label="@string/app_name"
-            android:theme="@style/theme_light_noTitleBar" >
+            android:theme="@style/theme_light_noTitleBar">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".WidgetConfigActivityX2"
             android:label="@string/app_name"
-            android:theme="@style/theme_light_noTitleBar" >
+            android:theme="@style/theme_light_noTitleBar">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".WidgetConfigActivityX3"
             android:label="@string/app_name"
-            android:theme="@style/theme_light_noTitleBar" >
+            android:theme="@style/theme_light_noTitleBar">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".WidgetConfigActivityX4"
             android:label="@string/app_name"
-            android:theme="@style/theme_light_noTitleBar" >
+            android:theme="@style/theme_light_noTitleBar">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".WidgetConfigActivityX5"
             android:label="@string/app_name"
-            android:theme="@style/theme_light_noTitleBar" >
+            android:theme="@style/theme_light_noTitleBar">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".WidgetConfigActivityNotify"
             android:label="@string/app_name"
-            android:theme="@style/theme_light_noTitleBar" >
+            android:theme="@style/theme_light_noTitleBar">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".brightness.BrightnessActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/theme_translucent_notitlebar" />
+            android:theme="@style/theme_translucent_notitlebar"/>
         <activity
             android:name=".GoToSettingsActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/theme_translucent_notitlebar" />
+            android:theme="@style/theme_translucent_notitlebar"/>
         <activity
             android:name=".brightness.BrightnessBar"
             android:launchMode="singleInstance"
-            android:theme="@style/theme_translucent_notitlebar" />
+            android:theme="@style/theme_translucent_notitlebar"/>
         <activity
             android:name=".flash.FlashlightActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".reboot.RebootActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/theme_translucent_notitlebar" />
+            android:theme="@style/theme_translucent_notitlebar"/>
         <activity
             android:name=".timeout.TimeoutSelectorActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/theme_translucent_notitlebar" />
+            android:theme="@style/theme_translucent_notitlebar"/>
         <activity
             android:name=".lock.DeviceAdminActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/theme_translucent_notitlebar" />
+            android:theme="@style/theme_translucent_notitlebar"/>
         <activity
             android:name=".volume.VolumeActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/theme_translucent_notitlebar" />
+            android:theme="@style/theme_translucent_notitlebar"/>
         <activity
             android:name=".ToggleConfigActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"/>
         <activity
             android:name=".icon.IconPrefActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"/>
         <activity
             android:name=".task.TaskModifyActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name"/>
         <activity
             android:name=".task.TaskMainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="alei.switchpro.task.TASK_MAIN_ACTION" />
+                <action android:name="alei.switchpro.task.TASK_MAIN_ACTION"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".process.ProcessMainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
-            android:label="@string/task_settings" >
-        </activity>
+            android:label="@string/task_settings"/>
 
         <receiver
             android:name=".WidgetProviderX1"
-            android:label="@string/app_nameX1" >
+            android:label="@string/app_nameX1">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="alei.switchpro.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="alei.switchpro.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info1" >
-            </meta-data>
+                android:resource="@xml/appwidget_info1"/>
         </receiver>
         <receiver
             android:name=".WidgetProviderX2"
-            android:label="@string/app_nameX2" >
+            android:label="@string/app_nameX2">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="alei.switchpro.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="alei.switchpro.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info2" >
-            </meta-data>
+                android:resource="@xml/appwidget_info2"/>
         </receiver>
         <receiver
             android:name=".WidgetProviderX3"
-            android:label="@string/app_nameX3" >
+            android:label="@string/app_nameX3">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="alei.switchpro.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="alei.switchpro.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info3" >
-            </meta-data>
+                android:resource="@xml/appwidget_info3"/>
         </receiver>
         <receiver
             android:name=".WidgetProviderX4"
-            android:label="@string/app_nameX4" >
+            android:label="@string/app_nameX4">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="alei.switchpro.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="alei.switchpro.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info4" >
-            </meta-data>
+                android:resource="@xml/appwidget_info4"/>
         </receiver>
         <receiver
             android:name=".WidgetProviderX5"
-            android:label="@string/app_nameX5" >
+            android:label="@string/app_nameX5">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="alei.switchpro.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="alei.switchpro.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info5" >
-            </meta-data>
+                android:resource="@xml/appwidget_info5"/>
         </receiver>
         <receiver
             android:name=".MainBrocastReceiver"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="com.htc.net.wimax.WIMAX_ENABLED_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-                <action android:name="android.bluetooth.intent.action.BLUETOOTH_STATE_CHANGED" />
-                <action android:name="android.intent.action.CLOSE_SYSTEM_DIALOGS" />
-                <action android:name="android.intent.action.AIRPLANE_MODE" />
-                <action android:name="android.intent.action.SCREEN_OFF" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.media.RINGER_MODE_CHANGED" />
-                <action android:name="android.media.VIBRATE_SETTING_CHANGED" />
-                <action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
-                <action android:name="android.net.conn.TETHER_STATE_CHANGED" />
-                <action android:name="android.net.conn.BACKGROUND_DATA_SETTING_CHANGED" />
-                <action android:name="com.android.sync.SYNC_CONN_STATUS_CHANGED" />
-                <action android:name="com.android.internal.telephony.MOBILE_DATA_CHANGED" />
-                <action android:name="com.android.settings.GPS_STATUS_CHANGED" />
-                <action android:name="android.location.PROVIDERS_CHANGED" />
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-                <action android:name="android.intent.action.PHONE_STATE" />
-                <action android:name="android.nfc.action.ADAPTER_STATE_CHANGED" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="com.htc.net.wimax.WIMAX_ENABLED_CHANGED"/>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
+                <action android:name="android.bluetooth.intent.action.BLUETOOTH_STATE_CHANGED"/>
+                <action android:name="android.intent.action.CLOSE_SYSTEM_DIALOGS"/>
+                <action android:name="android.intent.action.AIRPLANE_MODE"/>
+                <action android:name="android.intent.action.SCREEN_OFF"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.media.RINGER_MODE_CHANGED"/>
+                <action android:name="android.media.VIBRATE_SETTING_CHANGED"/>
+                <action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED"/>
+                <action android:name="android.net.conn.TETHER_STATE_CHANGED"/>
+                <action android:name="android.net.conn.BACKGROUND_DATA_SETTING_CHANGED"/>
+                <action android:name="com.android.sync.SYNC_CONN_STATUS_CHANGED"/>
+                <action android:name="com.android.internal.telephony.MOBILE_DATA_CHANGED"/>
+                <action android:name="com.android.settings.GPS_STATUS_CHANGED"/>
+                <action android:name="android.location.PROVIDERS_CHANGED"/>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.nfc.action.ADAPTER_STATE_CHANGED"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_SCANNER_STARTED" />
-                <action android:name="android.intent.action.MEDIA_SCANNER_FINISHED" />
-                <action android:name="android.intent.action.MEDIA_CHECKING" />
-                <action android:name="android.intent.action.MEDIA_MOUNTED" />
-                <action android:name="android.intent.action.MEDIA_SHARED" />
+                <action android:name="android.intent.action.MEDIA_SCANNER_STARTED"/>
+                <action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"/>
+                <action android:name="android.intent.action.MEDIA_CHECKING"/>
+                <action android:name="android.intent.action.MEDIA_MOUNTED"/>
+                <action android:name="android.intent.action.MEDIA_SHARED"/>
 
-                <data android:scheme="file" />
+                <data android:scheme="file"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.app.device_admin"
-                android:resource="@xml/device_admin" />
+                android:resource="@xml/device_admin"/>
         </receiver>
-        <receiver android:name=".task.TaskReceiver" >
+        <receiver android:name=".task.TaskReceiver">
             <intent-filter>
-                <action android:name="alei.switchpro.task.TASK_ACION" />
+                <action android:name="alei.switchpro.task.TASK_ACION"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".task.TaskInitReceiver" >
+        <receiver android:name=".task.TaskInitReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
             </intent-filter>
         </receiver>
     </application>

@@ -31,7 +31,7 @@ public class ColorAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Resources res = activity.getResources();
 
-        // ˳���ܴ�����
+        // 顺序不能错，根据
         mItems.add(new ListItem(res, R.string.color_pink, R.drawable.ind_pink_on_c));
         mItems.add(new ListItem(res, R.string.color_red, R.drawable.ind_red_on_c));
         mItems.add(new ListItem(res, R.string.color_orange, R.drawable.ind_orange_on_c));

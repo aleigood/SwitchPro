@@ -22,14 +22,14 @@ public class BluetoothUtils {
     public static final int STATE_ON = 12;
     public static final int STATE_TURNING_OFF = 13;
 
-    // ��һ�ַ�����ʹ�÷����ȡBluetooth Adapter
+    // 第一种方法，使用服务获取Bluetooth Adapter
     private static Object device;
     private static Method disableMethod;
     private static Method enableMethod;
     private static Method isEnabledMethod;
     private static Method getStateMethod;
 
-    // �ڶ��ַ�����ֱ��ͨ�������ȡBluetooth Adapter
+    // 第二种方法，直接通过反射获取Bluetooth Adapter
     private static Object device1;
     private static Method disableMethod1;
     private static Method enableMethod1;
@@ -73,7 +73,7 @@ public class BluetoothUtils {
         try {
             return ((Boolean) isEnabledMethod.invoke(device, new Object[]{})).booleanValue();
         } catch (Exception e) {
-            // ��֤��һ�ַ����޷�ִ��ʱ�������쳣���ڶ��ַ�������ִ��
+            // 保证第一种方法无法执行时或抛了异常，第二种方法可以执行
             try {
                 return ((Boolean) isEnabledMethod1.invoke(device1, new Object[]{})).booleanValue();
             } catch (Exception e2) {
@@ -96,7 +96,7 @@ public class BluetoothUtils {
         try {
             state = ((Integer) getStateMethod.invoke(device, new Object[]{})).intValue();
         } catch (Exception e) {
-            // ��֤��һ�ַ����޷�ִ��ʱ�������쳣���ڶ��ַ�������ִ��
+            // 保证第一种方法无法执行时或抛了异常，第二种方法可以执行
             try {
                 state = ((Integer) getStateMethod1.invoke(device1, new Object[]{})).intValue();
             } catch (Exception e2) {
@@ -125,7 +125,7 @@ public class BluetoothUtils {
     public static void toggleBluetooth(Context context) {
         initialize(context);
 
-        // ���Ҫ������
+        // 如果要打开蓝牙
         if (!isBluetoothEnabled(context)) {
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -143,7 +143,7 @@ public class BluetoothUtils {
             } else {
                 enable(context);
 
-                // �����������Ҫ�����ý��棬�ڴ򿪺󵯳�����
+                // 如果配置了需要打开配置界面，在打开后弹出界面
                 boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_BLUETOOTH, false);
 
                 if (openAction) {
@@ -168,7 +168,7 @@ public class BluetoothUtils {
     }
 
     public static void disable(Context context) {
-        // �ж��Ƿ��Ѿ���ȷִ����
+        // 判断是否已经正确执行了
         boolean result = false;
 
         try {
@@ -177,21 +177,21 @@ public class BluetoothUtils {
         } catch (Exception e) {
         }
 
-        // ��֤��һ�ַ����޷�ִ��ʱ�������쳣���ڶ��ַ�������ִ��
+        // 保证第一种方法无法执行时或抛了异常，第二种方法可以执行
         try {
             disableMethod1.invoke(device1, new Object[]{});
             result = true;
         } catch (Exception e) {
         }
 
-        // ������ַ���������
+        // 如果两种方法都不行
         if (!result) {
             switchBT(context);
         }
     }
 
     public static void enable(Context context) {
-        // �ж��Ƿ��Ѿ���ȷִ����
+        // 判断是否已经正确执行了
         boolean result = false;
 
         try {
@@ -200,7 +200,7 @@ public class BluetoothUtils {
         } catch (Exception e) {
         }
 
-        // ��֤��һ�ַ����޷�ִ��ʱ�������쳣���ڶ��ַ�������ִ��
+        // 保证第一种方法无法执行时或抛了异常，第二种方法可以执行
         try {
             enableMethod1.invoke(device1, new Object[]{});
             result = true;

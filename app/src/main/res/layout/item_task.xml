@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="5dip" >
+    android:paddingLeft="5dip">
 
     <alei.switchpro.task.DigitalClock
         android:id="@+id/digitalClock"
@@ -12,25 +12,25 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingLeft="8dip"
-        android:paddingRight="8dip" >
+        android:paddingRight="8dip">
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/timeDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
+                android:textSize="30sp"/>
 
             <LinearLayout
                 android:id="@+id/am_pm"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="4dip"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/am"
@@ -39,7 +39,7 @@
                     android:layout_weight=".5"
                     android:gravity="bottom"
                     android:includeFontPadding="false"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <TextView
                     android:id="@+id/pm"
@@ -48,7 +48,7 @@
                     android:layout_weight=".5"
                     android:gravity="top"
                     android:includeFontPadding="false"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
             </LinearLayout>
 
             <TextView
@@ -56,21 +56,21 @@
                 android:layout_height="wrap_content"
                 android:text=" - "
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/timeDisplay2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
+                android:textSize="30sp"/>
 
             <LinearLayout
                 android:id="@+id/am_pm2"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="4dip"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/am2"
@@ -79,7 +79,7 @@
                     android:layout_weight=".5"
                     android:gravity="bottom"
                     android:includeFontPadding="false"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <TextView
                     android:id="@+id/pm2"
@@ -88,7 +88,7 @@
                     android:layout_weight=".5"
                     android:gravity="top"
                     android:includeFontPadding="false"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="10sp" />
+            android:textSize="10sp"/>
 
         <TextView
             android:id="@+id/label"
@@ -106,7 +106,7 @@
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:textStyle="bold|italic" />
+            android:textStyle="bold|italic"/>
     </alei.switchpro.task.DigitalClock>
 
     <CheckBox
@@ -114,6 +114,6 @@
         android:layout_width="60dip"
         android:layout_height="76dip"
         android:layout_gravity="center_vertical"
-        android:focusable="false" />
+        android:focusable="false"/>
 
 </LinearLayout>

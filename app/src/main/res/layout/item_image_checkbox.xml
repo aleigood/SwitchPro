@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingLeft="5dip"
-    android:paddingRight="5dip" >
+    android:paddingRight="5dip">
 
     <ImageView
         android:id="@+id/pref_img"
@@ -13,7 +13,7 @@
         android:layout_height="48dip"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="4dip"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/pref_txt"
@@ -22,11 +22,11 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeight"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <CheckBox
         android:id="@+id/pref_checkbox"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"/>
 
 </LinearLayout>

@@ -59,7 +59,7 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
     }
 
     /**
-     * ���������������Preferenceʵ�����Ժ����
+     * 这个方法会在整个Preference实例化以后调用
      *
      * @param parent
      */
@@ -160,7 +160,7 @@ public class LevelPreference extends DialogPreference implements OnCheckedChange
     }
 
     /*
-     * ֻ����ʾʱ����
+     * 只在显示时调用
      * 
      * @see android.preference.Preference#onBindView(android.view.View)
      */

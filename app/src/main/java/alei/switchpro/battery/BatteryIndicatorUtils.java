@@ -32,7 +32,7 @@ public class BatteryIndicatorUtils {
             return BitmapFactory.decodeResource(resources, R.drawable.icon_battery_full);
         }
 
-        // inMutable����level 11��֧�֣�����ֻ�ܸ���
+        // inMutable属性level 11才支持，这里只能复制
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         Bitmap scaledBitmap = BitmapFactory.decodeResource(resources, R.drawable.batterynumber_blank, options);
@@ -119,14 +119,14 @@ public class BatteryIndicatorUtils {
         return null;
     }
 
-    // �Զ���ͼ��ʱʹ�á��˷���ֱ�Ӱ����ֻ���ͼƬ��
+    // 自定义图标时使用。此方法直接把文字画在图片上
     public static Bitmap getIcon(Context paramContext, Bitmap srcBitmap, int level) {
         int width = srcBitmap.getWidth();
         int height = srcBitmap.getHeight();
         int[] pixels = new int[width * height];
         srcBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
 
-        // ��ԭλͼ�и�������
+        // 从原位图中复制像素
         Bitmap newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         newBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
@@ -134,7 +134,7 @@ public class BatteryIndicatorUtils {
 
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
-        // �����
+        // 抗锯齿
         paint.setAntiAlias(true);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         paint.setTypeface(Typeface.DEFAULT_BOLD);

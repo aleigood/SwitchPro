@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<level-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:maxLevel="0">
         <layer-list>
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -15,7 +15,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -24,7 +24,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -33,7 +33,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -42,7 +42,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -51,7 +51,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -60,7 +60,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -69,7 +69,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -78,7 +78,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -87,7 +87,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -96,12 +96,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -110,12 +110,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -124,12 +124,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -138,12 +138,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -152,12 +152,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -166,12 +166,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -180,12 +180,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -194,12 +194,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -208,12 +208,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -222,12 +222,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -236,12 +236,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -250,12 +250,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -264,12 +264,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -278,12 +278,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -292,12 +292,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -306,12 +306,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -320,12 +320,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -334,12 +334,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -348,12 +348,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -362,12 +362,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -376,12 +376,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -390,12 +390,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -404,12 +404,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -418,12 +418,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -432,12 +432,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -446,12 +446,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -460,12 +460,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -474,12 +474,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -488,12 +488,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -502,12 +502,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -516,12 +516,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -530,12 +530,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -544,12 +544,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -558,12 +558,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -572,12 +572,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -586,12 +586,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -600,12 +600,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -614,12 +614,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -628,12 +628,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -642,12 +642,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -656,12 +656,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -670,12 +670,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -684,12 +684,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -698,12 +698,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -712,12 +712,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -726,12 +726,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -740,12 +740,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -754,12 +754,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -768,12 +768,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -782,12 +782,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -796,12 +796,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -810,12 +810,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -824,12 +824,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -838,12 +838,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -852,12 +852,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -866,12 +866,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -880,12 +880,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -894,12 +894,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -908,12 +908,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -922,12 +922,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -936,12 +936,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -950,12 +950,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -964,12 +964,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -978,12 +978,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -992,12 +992,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -1006,12 +1006,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -1020,12 +1020,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -1034,12 +1034,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -1048,12 +1048,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -1062,12 +1062,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -1076,12 +1076,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -1090,12 +1090,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -1104,12 +1104,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -1118,12 +1118,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -1132,12 +1132,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -1146,12 +1146,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -1160,12 +1160,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -1174,12 +1174,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -1188,12 +1188,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -1202,12 +1202,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -1216,12 +1216,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_0" />
+                    android:src="@drawable/notify_battery_white_0"/>
             </item>
         </layer-list>
     </item>
@@ -1230,12 +1230,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_1" />
+                    android:src="@drawable/notify_battery_white_1"/>
             </item>
         </layer-list>
     </item>
@@ -1244,12 +1244,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_2" />
+                    android:src="@drawable/notify_battery_white_2"/>
             </item>
         </layer-list>
     </item>
@@ -1258,12 +1258,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_3" />
+                    android:src="@drawable/notify_battery_white_3"/>
             </item>
         </layer-list>
     </item>
@@ -1272,12 +1272,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_4" />
+                    android:src="@drawable/notify_battery_white_4"/>
             </item>
         </layer-list>
     </item>
@@ -1286,12 +1286,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_5" />
+                    android:src="@drawable/notify_battery_white_5"/>
             </item>
         </layer-list>
     </item>
@@ -1300,12 +1300,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_6" />
+                    android:src="@drawable/notify_battery_white_6"/>
             </item>
         </layer-list>
     </item>
@@ -1314,12 +1314,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_7" />
+                    android:src="@drawable/notify_battery_white_7"/>
             </item>
         </layer-list>
     </item>
@@ -1328,12 +1328,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_8" />
+                    android:src="@drawable/notify_battery_white_8"/>
             </item>
         </layer-list>
     </item>
@@ -1342,12 +1342,12 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
             <item android:left="17dip">
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_9" />
+                    android:src="@drawable/notify_battery_white_9"/>
             </item>
         </layer-list>
     </item>
@@ -1356,7 +1356,7 @@
             <item>
                 <bitmap
                     android:gravity="left"
-                    android:src="@drawable/notify_battery_white_f" />
+                    android:src="@drawable/notify_battery_white_f"/>
             </item>
         </layer-list>
     </item>

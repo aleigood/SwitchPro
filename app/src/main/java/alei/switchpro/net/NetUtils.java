@@ -31,16 +31,16 @@ public class NetUtils {
             Object obj = method.invoke(sTelephonyManager, new Object[]{});
 
             if (state) {
-                // invoke�󷵻�ITelephony
+                // invoke后返回ITelephony
                 Method tmp = obj.getClass().getMethod("enableDataConnectivity", new Class[]{});
                 tmp.invoke(obj, new Object[]{});
             } else {
-                // invoke�󷵻�ITelephony
+                // invoke后返回ITelephony
                 Method tmp = obj.getClass().getMethod("disableDataConnectivity", new Class[]{});
                 tmp.invoke(obj, new Object[]{});
             }
 
-            // �洢��ǰ��״̬���Ա��������Ժ�ָ�״̬
+            // 存储当前的状态，以便在重启以后恢复状态
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor configEditor = config.edit();
             configEditor.putBoolean(Constants.PREF_NET_STATE, state);
@@ -53,7 +53,7 @@ public class NetUtils {
     public static void toggleMobileNetwork9(Context context) {
         ConnectivityManager sConnectivityManager = (ConnectivityManager) context.getSystemService("connectivity");
 
-        // �������������л����ȴ�APN(sdk17 ��ȡapn�ᱨ��)
+        // 如果用这个开关切换，先打开APN(sdk17 读取apn会报错)
         if (VERSION.SDK_INT < 17 && !ApnUtils.getApnState(context)) {
             ApnUtils.setApnState(context, true);
         }
@@ -73,7 +73,7 @@ public class NetUtils {
     }
 
     public static void toggleMobileNetwork(Context context) {
-        // �������������л����ȴ�APN
+        // 如果用这个开关切换，先打开APN
         if (!ApnUtils.getApnState(context)) {
             ApnUtils.setApnState(context, true);
         }
@@ -123,14 +123,14 @@ public class NetUtils {
     }
 
     public static void initNetworkState(Context context) {
-        // �洢��ǰ��״̬���Ա��������Ժ�ָ�״̬
+        // 存储当前的状态，以便在重启以后恢复状态
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (config.contains(Constants.PREF_NET_STATE)) {
-            // ���û��ȡ����������Ϊ���Ѿ��򿪵ģ���������
+            // 如果没获取到参数就认为是已经打开的，不做操作
             boolean state = config.getBoolean(Constants.PREF_NET_STATE, true);
 
-            // ���֮ǰ�ǹرյ�,����������ر��ƶ�����
+            // 如果之前是关闭的,那在重启后关闭移动网络
             if (!state) {
                 NetUtils.setMobileNetworkState(context, false);
             }

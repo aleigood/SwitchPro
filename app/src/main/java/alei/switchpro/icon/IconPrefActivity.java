@@ -164,7 +164,7 @@ public class IconPrefActivity extends PreferenceActivity {
         this.startActivityForResult(localIntent, reqCode);
     }
 
-    // ��Ҫ���ǵ����û��ѡ���ͼƬ��Ӧ����η��أ���ûѡ��ͼƬ��η���
+    // 需要考虑到如果没有选择的图片的应用如何返回，和没选择图片如何返回
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -295,7 +295,7 @@ public class IconPrefActivity extends PreferenceActivity {
 
         if ((width > scaledSize) || (height > scaledSize)) {
             if (width > height) {
-                // ʹͼ�񲻻�����
+                // 使图像不会拉伸
                 newWidth = scaledSize;
                 newHeight = scaledSize * height / width;
             } else {
@@ -307,7 +307,7 @@ public class IconPrefActivity extends PreferenceActivity {
         int left = (scaledSize - newWidth) / 2;
         int right = (scaledSize - newHeight) / 2;
         Rect srcRect = new android.graphics.Rect(0, 0, width, height);
-        // ���ͼ����С��48��ʹͼ�����
+        // 如果图像本身小于48，使图像居中
         Rect dstRect = new android.graphics.Rect(left, right, left + newWidth, right + newHeight);
 
         Canvas canvas = new Canvas();

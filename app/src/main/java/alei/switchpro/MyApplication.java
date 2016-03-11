@@ -32,10 +32,10 @@ public class MyApplication extends Application {
 
         registerReceiver(mainReceiver, new IntentFilter("android.intent.action.BATTERY_CHANGED"));
 
-        // �������������ʼ������״̬����ΪĬ�������󶼻����������
+        // 用于在重启后初始化网络状态，因为默认重启后都会打开数据网络�
         NetUtils.initNetworkState(this);
 
-        // ��ʼ����������״̬�ļ�����
+        // 初始化监听网络状态的监听器
         TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         mTelephonyMgr.listen(new NetStateListener(this), PhoneStateListener.LISTEN_SERVICE_STATE
                 | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE | PhoneStateListener.LISTEN_SIGNAL_STRENGTH);

@@ -45,14 +45,14 @@ public class IconPreferenceScreen extends Preference {
 
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View paramView) {
-                // �ܵ����˵���ļ��������Ѿ�����
+                // 能点击，说明文件和配置已经存在
                 config.edit().remove(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, iconId)).commit();
                 context.deleteFile(fileName);
                 button.setEnabled(false);
                 WidgetProviderUtil.freeMemory(iconId);
 
                 if (imageView != null && mIcon != null) {
-                    // ����˾�
+                    // 清除滤镜
                     mIcon.clearColorFilter();
                     mIcon.setAlpha(255);
                     imageView.setImageDrawable(mIcon);
@@ -78,7 +78,7 @@ public class IconPreferenceScreen extends Preference {
             button.setEnabled(false);
 
             if (imageView != null && mIcon != null) {
-                // ����˾�
+                // 清除滤镜
                 mIcon.clearColorFilter();
                 mIcon.setAlpha(255);
                 imageView.setImageDrawable(mIcon);

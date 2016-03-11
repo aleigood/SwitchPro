@@ -52,7 +52,7 @@ public class DividerCustomPreference extends Preference {
     public void init(Context context) {
         this.parent = (WidgetConfigBaseActivity) context;
 
-        // ���һ����ɫ
+        // 最后一次颜色
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
         lastColor = config.getInt(
                 String.format(Constants.PREFS_DIVIDER_COLOR_FIELD_PATTERN, this.parent.getWidgetId()),
@@ -89,7 +89,7 @@ public class DividerCustomPreference extends Preference {
             }
         };
 
-        // ��Ҫ������ ��ɫ��Ĳ���
+        // 主要是设置 调色板的布局
         LinearLayout layout = new LinearLayout(getContext());
         layout.setPadding(0, 0, 0, 0);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -112,13 +112,13 @@ public class DividerCustomPreference extends Preference {
         mCPView.setFocusable(true);
         layout.addView(mCPView);
 
-        // ���һ�����صı༭��Ϊ�˿��Դ򿪼��̣������޷���ʾ�����
+        // 添加一个隐藏的编辑框，为了可以打开键盘，否则无法显示软键盘
         EditText hideEdit = new EditText(parent);
         hideEdit.setVisibility(View.GONE);
         layout.addView(hideEdit);
         layout.setId(android.R.id.widget_frame);
 
-        // ���öԻ���ı���ͼƬ
+        // 设置对话框的背景图片
         Bitmap bitmap = BitmapFactory.decodeResource(parent.getResources(), R.drawable.trans_bg);
         BitmapDrawable drawable = new BitmapDrawable(bitmap);
         drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
@@ -133,14 +133,14 @@ public class DividerCustomPreference extends Preference {
 
         builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener() {
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                // �������úõ���ɫ
+                // 保存设置好的颜色
                 applyAction(mCPView.getColor());
             }
         });
         builder.setNeutralButton(parent.getResources().getString(R.string.hide), new OnClickListener() {
-            // ���Ҫ����ָʾ����������ɫΪConstants.NOT_SHOW_FLAG�����ֵ�ǰ�ȫ�ģ���Ϊ����͸����ɫ���ڽ��������޷���������ɫ��
+            // 如果要隐藏指示器，设置颜色为Constants.NOT_SHOW_FLAG，这个值是安全的，因为这是透明颜色，在界面上是无法获得这个颜色的
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                // �������һ�����õ���ɫ
+                // 保存最后一次配置的颜色
                 PreferenceManager.getDefaultSharedPreferences(parent).edit()
                         .putInt(Constants.PREFS_LAST_DIVIDER_COLOR, Constants.NOT_SHOW_FLAG).commit();
                 lastColor = Constants.NOT_SHOW_FLAG;
@@ -165,7 +165,7 @@ public class DividerCustomPreference extends Preference {
             }
         });
 
-        // �������������ɫʱ��̬�ı�ѡ������ɫ
+        // 在输入框输入颜色时动态改变选择器颜色
         editText.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                 setColor();

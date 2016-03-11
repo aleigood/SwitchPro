@@ -29,10 +29,10 @@ public class XmlUtil {
 
     private static boolean saveToFile(byte[] msgs, String fileName) {
         try {
-            // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+            // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File dir = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH);
 
@@ -55,7 +55,7 @@ public class XmlUtil {
     }
 
     /**
-     * ���������ļ�����Ŀ¼������
+     * 假设两个文件所在目录都存在
      *
      * @param oldPath
      * @param newPath
@@ -65,7 +65,7 @@ public class XmlUtil {
         try {
             int byteRead = 0;
 
-            // �ļ�����ʱ
+            // 文件存在时
             if (new File(oldPath).exists()) {
                 InputStream is = new FileInputStream(oldPath);
                 FileOutputStream fos = new FileOutputStream(newPath);
@@ -87,10 +87,10 @@ public class XmlUtil {
 
     public static boolean deleteFile(String fileName) {
         try {
-            // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+            // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + fileName);
@@ -107,17 +107,17 @@ public class XmlUtil {
     }
 
     /**
-     * ��ȡ�����ļ��������ִ���ʱ����null
+     * 读取配置文件，当出现错误时返回null
      *
      * @param fileName
      * @return
      */
     private static FileInputStream readFile(String fileName) {
         try {
-            // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+            // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + fileName);
@@ -135,7 +135,7 @@ public class XmlUtil {
     }
 
     /**
-     * ������ת����xml���ַ���
+     * 将配置转换成xml的字符串
      *
      * @param XmlEntitys
      * @return
@@ -174,7 +174,7 @@ public class XmlUtil {
 
     /**
      * @param is
-     * @return ����ȡ�ļ�����ʱ����SizeΪ0�ļ���
+     * @return 当读取文件出错时返回Size为0的集合
      */
     public static List<XmlEntity> parseWidgetCfg(String fileName) {
         InputStream is = readFile(fileName);
@@ -241,7 +241,7 @@ public class XmlUtil {
     }
 
     /**
-     * ������ת����xml���ַ���
+     * 将配置转换成xml的字符串
      *
      * @param XmlEntitys
      * @return
@@ -342,12 +342,12 @@ public class XmlUtil {
                     serializer.attribute("", tmp, existFileName);
                 }
 
-                // ��ͼ���ļ�Ҳ������SD��
+                // 把图标文件也拷贝到SD卡
                 try {
-                    // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+                    // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                        // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                        // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                        // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                         File sdCardDir = Environment.getExternalStorageDirectory();
                         File dir = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH);
 
@@ -408,10 +408,10 @@ public class XmlUtil {
     }
 
     /**
-     * ����ȫ�ֲ���������ͼ������
+     * 备份全局参数，包括图标设置
      *
      * @param is
-     * @return ����ȡ�ļ�����ʱ����null
+     * @return 当读取文件出错时返回null
      */
     public static boolean parseGlobalCfg(Context context, String fileName) {
         InputStream is = readFile(fileName);
@@ -438,7 +438,7 @@ public class XmlUtil {
                         name = parser.getName();
 
                         if (name.equalsIgnoreCase(TAG_GLOBAL)) {
-                            // �Ƿ��wifi����
+                            // 是否打开wifi界面
                             String prefToggleWifi = parser.getAttributeValue("", Constants.PREFS_TOGGLE_WIFI);
 
                             if (prefToggleWifi != null) {
@@ -446,7 +446,7 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // �Ƿ����������
+                            // 是否打开蓝牙界面
                             String prefToggleBt = parser.getAttributeValue("", Constants.PREFS_TOGGLE_BLUETOOTH);
 
                             if (prefToggleBt != null) {
@@ -454,7 +454,7 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // �Ƿ��GPS����
+                            // 是否打开GPS界面
                             String prefToggleGPS = parser.getAttributeValue("", Constants.PREFS_TOGGLE_GPS);
 
                             if (prefToggleGPS != null) {
@@ -462,7 +462,7 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // �Ƿ��ͬ������
+                            // 是否打开同步界面
                             String prefToggleSync = parser.getAttributeValue("", Constants.PREFS_TOGGLE_SYNC);
 
                             if (prefToggleSync != null) {
@@ -470,7 +470,7 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // ����ģʽ�Ƿ�ر�wifi
+                            // 飞行模式是否关闭wifi
                             String prefToggleAireWifi = parser.getAttributeValue("", Constants.PREFS_AIRPLANE_WIFI);
 
                             if (prefToggleAireWifi != null) {
@@ -478,7 +478,7 @@ public class XmlUtil {
                                         Boolean.parseBoolean(prefToggleAireWifi)).commit();
                             }
 
-                            // �Ƿ�ʹ�������
+                            // 是否使用闪光灯
                             String prefToggleFlash = parser.getAttributeValue("", Constants.PREFS_TOGGLE_FLASH);
 
                             if (prefToggleFlash != null) {
@@ -486,7 +486,7 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // �Ƿ���ʾʱ��ѡ����
+                            // 是否显示时间选择器
                             String prefToggleTime = parser.getAttributeValue("", Constants.PREFS_TOGGLE_TIMEOUT);
 
                             if (prefToggleTime != null) {
@@ -494,14 +494,14 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // �Ƿ�ʹ��APN
+                            // 是否使用APN
                             String prefApn = parser.getAttributeValue("", Constants.PREFS_USE_APN);
 
                             if (prefApn != null) {
                                 editor.putBoolean(Constants.PREFS_USE_APN, Boolean.parseBoolean(prefApn)).commit();
                             }
 
-                            // �Ƿ�ر�ý������
+                            // 是否关闭媒体音量
                             String prefMuteMedia = parser.getAttributeValue("", Constants.PREFS_MUTE_MEDIA);
 
                             if (prefMuteMedia != null) {
@@ -509,7 +509,7 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // �Ƿ�رվ�������
+                            // 是否关闭警告音量
                             String prefMuteAlarm = parser.getAttributeValue("", Constants.PREFS_MUTE_ALARM);
 
                             if (prefMuteAlarm != null) {
@@ -517,7 +517,7 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // �Ƿ�ر��ֻ��ź�
+                            // 是否关闭手机信号
                             String prefRadio = parser.getAttributeValue("", Constants.PREFS_AIRPLANE_RADIO);
 
                             if (prefRadio != null) {
@@ -525,28 +525,28 @@ public class XmlUtil {
                                         .commit();
                             }
 
-                            // ���ȼ���
+                            // 亮度级别
                             String preBrightLevel = parser.getAttributeValue("", Constants.PREFS_BRIGHT_LEVEL);
 
                             if (preBrightLevel != null) {
                                 editor.putString(Constants.PREFS_BRIGHT_LEVEL, preBrightLevel).commit();
                             }
 
-                            // ������ť
+                            // 静音按钮
                             String preSilentBtn = parser.getAttributeValue("", Constants.PREFS_SILENT_BTN);
 
                             if (preSilentBtn != null) {
                                 editor.putString(Constants.PREFS_SILENT_BTN, preSilentBtn).commit();
                             }
 
-                            // �ֻ�����
+                            // 手机类型
                             String preDvieceType = parser.getAttributeValue("", Constants.PREFS_DEVICE_TYPE);
 
                             if (preDvieceType != null) {
                                 editor.putString(Constants.PREFS_DEVICE_TYPE, preDvieceType).commit();
                             }
 
-                            // �Ƿ�����ͬ��
+                            // 是否立即同步
                             String preSyncNow = parser.getAttributeValue("", Constants.PREFS_SYNC_NOW);
 
                             if (preSyncNow != null) {
@@ -557,15 +557,15 @@ public class XmlUtil {
                                 String tmp = String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, i);
                                 String stored = parser.getAttributeValue("", tmp);
 
-                                // ������Դ���
+                                // 如果属性存在
                                 if (stored != null) {
                                     editor.putString(tmp, stored).commit();
 
                                     try {
-                                        // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+                                        // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
                                         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                                            // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                                            // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                                            // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                                            // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                                             File sdCardDir = Environment.getExternalStorageDirectory();
                                             File dir = new File(sdCardDir.getPath() + File.separator
                                                     + Constants.BACK_FILE_PATH);
@@ -612,10 +612,10 @@ public class XmlUtil {
         FileInputStream fis = null;
 
         try {
-            // �ڱ���֮ǰ��Ҫ�ж� SDCard �Ƿ����,�����Ƿ���п�дȨ�ޣ�
+            // 在保存之前需要判断 SDCard 是否存在,并且是否具有可写权限：
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                // ��ȡSDCardĿ¼,2.2��ʱ��Ϊ:/mnt/sdcart
-                // 2.1��ʱ��Ϊ��/sdcard������ʹ�þ�̬�����õ�·�����һ�㡣
+                // 获取SDCard目录,2.2的时候为:/mnt/sdcart
+                // 2.1的时候为：/sdcard，所以使用静态方法得到路径会好一点。
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 File file = new File(sdCardDir.getPath() + File.separator + Constants.BACK_FILE_PATH + File.separator
                         + Constants.IGNORED.TABLE_IGNORED);
@@ -632,7 +632,7 @@ public class XmlUtil {
             parser.setInput(fis, null);
             int eventType = parser.getEventType();
             boolean done = false;
-            // ɾ�����ݿ����е�����
+            // 删除数据库所有的内容
             ap.deleteAllIgnoredApp();
 
             while (eventType != XmlPullParser.END_DOCUMENT && !done) {

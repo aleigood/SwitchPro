@@ -53,9 +53,9 @@ public class IndCustomPreference extends Preference {
     public void init(Context context) {
         parent = (WidgetConfigBaseActivity) context;
 
-        // ���һ����ɫ
+        // 最后一次颜色
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
-        // ��ͼȥ��ȡ���Widget�Ѿ����ڵ���ɫ���ã�����Ҳ����ͷ������һ�ε�����
+        // 试图去获取这个Widget已经存在的颜色配置，如果找不到就返回最后一次的配置
         lastColor = config.getInt(String.format(Constants.PREFS_IND_COLOR_FIELD_PATTERN, this.parent.getWidgetId()),
                 config.getInt(Constants.PREFS_LAST_IND_COLOR, Constants.IND_COLOR_DEFAULT));
         updateView();
@@ -94,26 +94,26 @@ public class IndCustomPreference extends Preference {
                 }
             };
 
-            // ��Ҫ������ ��ɫ��Ĳ���
+            // 主要是设置 调色板的布局
             LinearLayout layout = new LinearLayout(getContext());
             layout.setPadding(0, 0, 0, 0);
             layout.setOrientation(LinearLayout.VERTICAL);
 
-            // ���öԻ���ı���ͼƬ
+            // 设置对话框的背景图片
             Bitmap bitmap = BitmapFactory.decodeResource(parent.getResources(), R.drawable.trans_bg);
             BitmapDrawable drawable = new BitmapDrawable(bitmap);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             drawable.setDither(true);
             layout.setBackgroundDrawable(drawable);
 
-            // ���һ�����صı༭��Ϊ�˿��Դ򿪼��̣������޷���ʾ�����
+            // 添加一个隐藏的编辑框，为了可以打开键盘，否则无法显示软键盘
             EditText hideEdit = new EditText(parent);
             hideEdit.setVisibility(View.GONE);
             layout.addView(hideEdit);
             layout.setId(android.R.id.widget_frame);
 
             Display display = parent.getWindowManager().getDefaultDisplay();
-            // ��ֹ������ʱ����ʾ����
+            // 防止横屏的时候显示过大
             int width = display.getWidth();
 
             if (display.getWidth() > display.getHeight()) {
@@ -143,9 +143,9 @@ public class IndCustomPreference extends Preference {
                 }
             });
             builder.setNeutralButton(parent.getResources().getString(R.string.hide), new OnClickListener() {
-                // ���Ҫ����ָʾ����������ɫΪConstants.NOT_SHOW_FLAG�����ֵ�ǰ�ȫ�ģ���Ϊ���Ǹ�͸����ɫ���ڽ��������޷���������ɫ��
+                // 如果要隐藏指示器，设置颜色为Constants.NOT_SHOW_FLAG，这个值是安全的，因为这是个透明颜色，在界面上是无法获得这个颜色的
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    // �������һ�����õ���ɫ
+                    // 保存最后一次配置的颜色
                     PreferenceManager.getDefaultSharedPreferences(parent).edit()
                             .putInt(Constants.PREFS_LAST_IND_COLOR, Constants.NOT_SHOW_FLAG).commit();
                     applyAction(Constants.NOT_SHOW_FLAG);
@@ -169,7 +169,7 @@ public class IndCustomPreference extends Preference {
                 }
             });
 
-            // �������������ɫʱ��̬�ı�ѡ������ɫ
+            // 在输入框输入颜色时动态改变选择器颜色
             editText.addTextChangedListener(new TextWatcher() {
                 public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                     setColor();
@@ -198,7 +198,7 @@ public class IndCustomPreference extends Preference {
             ColorAdapter mAdapter = new ColorAdapter(parent);
             builder.setAdapter(mAdapter, new OnClickListener() {
                 public void onClick(DialogInterface arg0, int imgId) {
-                    // �������һ�����õ�ͼƬ
+                    // 保存最后一次配置的图片
                     SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(parent).edit();
                     editor.putInt(Constants.PREFS_LAST_IND_COLOR, imgId);
                     editor.commit();
@@ -206,7 +206,7 @@ public class IndCustomPreference extends Preference {
                 }
             });
 
-            // �����ʲô����?
+            // 这句有什么作用?
             builder.setInverseBackgroundForced(true);
             dialog = builder.create();
         }
@@ -312,7 +312,7 @@ public class IndCustomPreference extends Preference {
                         preview_img.setBackgroundColor(Color.TRANSPARENT);
                     setSummary(parent.getResources().getString(R.string.hide));
                     break;
-                // ��ط����ܵ����������ɫ��16����ֵ
+                // 这地方可能的情况就是颜色的16进制值
                 default:
                     if (preview_img != null)
                         preview_img.setBackgroundColor(lastColor);

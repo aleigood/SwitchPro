@@ -34,22 +34,22 @@ public class FlashlightActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_flashlight);
 
-        // ����ȫ��
+        // 设置全屏
         Window win = getWindow();
         win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // ���ñ���Ϊ���һ�����õ���ɫ
+        // 设置背景为最后一次设置的颜色
         mWindow = findViewById(R.id.flashlight_main);
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(this);
         lastColor = pre.getInt(Constants.PREFS_FLASH_COLOR, Color.WHITE);
         mWindow.setBackgroundColor(lastColor);
 
-        // ������Ļ����
+        // 设置屏幕亮度
         LayoutParams attributes = getWindow().getAttributes();
         attributes.screenBrightness = 1.0f;
         getWindow().setAttributes(attributes);
 
-        // ������Ļ����
+        // 设置屏幕常亮
         mWakeLock = Utils.getWakeLock(this);
         mWakeLock.acquire();
 
@@ -74,10 +74,10 @@ public class FlashlightActivity extends Activity {
 
         OnColorChangedListener listener = new OnColorChangedListener() {
             public void colorChanged(int color) {
-                // �������úõ���ɫ
+                // 保存设置好的颜色
                 lastColor = color;
 
-                // �������һ�����õ���ɫ
+                // 保存最后一次配置的颜色
                 SharedPreferences.Editor editor = PreferenceManager
                         .getDefaultSharedPreferences(FlashlightActivity.this).edit();
                 editor.putInt(Constants.PREFS_FLASH_COLOR, lastColor);
@@ -87,12 +87,12 @@ public class FlashlightActivity extends Activity {
             }
         };
 
-        // ��Ҫ������ ��ɫ��Ĳ���
+        // 主要是设置 调色板的布局
         LinearLayout layout = new LinearLayout(this);
         layout.setPadding(0, 0, 0, 0);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        // �ޱ���ʱ��ѡ���͸��ѡ�����԰뾶ҪС
+        // 无背景时可选择半透明选择，所以半径要小
         Display display = getWindowManager().getDefaultDisplay();
         int x = ((display.getWidth() - display.getWidth() / 3) / 2);
 
@@ -108,14 +108,14 @@ public class FlashlightActivity extends Activity {
         hsv.addView(layout);
         builder.setView(hsv);
 
-        // ��ʼ����ť�¼�
+        // 初始化按钮事件
         builder.setPositiveButton(getResources().getString(R.string.button_apply),
                 new android.content.DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                        // �������úõ���ɫ
+                        // 保存设置好的颜色
                         lastColor = mCPView.getColor();
 
-                        // �������һ�����õ���ɫ
+                        // 保存最后一次配置的颜色
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
                                 FlashlightActivity.this).edit();
                         editor.putInt(Constants.PREFS_FLASH_COLOR, lastColor);
@@ -133,7 +133,7 @@ public class FlashlightActivity extends Activity {
         return dialog;
     }
 
-    // һ��Ҫ��pause��ʱ�������activity
+    // 一定要在pause的时候结束本activity
     @Override
     protected void onPause() {
         super.onPause();

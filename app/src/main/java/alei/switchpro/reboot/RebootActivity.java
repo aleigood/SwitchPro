@@ -56,7 +56,7 @@ public class RebootActivity extends Activity {
             sb.append(rebootPath);
             su.Run(sb.toString());
 
-            // �������ŵ�ִ�з�ʽ
+            // 不带引号的执行方式
             StringBuilder sb1 = new StringBuilder(rebootPath);
             sb1.append(" ");
             sb1.append(String.valueOf(mode));
@@ -118,7 +118,7 @@ public class RebootActivity extends Activity {
                 }).show();
     }
 
-    // һ��Ҫ��pause��ʱ�������activity
+    // 一定要在pause的时候结束本activity
     @Override
     protected void onPause() {
         super.onPause();

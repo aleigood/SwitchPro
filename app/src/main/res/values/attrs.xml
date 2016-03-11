@@ -2,8 +2,8 @@
 <resources>
 
     <declare-styleable name="IconPreferenceScreen">
-        <attr format="reference" name="customicon" />
-        <attr format="integer" name="iconid" />
+        <attr name="customicon" format="reference"/>
+        <attr name="iconid" format="integer"/>
     </declare-styleable>
 
 </resources>

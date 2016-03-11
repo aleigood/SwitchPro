@@ -74,7 +74,7 @@
     <string name="flash_color">Flashlight color</string>
     <string name="button_already_exists">The button already exists.</string>
     <string name="button_max">I\'m full :(</string>
-    
+
     <string name="notification_widget">Notification bar widget</string>
     <string name="notification_widget_summary">Add/remove widget on notification bar.</string>
     <string name="show_notify_icon">Show battery level</string>
@@ -87,14 +87,14 @@
     <string name="notify_priority">Notify priority</string>
     <string name="notify_priority_summary">The maximum will keep notification on top, the minimum priority will hide status bar icon. (Android 4.1)</string>
     <string name="notify_icon_color">Notification icon color</string>
-  
+
     <string name="other">Other</string>
     <string name="other_option">Other options</string>
     <string name="global_option">This configuration will be applied to all widgets.</string>
-  
+
     <string name="bright_level">Level of brightness</string>
     <string name="bright_level_auto">Auto</string>
-    
+
     <string name="device_type">Select device type</string>
     <string name="type1">Default</string>
     <string name="type2">Motorola</string>
@@ -103,19 +103,19 @@
     <string name="type5">Samsung</string>
     <string name="type6">Other</string>
     <string name="type7">Final</string>
-    
+
     <string name="screen_timeout_15sec">15 sec</string>
     <string name="screen_timeout_30sec">30 sec</string>
     <string name="screen_timeout_1min">1 min</string>
     <string name="screen_timeout_2min">2 min</string>
     <string name="screen_timeout_10min">10 min</string>
     <string name="screen_timeout_30min">30 min</string>
-    
+
     <string name="wifi_sleep_off">Wi-Fi should go to sleep when the screen turns off.</string>
     <string name="wifi_sleep_on">Wi-Fi never go to sleep.</string>
-    
+
     <string name="auto_screen_lock_tip">The screen will not be locked automatically (but still will be turn off).</string>
-   
+
     <string name="settings_panel">Settings Panel</string>
     <string name="show_settings_panel">Show settings panel</string>
     <string name="open_wifi_panel">Show Wi-Fi panel</string>
@@ -123,44 +123,44 @@
     <string name="open_gps_panel">Show GPS panel</string>
     <string name="open_bluetooth_panel">Show bluetooth panel</string>
     <string name="bluetooth_discover">Make bluetooth discoverable</string>
-    
+
     <string name="haptic_feedback">Haptic feedback</string>
     <string name="haptic_feedback_summary">Vibrate when pressing the buttons.</string>
-    
+
     <string name="airplane_close_wifi_summary">All wireless connections will be disabled.</string>
     <string name="airplane_close_wifi">Turn off Wi-Fi</string>
     <string name="only_close_phone_network">Turn off signal only</string>
     <string name="only_close_phone_network_summary">Airplane mode will only turn off the mobile network.</string>
-  
+
     <string name="open_screen_light_summary">Not all camera flashes are supported.</string>
     <string name="open_screen_light">Use the camera flash</string>
     <string name="close_screen_light_info">Tap To Close</string>
-  
+
     <string name="toggle_timeout">Screen Always On</string>
     <string name="open_time_selector">Show time selector</string>
     <string name="open_time_selector_summary">Use the time selector instead of screen always on.</string>
-  
+
     <string name="silent_mode">Vibration/Silent Mode</string>
     <string name="silent_btn">Select Mode</string>
     <string name="mute_media">Mute media volume</string>
     <string name="mute_media_summary">Also mute the media volume, when Vibration/Silent Mode is enabled.</string>
     <string name="mute_alarm">Mute alarm volume</string>
     <string name="mute_alarm_summary">Also mute the alarm volume, when Vibration/Silent Mode is enabled.</string>
-  
+
     <string name="data_connection">Data connection</string>
     <string name="use_apn">Use APN toggle</string>
     <string name="use_apn_summary">If the data connection toggle doesn\'t work, you can try this.</string>
-  
+
     <string name="modify_widget">Modify existing widgets</string>
     <string name="no_widget_to_modify">There is no widget to modify.</string>
     <string name="select_widget">Select the widget</string>
-    
+
     <string name="custom_menu">Custom widget list</string>
     <string name="need_reboot">Configuration will take effect after reboot.</string>
     <string name="custom_ico">Custom icons</string>
     <string name="ico_settings">Icon settings</string>
     <string name="ico_theme">Icon theme</string>
-    
+
     <string name="no_saved_conf">There is no saved widget.</string>
     <string name="load_conf_summary">Restore widgets from SD card.</string>
     <string name="load_conf">Load</string>
@@ -168,7 +168,7 @@
     <string name="save_conf_error">Can\'t save widget, make sure the SD card has been mounted.</string>
     <string name="clear_conf">Clear</string>
     <string name="clear_conf_succ">Configuration has been cleared.</string>
-    
+
     <string name="refresh">Refresh</string>
     <string name="confirm">Confirm</string>
     <string name="reboot_confirm">What do you want to do?</string>
@@ -177,7 +177,7 @@
     <string name="screen_timeout">Screen Timeout</string>
     <string name="open_camera_info">If the camera flash is not open, it means I can\'t drive it.</string>
     <string name="func_error">This feature does not support the current system version.</string>
-   
+
     <string name="no_color">No color</string>
     <string name="color_code">Code: #</string>
     <string name="color_default">Default</string>
@@ -192,16 +192,16 @@
     <string name="color_gray">Gray</string>
     <string name="hide">Not show</string>
     <string name="the_transparency_when_disabled">The transparency when disabled</string>
-    
+
     <string name="usb_tethering_storage_active_subtext">Can\'t tether when USB storage in use</string>
     <string name="usb_tethering_errored_subtext">USB tethering error</string>
 
     <string name="trans_when_disabled">Translucent when disabled</string>
     <string name="level_select_warning">Please select two levels at least.</string>
-    
+
     <string name="sync_now">Sync now</string>
     <string name="sync_now_summary">Force sync when Auto-sync is on.</string>
-    
+
     <string name="task_settings">Ignore List</string>
     <string name="task_settings_summary">Select the exclude task.</string>
     <string name="task_killed_tip_part3">tasks, remaining memory</string>
@@ -210,7 +210,7 @@
 
     <string name="toggle_settings">Toggle settings</string>
     <string name="about">About</string>
-    
+
     <string name="timer_settings">Timer settings</string>
     <string name="new_timer">New timer</string>
     <string name="turn_off">Turn off</string>
@@ -232,7 +232,7 @@
     <string name="label">Label</string>
     <string name="delete_alarm">Delete</string>
     <string name="delete_alarm_confirm">This task will be deleted.</string>
-    
+
     <string name="save_cfg">Backup settings</string>
     <string name="load_cfg">Restore backup</string>
     <string name="activate_admin_Warning">WARNING: Please deactivate before uninstalling (Settings-\>Security-\>Device administration), otherwise it can not be uninstalled.</string>

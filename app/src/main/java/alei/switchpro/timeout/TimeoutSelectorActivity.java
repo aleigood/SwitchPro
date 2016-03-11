@@ -89,7 +89,7 @@ public class TimeoutSelectorActivity extends Activity {
                 }).show();
     }
 
-    // һ��Ҫ��pause��ʱ�������activity
+    // 一定要在pause的时候结束本activity
     @Override
     protected void onPause() {
         super.onPause();
@@ -98,7 +98,7 @@ public class TimeoutSelectorActivity extends Activity {
     }
 
     /**
-     * ��ȡ��Ļ��ʱ
+     * 获取屏幕超时
      *
      * @param context
      */
@@ -108,7 +108,7 @@ public class TimeoutSelectorActivity extends Activity {
     }
 
     /**
-     * ������Ļ��ʱ
+     * 设置屏幕超时
      *
      * @param context
      */

@@ -57,12 +57,12 @@ public class IconCustomPreference extends Preference {
 
     private void init(Context context) {
         this.parent = (WidgetConfigBaseActivity) context;
-        // ��ͼȥ��ȡ���Widget�Ѿ����ڵ���ɫ���ã�����Ҳ����ͷ������һ�ε����ã��޸�Widgetʱʹ�ã�
+        // 试图去获取这个Widget已经存在的颜色配置，如果找不到就返回最后一次的配置（修改Widget时使用）
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(parent);
         lastColor = config.getInt(String.format(Constants.PREFS_ICON_COLOR_FIELD_PATTERN, this.parent.getWidgetId()),
                 config.getInt(Constants.PREFS_LAST_ICON_COLOR, Color.WHITE));
 
-        // Ĭ�ϵ�͸����Ϊ120
+        // 默认的透明度为120
         lastTrans = config.getInt(String.format(Constants.PREFS_ICON_TRANS_FIELD_PATTERN, this.parent.getWidgetId()),
                 config.getInt(Constants.PREFS_LAST_ICON_TRANS, 120));
 
@@ -92,26 +92,26 @@ public class IconCustomPreference extends Preference {
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
         builder.setTitle(R.string.icon_color);
 
-        // ����м�Բ���Ǵ���
+        // 点击中间圆点是触发
         OnColorChangedListener listener = new OnColorChangedListener() {
             public void colorChanged(int color) {
                 applyAction(color);
             }
         };
 
-        // ��Ҫ������ ��ɫ��Ĳ���
+        // 主要是设置 调色板的布局
         LinearLayout colorLayout = new LinearLayout(getContext());
         colorLayout.setPadding(0, 0, 0, 10);
         colorLayout.setOrientation(LinearLayout.VERTICAL);
 
-        // ���öԻ���ı���ͼƬ
+        // 设置对话框的背景图片
         Bitmap bitmap = BitmapFactory.decodeResource(parent.getResources(), R.drawable.trans_bg);
         BitmapDrawable drawable = new BitmapDrawable(bitmap);
         drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
         drawable.setDither(true);
         colorLayout.setBackgroundDrawable(drawable);
 
-        // �ޱ���ʱ��ѡ���͸��ѡ�����԰뾶ҪС
+        // 无背景时可选择半透明选择，所以半径要小
         Display display = parent.getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
 
@@ -119,7 +119,7 @@ public class IconCustomPreference extends Preference {
             width = display.getHeight();
         }
 
-        // �����ɫ���
+        // 添加颜色面板
         int x = ((width - width / 3) / 2);
         final ColorPickerView mCPView = new ColorPickerView(getContext(), listener,
                 lastColor == Constants.NOT_SHOW_FLAG ? Color.WHITE : lastColor, x, false);
@@ -129,7 +129,7 @@ public class IconCustomPreference extends Preference {
         mCPView.setLayoutParams(params1);
         colorLayout.addView(mCPView);
 
-        // ���һ�����صı༭��Ϊ�˿��Դ򿪼��̣������޷���ʾ�����
+        // 添加一个隐藏的编辑框，为了可以打开键盘，否则无法显示软键盘
         EditText hideEdit = new EditText(parent);
         hideEdit.setVisibility(View.GONE);
         colorLayout.addView(hideEdit);
@@ -149,7 +149,7 @@ public class IconCustomPreference extends Preference {
 
         seekBar = new SeekBar(getContext());
         seekBar.setPadding(18, 5, 18, 5);
-        // ���ó�ʼֵ
+        // 设置初始值
         seekBar.setMax(255);
         seekBar.setProgress(lastTrans);
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -179,7 +179,7 @@ public class IconCustomPreference extends Preference {
         scrollView.setBackgroundColor(0XFFF5F5F5);
         builder.setView(scrollView);
 
-        // ��ʼ����ť�¼�
+        // 初始化按钮事件
         builder.setPositiveButton(parent.getResources().getString(R.string.button_apply), new OnClickListener() {
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 applyAction(mCPView.getColor());
@@ -209,7 +209,7 @@ public class IconCustomPreference extends Preference {
             }
         });
 
-        // �������������ɫʱ��̬�ı�ѡ������ɫ
+        // 在输入框输入颜色时动态改变选择器颜色
         editText.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3) {
                 setColor();

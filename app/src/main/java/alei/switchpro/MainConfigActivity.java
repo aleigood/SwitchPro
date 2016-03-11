@@ -44,7 +44,7 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
     }
 
     /**
-     * ��Ϊ��onCreate������onResume����ֱ����onResume�г�ʼ��
+     * 因为在onCreate后会调用onResume所以直接在onResume中初始化
      */
     private void initUI() {
         aboutDlg = (AboutDlg) findPreference("about");
@@ -126,7 +126,7 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
                         public void onClick(DialogInterface d, int w) {
                             SharedPreferences sp = PreferenceManager
                                     .getDefaultSharedPreferences(MainConfigActivity.this);
-                            // ɾ����Ӧ����
+                            // 删除相应参数
                             String[] notificationWidgetIds = sp.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "")
                                     .split(",");
 
@@ -135,7 +135,7 @@ public class MainConfigActivity extends PreferenceActivity implements OnSharedPr
                                     int widgetId = Integer.parseInt(notificationWidgetIds[i]);
                                     String fileName = sp.getString(
                                             String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, widgetId), "");
-                                    // ɾ������ͼƬ�ļ�
+                                    // 删除背景图片文件
                                     deleteFile(fileName);
 
                                     sp.edit()

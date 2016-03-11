@@ -54,7 +54,7 @@ public final class ApnDao {
         if (currentName.startsWith(SUFFIX_START) && currentName.endsWith(SUFFIX_END)) {
             String tmp = currentName.substring(1, currentName.length() - SUFFIX_END.length());
 
-            // �����ϵİ汾
+            // 兼容老的版本
             if (tmp.endsWith("_off")) {
                 return tmp.substring(0, tmp.length() - "_off".length());
             } else {
@@ -66,7 +66,7 @@ public final class ApnDao {
     }
 
     /**
-     * �����Ƿ�Ҫ����MMS����
+     * 设置是否要保持MMS连接
      *
      * @param mmsTarget
      */
@@ -75,7 +75,7 @@ public final class ApnDao {
     }
 
     /**
-     * �����Ƿ�ر�����apn
+     * 设置是否关闭所有apn
      *
      * @param disableAll
      */
@@ -111,7 +111,7 @@ public final class ApnDao {
     }
 
     /**
-     * ��ñ����õ�APN����
+     * 获得被引用的APN配置
      *
      * @return
      */
@@ -127,7 +127,7 @@ public final class ApnDao {
     }
 
     /**
-     * �ָ������õ�APN
+     * 恢复被引用的APN
      *
      * @param id
      */
@@ -149,7 +149,7 @@ public final class ApnDao {
      */
     public boolean switchApnState(int targetState) {
         if (targetState == ApnUtils.OFF) {
-            // ��ȡ���п��õ�APN����
+            // 获取所有可用的APN配置
             String query;
             boolean disableAll = this.disableAll;
             String disableAllQuery = disableAll ? null : "current is not null";
@@ -183,7 +183,7 @@ public final class ApnDao {
     }
 
     /**
-     * ��ȡ�����ر�MMS����״̬�Ƿ��Ǵ򿪻�رյ�
+     * 获取“不关闭MMS”的状态是否是打开或关闭的
      *
      * @param targetState apn state. this method tries to passed target state
      * @return {@code true} if switch was successfull (apn state changed) and
@@ -202,7 +202,7 @@ public final class ApnDao {
     }
 
     /**
-     * ��ȡAPN�Ƿ�򿪵�״̬ Calculates current apn state
+     * 获取APN是否打开的状态 Calculates current apn state
      *
      * @return current apn state;
      */
@@ -243,7 +243,7 @@ public final class ApnDao {
     }
 
     private boolean enableAllInDb() {
-        // ��ȡ�Ѿ������˺�׺�Ĳ����õ�APN
+        // 获取已经被加了后缀的不可用的APN
         String suffix = DB_LIKE_SUFFIX;
         List<ApnInfo> apns = selectApnInfo("apn like ? or type like ?", new String[]{suffix, suffix});
         return enableApnList(apns);

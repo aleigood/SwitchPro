@@ -31,7 +31,7 @@ import android.widget.RemoteViews;
 import java.io.FileNotFoundException;
 
 public class WidgetProviderUtil {
-    // ����״̬
+    // 开关状态
     public static final int STATE_OTHER = -1;
     public static final int STATE_DISABLED = 0;
     public static final int STATE_ENABLED = 1;
@@ -41,11 +41,11 @@ public class WidgetProviderUtil {
     public static final int IND_POS_CENTER = 2;
     public static final int IND_POS_RIGHT = 3;
 
-    // Ĭ�ϵİ�ť˳��
+    // 默认的按钮顺序
     public static final String EXTRA_BUTTON_ID = "buttonId";
     public static final String URI_SCHEME = "SWITCH_PRO_WIDGET";
     public static volatile boolean dataConnectionFlag = false;
-    // ��Ϊ�Ǳ�����򿪵ı�ǣ����Ϊtrue���ͱ�ʾ�Ǵӱ�widget�����ģ���Ҫ��ʾ���������ʾ
+    // 作为是本软件打开的标记，如果为true，就表示是从本widget触发的，需要显示重载完的提示
     public static volatile boolean scanMediaFlag = false;
 
     public static Bitmap BITMAP_WIFI;
@@ -82,15 +82,15 @@ public class WidgetProviderUtil {
     public static Bitmap BITMAP_NFC;
 
     /**
-     * ɾ��ÿ��widget��Ӧ�Ĳ���
+     * 删除每个widget对应的参数
      */
     public static void onDeleted(Context context, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            // ɾ��ɾ��ÿ��widgetʵ���İ�ť����,�����ɾ��������޸�����ʾ����
+            // 删除删除每个widget实例的按钮参数,如果不删除则会在修改是显示出来
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor configEditor = config.edit();
 
-            // �����widget��ɾ����Ӧ����
+            // 如果是widget就删除相应参数
             String[] notificationWidgetIds = config.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "").split(",");
             boolean isExist = false;
 
@@ -104,7 +104,7 @@ public class WidgetProviderUtil {
             if (!isExist) {
                 String fileName = config.getString(
                         String.format(Constants.PREFS_BACK_IMAGE_FIELD_PATTERN, appWidgetId), "");
-                // ɾ������ͼƬ�ļ�
+                // 删除背景图片文件
                 context.deleteFile(fileName);
 
                 configEditor.remove(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, appWidgetId));
@@ -126,11 +126,11 @@ public class WidgetProviderUtil {
 
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // ���������¼���һ���ǽ��յ�״̬���µ���Ϣ������Ҫ�������е�widget
+        // 其他更新事件。一般是接收到状态更新的消息，所以要更新所有的widget
         int[] widgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(intent.getComponent());
 
         for (int i = 0; i < widgetIds.length; i++) {
-            // Views�п���Ϊ�գ����Ϊ��ֱ��������������
+            // Views有可能为空，如果为空直接跳过，不更新
             RemoteViews views = buildAndUpdateButtons(context, widgetIds[i], config, cls);
             AppWidgetManager gm = AppWidgetManager.getInstance(context);
 
@@ -146,7 +146,7 @@ public class WidgetProviderUtil {
         Bundle bundle = intent.getExtras();
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // ����ǰ�ť������¼�
+        // 如果是按钮点击的事件
         if (intent.hasCategory(Intent.CATEGORY_ALTERNATIVE) && bundle != null) {
             int buttonId = bundle.getInt(EXTRA_BUTTON_ID, -1);
 
@@ -263,7 +263,7 @@ public class WidgetProviderUtil {
                                                     String layoutName, int iconColor, int iconTrans, int indColor, int dividerColor, int backColor,
                                                     Bitmap backImg) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
-        // ��ȡ���в���
+        // 读取所有参数
 
         if (layoutName == null || layoutName.equals("")) {
             return null;
@@ -271,14 +271,14 @@ public class WidgetProviderUtil {
 
         int layoutId = getLayoutId(context, layoutName);
 
-        // ����RemoteViews
+        // 构造RemoteViews
         RemoteViews views = new RemoteViews(context.getPackageName(), layoutId);
 
-        // ������Զ�����ɫ������ֱ��������ɫ
+        // 如果是自定义颜色背景的直接设置颜色
         updateBackground(context, widgetId, views, layoutName, backColor, backImg);
         updateDivider(context, views, layoutName, dividerColor);
 
-        // ��ť��ɾ���˵�����
+        // 按钮被删完了的情形
         if (strBtnIds == null || strBtnIds.trim().equals("")) {
             return views;
         }
@@ -295,22 +295,22 @@ public class WidgetProviderUtil {
      * @param context
      * @param appWidgetId
      * @param config
-     * @param cls         ����Ϊ��
+     * @param cls         可以为空
      * @return
      */
     public static RemoteViews buildAndUpdateButtons(Context context, int appWidgetId, SharedPreferences config,
                                                     Class<?> cls) {
-        // �ж��������Ƿ������WidgetId,��������ý�����Home���˳�ʱ���ᴴ��һ��WidgetId
+        // 判断配置里是否有这个WidgetId,如果在配置界面点击Home键退出时，会创建一个WidgetId
         if (!config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, appWidgetId))) {
             return null;
         }
 
-        // ����Layout
+        // 设置Layout
         String layoutName = config.getString(String.format(Constants.PREFS_LAYOUT_FIELD_PATTERN, appWidgetId),
                 context.getString(R.string.list_pre_bg_default));
         int layoutId = getLayoutId(context, layoutName);
 
-        // ��ȡ��ťID
+        // 获取按钮ID
         String buttonIdsStr = config.getString(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, appWidgetId),
                 WidgetConfigBaseActivity.DEFAULT_BUTTON_IDS);
 
@@ -320,27 +320,27 @@ public class WidgetProviderUtil {
 
         int[] buttonIds = getButtonIdsFromStr(context, buttonIdsStr);
 
-        // ��ȡָʾ������ɫ
+        // 获取指示器的颜色
         int indColor = config.getInt(String.format(Constants.PREFS_IND_COLOR_FIELD_PATTERN, appWidgetId),
                 Constants.IND_COLOR_DEFAULT);
 
-        // ��ȡͼ����ɫ
+        // 获取图标颜色
         int iconColor = config
                 .getInt(String.format(Constants.PREFS_ICON_COLOR_FIELD_PATTERN, appWidgetId), Color.WHITE);
 
-        // ��ȡ�ָ�����ɫ
+        // 获取分割线颜色
         int dividerColor = config.getInt(String.format(Constants.PREFS_DIVIDER_COLOR_FIELD_PATTERN, appWidgetId),
                 Constants.DEFAULT_DEVIDER_COLOR);
 
-        // ��ȡ͸������
+        // 获取透明比例
         int transPref = config.getInt(String.format(Constants.PREFS_ICON_TRANS_FIELD_PATTERN, appWidgetId), 50);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), layoutId);
         updateBackground(context, appWidgetId, config, views, layoutName);
         updateDivider(context, views, layoutName, dividerColor);
-        // �������а�ť
+        // 构造所有按钮
         buildButtons(views, context, buttonIds, cls, appWidgetId, layoutName, dividerColor);
-        // �������а�ť
+        // 更新所有按钮
         updateButtons(views, context, config, layoutName, buttonIds, iconColor, transPref, indColor);
         return views;
     }
@@ -396,11 +396,11 @@ public class WidgetProviderUtil {
 
         if (layoutName.equals(context.getString(R.string.list_pre_bg_custom))
                 || layoutName.equals(context.getString(R.string.list_pre_bg_custom_shadow))) {
-            // ����õ��Ǳ���ͼƬ����Ҳ�ᱣ��һ��Ĭ�ϵı�����ɫ����������б���ͼƬ������������
+            // 如果用的是背景图片，则也会保存一个默认的背景颜色参数，如果有背景图片参数则优先用
             if (config.contains(backImgKey)) {
                 Bitmap backBitmap = getBackgroundBitmap(context, appWidgetId, config);
 
-                // ��������ȡͼƬ
+                // 能正常获取图片
                 if (backBitmap != null) {
                     views.setImageViewBitmap(R.id.custom_img, backBitmap);
                 } else {
@@ -485,20 +485,20 @@ public class WidgetProviderUtil {
     }
 
     /**
-     * ���찴ť
+     * 构造按钮
      *
      * @param views
      * @param context
      * @param buttonIds
-     * @param cls         ����Ϊ�գ�Ϊ��ʱ������ÿ����ť����Ӧ�¼�
-     * @param appWidgetId ����Ϊ�գ�Ϊ��ʱ������ÿ����ť����Ӧ�¼�
+     * @param cls         可以为空，为空时不构建每个按钮的响应事件
+     * @param appWidgetId 可以为空，为空时不构建每个按钮的响应事件
      * @return
      */
     private static RemoteViews buildButtons(RemoteViews views, Context context, int[] buttonIds, Class<?> cls,
                                             Integer appWidgetId, String layoutName, int dividerColor) {
         switch (buttonIds.length) {
             case 1:
-                // ���ص�2-7����ť
+                // 隐藏第2-7个按钮
                 views.setOnClickPendingIntent(R.id.btn_0,
                         getLaunchPendingIntent(context, appWidgetId, buttonIds[0], cls));
 
@@ -782,7 +782,7 @@ public class WidgetProviderUtil {
                 views.setOnClickPendingIntent(R.id.btn_19,
                         getLaunchPendingIntent(context, appWidgetId, buttonIds[5], cls));
 
-                // ���صڶ�����ť
+                // 隐藏第二个按钮
                 views.setViewVisibility(R.id.btn_1, View.GONE);
                 views.setViewVisibility(R.id.btn_2, View.GONE);
                 views.setViewVisibility(R.id.btn_3, View.GONE);
@@ -2103,7 +2103,7 @@ public class WidgetProviderUtil {
     }
 
     /**
-     * ��ȡ��ť���õĲ���ֵ
+     * 获取按钮配置的参数值
      *
      * @param context
      * @param appWidgetId
@@ -2238,7 +2238,7 @@ public class WidgetProviderUtil {
 
     /**
      * Updates the buttons based on the underlying states of wifi, etc.
-     * ��ص�״̬��BatteryInfoService�����
+     * 电池的状态在BatteryInfoService里更新
      *
      * @param views   The RemoteViews to update.
      * @param context
@@ -2247,7 +2247,7 @@ public class WidgetProviderUtil {
                                       int[] buttonIds, int iconColor, int iconTrans, int indColor) {
         int viewId = -1;
 
-        // ����WIFI״̬
+        // 更新WIFI状态
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFI, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_WIFI));
@@ -2259,7 +2259,7 @@ public class WidgetProviderUtil {
                         BITMAP_WIFI = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIFI), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_wifi_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2273,7 +2273,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_WIFI, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ��ȡAPN״̬
+        // 获取APN状态
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_EDGE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_EDGE));
@@ -2285,7 +2285,7 @@ public class WidgetProviderUtil {
                         BITMAP_EDGE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_EDGE), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, getDataConnIcon(context), state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2299,7 +2299,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_EDGE, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ��ȡ����״̬
+        // 获取亮度状态
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_BRIGHTNESS, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BRIGHTNESS));
@@ -2307,7 +2307,7 @@ public class WidgetProviderUtil {
                     Constants.ICON_AUTO_BRIGHTNESS));
             int state = SwitchUtils.getBrightness(context);
 
-            // �Զ�����
+            // 自动亮度
             if (state == STATE_OTHER) {
                 if (needCustomAutoIcon) {
                     if (BITMAP_AUTO_BRIGHT == null) {
@@ -2316,7 +2316,7 @@ public class WidgetProviderUtil {
                                     .decodeStream(context.openFileInput(config.getString(String.format(
                                             Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_AUTO_BRIGHTNESS), "")));
                         } catch (FileNotFoundException e) {
-                            // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                            // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                             setIconResource(context, views, viewId, R.drawable.icon_brightness_auto_on, STATE_ENABLED,
                                     iconColor, iconTrans);
                             e.printStackTrace();
@@ -2339,7 +2339,7 @@ public class WidgetProviderUtil {
                                     .decodeStream(context.openFileInput(config.getString(String.format(
                                             Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BRIGHTNESS), "")));
                         } catch (FileNotFoundException e) {
-                            // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                            // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                             setIconResource(context, views, viewId, R.drawable.icon_brightness_on, state, iconColor,
                                     iconTrans);
                             e.printStackTrace();
@@ -2355,7 +2355,7 @@ public class WidgetProviderUtil {
             }
         }
 
-        // ��ȡͬ��״̬
+        // 获取同步状态
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_SYNC, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SYNC));
@@ -2367,7 +2367,7 @@ public class WidgetProviderUtil {
                         BITMAP_SYNC = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SYNC), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_sync_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2381,7 +2381,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_SYNC, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ��ȡGPS״̬
+        // 获取GPS状态
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_GPS, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_GPS));
@@ -2393,7 +2393,7 @@ public class WidgetProviderUtil {
                         BITMAP_GPS = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_GPS), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_gps_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2407,7 +2407,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_GPS, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ��ȡ������Ӧ״̬
+        // 获取重力感应状态
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_GRAVITY, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_GRAVITY));
@@ -2419,7 +2419,7 @@ public class WidgetProviderUtil {
                         BITMAP_GRAVITY = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_GRAVITY), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_gravity_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2433,7 +2433,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_GRAVITY, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ��ȡ����״̬
+        // 获取蓝牙状态
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_BLUETOOTH, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BLUETOOTH));
@@ -2445,7 +2445,7 @@ public class WidgetProviderUtil {
                         BITMAP_BLUETOOTH = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BLUETOOTH), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_bluetooth_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2460,7 +2460,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_BLUETOOTH, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ����ģʽ
+        // 飞行模式
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_AIRPLANE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_AIRPLANE));
@@ -2472,7 +2472,7 @@ public class WidgetProviderUtil {
                         BITMAP_AIRPLANE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_AIRPLANE), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_airplane_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2487,7 +2487,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_AIRPLANE, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ��Ļ��ʱ
+        // 屏幕超时
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_SCREEN_TIMEOUT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SCREEN_TIMEOUT));
@@ -2500,7 +2500,7 @@ public class WidgetProviderUtil {
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SCREEN_TIMEOUT), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_screen_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2514,12 +2514,12 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_SCREEN_TIMEOUT, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ���¾�����ť
+        // 更新静音按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_VIBRATE, buttonIds)) != -1) {
             int mode = SwitchUtils.getViberate(context);
             String btn = config.getString(Constants.PREFS_SILENT_BTN, Constants.BTN_VS);
 
-            // ֻ�а�ťѡ����˫ģʽ����ģʽʱ����ʾ��ͼ��
+            // 只有按钮选择了双模式和振动模式时才显示振动图标
             if (mode == AudioManager.RINGER_MODE_VIBRATE && !btn.equals(Constants.BTN_ONLY_SILENT)) {
                 updateVibrate(views, context, config, buttonIds, iconColor, iconTrans, indColor, viewId, STATE_ENABLED);
                 setIndViewResource(context, Constants.BUTTON_VIBRATE, views, layoutName, buttonIds, STATE_ENABLED,
@@ -2529,7 +2529,7 @@ public class WidgetProviderUtil {
                 setIndViewResource(context, Constants.BUTTON_VIBRATE, views, layoutName, buttonIds, STATE_ENABLED,
                         indColor);
             } else {
-                // �����ťֻѡ���˾�������ô��ģʽ�ر�ʱ��ʾ������ť
+                // 如果按钮只选择了静音，那么在模式关闭时显示静音按钮
                 if (btn.equals(Constants.BTN_ONLY_SILENT)) {
                     updateSilent(views, context, config, buttonIds, iconColor, iconTrans, indColor, viewId,
                             STATE_DISABLED);
@@ -2538,7 +2538,7 @@ public class WidgetProviderUtil {
                             STATE_DISABLED);
                 }
 
-                // ����������ʱ�ָ����֣���ֹ��������Ӵ�����ģʽ�Ӷ��޷��ָ�ý������
+                // 当铃声正常时恢复音乐，防止用物理键接触静音模式从而无法恢复媒体音量
                 AudioManager audioManager = (AudioManager) context.getApplicationContext().getSystemService(
                         Context.AUDIO_SERVICE);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
@@ -2548,7 +2548,7 @@ public class WidgetProviderUtil {
             }
         }
 
-        // ����ý��ɨ�谴ť
+        // 更新媒体扫描按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_SCANMEDIA, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SCANMEDIA));
@@ -2559,7 +2559,7 @@ public class WidgetProviderUtil {
                         BITMAP_SCANMEDIA = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SCANMEDIA), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_media_on, STATE_DISABLED, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2575,7 +2575,7 @@ public class WidgetProviderUtil {
                     indColor);
         }
 
-        // ���������л���ť
+        // 更新网络切换按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_NET_SWITCH, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_NET_SWITCH));
@@ -2587,7 +2587,7 @@ public class WidgetProviderUtil {
                         BITMAP_NET_SWITCH = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_NET_SWITCH), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_netswitch_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2602,7 +2602,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_NET_SWITCH, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ���½���ģʽ��ť
+        // 更新解锁模式按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_UNLOCK, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_UNLOCK));
@@ -2614,7 +2614,7 @@ public class WidgetProviderUtil {
                         BITMAP_UNLOCK = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_UNLOCK), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_unlock_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2628,7 +2628,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_UNLOCK, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ��������ư�ť
+        // 更新闪光灯按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_FLASHLIGHT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_FLASHLIGHT));
@@ -2640,7 +2640,7 @@ public class WidgetProviderUtil {
                         BITMAP_FLASHLIGHT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_FLASHLIGHT), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_flashlight_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2655,7 +2655,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_FLASHLIGHT, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ����4G����
+        // 更新4G开关
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIMAX, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_FLASHLIGHT));
@@ -2667,7 +2667,7 @@ public class WidgetProviderUtil {
                         BITMAP_WIMAX = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIMAX), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_wimax_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2681,7 +2681,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_WIMAX, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ����reboot��ť
+        // 更新reboot按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_REBOOT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_REBOOT));
@@ -2692,7 +2692,7 @@ public class WidgetProviderUtil {
                         BITMAP_REBOOT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_REBOOT), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_reboot_on, STATE_DISABLED, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2707,7 +2707,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_REBOOT, views, layoutName, buttonIds, STATE_DISABLED, indColor);
         }
 
-        // ����Speakerģʽ
+        // 更新Speaker模式
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_SPEAKER, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_SPEAKER));
@@ -2719,7 +2719,7 @@ public class WidgetProviderUtil {
                         BITMAP_SPEAKER = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SPEAKER), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_speaker_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2733,7 +2733,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_SPEAKER, views, layoutName, buttonIds, state, indColor);
         }
 
-        // �����Զ���Ļ��
+        // 更新自动屏幕锁
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_AUTOLOCK, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_AUTOLOCK));
@@ -2745,7 +2745,7 @@ public class WidgetProviderUtil {
                         BITMAP_AUTOLOCK = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_AUTOLOCK), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_autolock_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -2760,7 +2760,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_AUTOLOCK, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ����Wifiap
+        // 更新Wifiap
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFIAP, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_WIFIAP));
@@ -2772,7 +2772,7 @@ public class WidgetProviderUtil {
                         BITMAP_WIFIAP = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIFIAP), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_wifite_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2786,7 +2786,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_WIFIAP, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ����Wifi���߲���
+        // 更新Wifi休眠策略
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_WIFI_SLEEP, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_WIFI_SLEEP));
@@ -2798,7 +2798,7 @@ public class WidgetProviderUtil {
                         BITMAP_WIFI_SLEEP = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_WIFI_SLEEP), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_wifi_sleep, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2812,7 +2812,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_WIFI_SLEEP, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ����Usb tether
+        // 更新Usb tether
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_USBTE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_USBTE));
@@ -2824,7 +2824,7 @@ public class WidgetProviderUtil {
                         BITMAP_USBTE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_USBTE), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_usbte_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2838,7 +2838,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_USBTE, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ����Mount
+        // 更新Mount
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_MOUNT, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_MOUNT));
@@ -2850,7 +2850,7 @@ public class WidgetProviderUtil {
                         BITMAP_MOUNT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_MOUNT), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_sdcard_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -2864,7 +2864,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_MOUNT, views, layoutName, buttonIds, state, indColor);
         }
 
-        // ������Ļ
+        // 锁定屏幕
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_LOCK_SCREEN, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_LOCK_SCREEN));
@@ -2875,7 +2875,7 @@ public class WidgetProviderUtil {
                         BITMAP_LOCK_SCREEN = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_LOCK_SCREEN), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_lockscreen_on, STATE_DISABLED,
                                 iconColor, iconTrans);
                         e.printStackTrace();
@@ -2892,13 +2892,13 @@ public class WidgetProviderUtil {
                     indColor);
         }
 
-        // ���µ��״̬��ť �����ȡ���������Ϣ�Ǵ����currentBatteryLevelΪ-1
+        // 更新电池状态按钮 如果获取不到电池信息是传入的currentBatteryLevel为-1
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_BATTERY, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BATTERY));
             int currentBatteryLevel = config.getInt(Constants.PREFS_BATTERY_LEVEL, -1);
 
-            // ����nullʱ��������ͼƬ����ɫ�˾�
+            // 传入null时不会设置图片的颜色滤镜
             Integer vcolor = iconColor == Constants.NOT_SHOW_FLAG ? null : iconColor;
 
             if (currentBatteryLevel < 0 || currentBatteryLevel > 100) {
@@ -2909,7 +2909,7 @@ public class WidgetProviderUtil {
                                     String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_LOCK_SCREEN),
                                     "")));
                         } catch (FileNotFoundException e) {
-                            // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                            // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                             setIconResource(context, views, viewId, R.drawable.batterynumber_blank, STATE_DISABLED,
                                     vcolor, iconTrans);
                             e.printStackTrace();
@@ -2931,7 +2931,7 @@ public class WidgetProviderUtil {
                             BITMAP_BATTERY = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                     String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BATTERY), "")));
                         } catch (FileNotFoundException e) {
-                            // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                            // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                             setIconResource(context, views, viewId, R.drawable.icon_battery_full, STATE_ENABLED,
                                     vcolor, iconTrans);
                             e.printStackTrace();
@@ -2955,7 +2955,7 @@ public class WidgetProviderUtil {
                             BITMAP_BATTERY = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                     String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BATTERY), "")));
                         } catch (FileNotFoundException e) {
-                            // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                            // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                             views.setImageViewBitmap(viewId, Utils.setIconColor(context,
                                     BatteryIndicatorUtils.getBitmap(context.getResources(), currentBatteryLevel), 255,
                                     vcolor));
@@ -2981,7 +2981,7 @@ public class WidgetProviderUtil {
             }
         }
 
-        // ����������ť
+        // 更新音量按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_VOLUME, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_VOLUME));
@@ -2991,7 +2991,7 @@ public class WidgetProviderUtil {
                         BITMAP_VOLUME = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_VOLUME), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_volume, STATE_DISABLED, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -3004,7 +3004,7 @@ public class WidgetProviderUtil {
             setIndViewResource(context, Constants.BUTTON_VOLUME, views, layoutName, buttonIds, STATE_DISABLED, indColor);
         }
 
-        // ɱ���̰�ť
+        // 杀进程按钮
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_KILL_PROCESS, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_KILL_PROCESS));
@@ -3015,7 +3015,7 @@ public class WidgetProviderUtil {
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_KILL_PROCESS), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_killprocess_on, STATE_DISABLED,
                                 iconColor, iconTrans);
                         e.printStackTrace();
@@ -3030,7 +3030,7 @@ public class WidgetProviderUtil {
                     indColor);
         }
 
-        // �ڴ�ռ�
+        // 内存空间
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_MEMORY_USAGE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_MEMORY_USAGE));
@@ -3047,7 +3047,7 @@ public class WidgetProviderUtil {
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_MEMORY_USAGE), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, Utils.createUsageIcon(context, percent),
                                 STATE_DISABLED, iconColor, iconTrans);
                         e.printStackTrace();
@@ -3062,7 +3062,7 @@ public class WidgetProviderUtil {
                     indColor);
         }
 
-        // �洢�ռ�
+        // 存储空间
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_STORAGE_USAGE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_STORAGE_USAGE));
@@ -3078,7 +3078,7 @@ public class WidgetProviderUtil {
                                 .decodeStream(context.openFileInput(config.getString(String.format(
                                         Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_STORAGE_USAGE), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, Utils.createUsageIcon(context, percent),
                                 STATE_DISABLED, iconColor, iconTrans);
                         e.printStackTrace();
@@ -3093,7 +3093,7 @@ public class WidgetProviderUtil {
                     indColor);
         }
 
-        // ����te
+        // 蓝牙te
         if ((viewId = getImgIdByBtnId(Constants.BUTTON_BT_TE, buttonIds)) != -1) {
             boolean needCustomIcon = config.contains(String.format(Constants.PREFS_CUSICON_FIELD_PATTERN,
                     Constants.ICON_BT_TE));
@@ -3105,7 +3105,7 @@ public class WidgetProviderUtil {
                         BITMAP_BT_TE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_BT_TE), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_blutoothte_on, state, iconColor,
                                 iconTrans);
                         e.printStackTrace();
@@ -3130,7 +3130,7 @@ public class WidgetProviderUtil {
                         BITMAP_NFC = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                                 String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_NFC), "")));
                     } catch (FileNotFoundException e) {
-                        // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                        // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                         setIconResource(context, views, viewId, R.drawable.icon_nfc_on, state, iconColor, iconTrans);
                         e.printStackTrace();
                     }
@@ -3154,7 +3154,7 @@ public class WidgetProviderUtil {
                     BITMAP_VIBRATE = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                             String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_VIBRATE), "")));
                 } catch (FileNotFoundException e) {
-                    // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                    // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                     setIconResource(context, views, viewId, R.drawable.icon_vibrate_on, state, iconColor, iconTrans);
                     e.printStackTrace();
                 }
@@ -3177,7 +3177,7 @@ public class WidgetProviderUtil {
                     BITMAP_SILENT = BitmapFactory.decodeStream(context.openFileInput(config.getString(
                             String.format(Constants.PREFS_CUSICON_FIELD_PATTERN, Constants.ICON_SILENT), "")));
                 } catch (FileNotFoundException e) {
-                    // ���ܴ���ֻ�������ļ�������û��ͼƬ�������ʱ���滻ͼƬ
+                    // 可能存在只有配置文件，但是没有图片情况，这时不替换图片
                     setIconResource(context, views, viewId, R.drawable.icon_cilent_on, state, iconColor, iconTrans);
                     e.printStackTrace();
                 }
@@ -3191,7 +3191,7 @@ public class WidgetProviderUtil {
     }
 
     /**
-     * ����ĳ����ťID�ҵ���Ӧ��ͼ��λ��
+     * 根据某个按钮ID找到对应的图标位置
      *
      * @param btnId
      * @param buttonIds
@@ -3200,10 +3200,10 @@ public class WidgetProviderUtil {
     public static int getImgIdByBtnId(int btnId, int[] buttonIds) {
         int pos = -1;
 
-        // ����ָ����ť�ڰ�ť˳������(buttonIds[])�е�λ��
+        // 查找指定按钮在按钮顺序数组(buttonIds[])中的位置
         for (int i = 0; i < buttonIds.length; i++) {
             if (buttonIds[i] == btnId) {
-                // �ӵڶ�����ť��ʼƫ��
+                // 从第二个按钮开始偏移
                 if (i != 0) {
                     switch (buttonIds.length) {
                         case 1:
@@ -3325,7 +3325,7 @@ public class WidgetProviderUtil {
     }
 
     /**
-     * ����ÿ����ť��ָʾ��ͼ��
+     * 设置每个按钮的指示器图标
      *
      * @param btnId
      * @param views
@@ -3338,7 +3338,7 @@ public class WidgetProviderUtil {
 
         for (int i = 0; i < buttonIds.length; i++) {
             if (buttonIds[i] == btnId) {
-                // �ӵڶ�����ť��ʼƫ��
+                // 从第二个按钮开始偏移
                 if (i != 0) {
                     switch (buttonIds.length) {
                         case 1:
@@ -3415,7 +3415,7 @@ public class WidgetProviderUtil {
         if (layoutName.equals(context.getText(R.string.list_pre_bg_custom))
                 || layoutName.equals(context.getText(R.string.list_pre_bg_custom_shadow))
                 || layoutName.equals(context.getText(R.string.list_pre_bg_none))) {
-            // ����ʾָʾ��
+            // 不显示指示器
             if (intColor == Constants.NOT_SHOW_FLAG) {
                 switch (pos) {
                     case 0:
@@ -3483,7 +3483,7 @@ public class WidgetProviderUtil {
                         break;
                 }
             }
-            // ���ʹ����ɫ�˾�
+            // 如果使用颜色滤镜
             else {
                 switch (pos) {
                     case 0:
@@ -3726,7 +3726,7 @@ public class WidgetProviderUtil {
     }
 
     /**
-     * ����λ�ã�״̬����ɫ�ҵ���Դ
+     * 根据位置，状态，颜色找到资源
      *
      * @param pos
      * @param state
@@ -3737,7 +3737,7 @@ public class WidgetProviderUtil {
      */
     private static int getIndImgSource(Context context, int state, int pos, RemoteViews views, String layoutName,
                                        int intColor, int[] buttonIds) {
-        // �����ֻ��һ����ť����ֻ��״̬�ı仯����ʹ�����߶���Բ�ǵ�ͼƬ
+        // 如果是只有一个按钮，则只有状态的变化，且使用两边都是圆角的图片
         if (buttonIds.length == 1) {
             if (state == STATE_INTERMEDIATE) {
                 switch (intColor) {
@@ -3797,7 +3797,7 @@ public class WidgetProviderUtil {
                 }
             }
         } else {
-            // �ұߵ�λ��
+            // 右边的位置
             if (pos == IND_POS_RIGHT) {
                 if (state == STATE_INTERMEDIATE) {
                     switch (intColor) {
@@ -3857,7 +3857,7 @@ public class WidgetProviderUtil {
                     }
                 }
             }
-            // ��ߵ�λ��
+            // 左边的位置
             else if (pos == IND_POS_LEFT) {
                 if (state == STATE_INTERMEDIATE) {
                     switch (intColor) {
@@ -3917,7 +3917,7 @@ public class WidgetProviderUtil {
                     }
                 }
             }
-            // ���������м�λ��
+            // 其他，如中间位置
             else {
                 if (state == STATE_INTERMEDIATE) {
                     switch (intColor) {
@@ -3981,7 +3981,7 @@ public class WidgetProviderUtil {
     }
 
     /**
-     * ����ͼ��
+     * 设置图标
      *
      * @param context
      * @param views
@@ -4009,12 +4009,12 @@ public class WidgetProviderUtil {
 
         Integer vcolor = ((color == null || color == Constants.NOT_SHOW_FLAG) ? null : color);
 
-        // ״̬Ϊonʱֱ������ͼ��,����ɫ�Ļ�������ɫ
+        // 状态为on时直接设置图标,有颜色的话设置颜色
         if (state == STATE_ENABLED) {
-            // ******����һ��Ҫ����͸����Ϊ255���������֮ǰ��������͸�����Ҵ���null�ᵼ��ֻ�ı���ɫ��͸���Ȳ���
+            // ******这里一定要设置透明度为255，否则如果之前被设置了透明，且传入null会导致只改变颜色，透明度不变
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, drawable, 255, vcolor));
         } else if (state == STATE_DISABLED) {
-            // ����ͬʱ������ɫ��͸����
+            // 否则同时设置颜色和透明度
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, drawable, alpha, vcolor));
         } else {
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, drawable, (255 + alpha) / 2, vcolor));
@@ -4022,7 +4022,7 @@ public class WidgetProviderUtil {
     }
 
     /**
-     * ����ͼ��
+     * 设置图标
      *
      * @param context
      * @param views
@@ -4036,14 +4036,14 @@ public class WidgetProviderUtil {
                                         Integer color, Integer alpha) {
         Integer vcolor = (color == Constants.NOT_SHOW_FLAG ? null : color);
 
-        // ״̬Ϊonʱֱ������ͼ��,����ɫ�Ļ�������ɫ
+        // 状态为on时直接设置图标,有颜色的话设置颜色
         if (state == STATE_ENABLED) {
-            // ******����һ��Ҫ����͸����Ϊ255���������֮ǰ��������͸�����Ҵ���null�ᵼ��ֻ�ı���ɫ��͸���Ȳ���
+            // ******这里一定要设置透明度为255，否则如果之前被设置了透明，且传入null会导致只改变颜色，透明度不变
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, bitmap, 255, vcolor));
         } else if (state == STATE_INTERMEDIATE) {
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, bitmap, (255 + alpha) / 2, vcolor));
         } else {
-            // ����ͬʱ������ɫ��͸����
+            // 否则同时设置颜色和透明度
             views.setImageViewBitmap(viewId, Utils.setIconColor(context, bitmap, alpha, vcolor));
         }
     }
@@ -4138,7 +4138,7 @@ public class WidgetProviderUtil {
      * @return key:widgetid value:size
      */
     public static SparseIntArray getAllWidget(Context context, boolean containsNotification) {
-        // ��ȡ��ǰ�Ѿ������Ĳ���
+        // 获取当前已经创建的部件
         String pkgName = WidgetProviderX4.class.getPackage().getName();
 
         final int[] widgetIdsX3 = AppWidgetManager.getInstance(context).getAppWidgetIds(
@@ -4158,8 +4158,8 @@ public class WidgetProviderUtil {
 
         if (widgetIdsX1.length > 0) {
             for (int i = 0; i < widgetIdsX1.length; i++) {
-                // �ж��Ƿ������WidgetId��������ã����û�о���Ϊ���Widgetû�д�����Launcher��
-                // �������widgetʱ��Home���˳��������ڴ����Widget������
+                // 判断是否有这个WidgetId的相关配置，如果没有就认为这个Widget没有创建在Launcher上
+                // 解决创建widget时按Home键退出，导致内存存在Widget的问题
                 if (config.contains(String.format(Constants.PREFS_BUTTONS_FIELD_PATTERN, widgetIdsX1[i]))) {
                     map.put(widgetIdsX1[i], 1);
                 }
@@ -4198,7 +4198,7 @@ public class WidgetProviderUtil {
             }
         }
 
-        // ����֪ͨ���еĲ���,֪ͨ��������sizeͳһΪ 0
+        // 加入通知栏中的部件,通知栏部件的size统一为 0
         if (containsNotification) {
             String[] notificationWidgetIds = config.getString(Constants.PREFS_IN_NOTIFICATION_BAR, "").split(",");
 

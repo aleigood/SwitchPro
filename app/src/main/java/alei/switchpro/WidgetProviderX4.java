@@ -7,7 +7,7 @@ import android.content.Intent;
 
 public class WidgetProviderX4 extends AppWidgetProvider {
     /**
-     * ɾ��ÿ��widget��Ӧ�Ĳ���
+     * 删除每个widget对应的参数
      */
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
@@ -26,7 +26,7 @@ public class WidgetProviderX4 extends AppWidgetProvider {
     }
 
     /**
-     * ���հ�ť�¼�����������״̬������¼�
+     * 接收按钮事件和其他设置状态变更的事件
      *
      * @param context
      * @param intent  Indicates the pressed button.

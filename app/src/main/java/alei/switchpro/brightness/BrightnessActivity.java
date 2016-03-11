@@ -14,7 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BrightnessActivity extends Activity {
-    // ����,�������ܵ������������Ϊ30
+    // 亮度,界面上能调整的最低亮度为30
     public static final int BRIGHT_LEVEL_0 = 0;
     public static final int BRIGHT_LEVEL_10 = 25;
     public static final int BRIGHT_LEVEL_20 = 51;
@@ -35,7 +35,7 @@ public class BrightnessActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ��ȡ���ȼ�������
+        // 获取亮度级别配置
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(this);
         List<Integer> lastLevel = LevelPreference.getLevelRealList(config.getString(Constants.PREFS_BRIGHT_LEVEL,
                 LevelPreference.DEFAULT_LEVEL));
@@ -88,11 +88,11 @@ public class BrightnessActivity extends Activity {
             nextLevel = lastLevel.get(0);
         }
 
-        // ���ֵΪ-1��Ҫ���ó��Զ�����
+        // 如果值为-1，要设置成自动调整
         if (nextLevel == -1) {
             Settings.System.putInt(getContentResolver(), BRIGHT_MODE, BRIGHT_MODE_AUTO);
         } else {
-            // �����ǰ���Զ�������Ӧ�ȹر�
+            // 如果当前是自动调整的应先关闭
             if (mode == BRIGHT_MODE_AUTO) {
                 Settings.System.putInt(getContentResolver(), BRIGHT_MODE, BRIGHT_MODE_MANUAL);
             }
@@ -121,24 +121,24 @@ public class BrightnessActivity extends Activity {
                 setVal = BRIGHT_LEVEL_100;
             }
 
-            // ����ϵͳ������(0-255)
+            // 设置系统的亮度(0-255)
             android.provider.Settings.System.putInt(getContentResolver(),
                     android.provider.Settings.System.SCREEN_BRIGHTNESS, setVal);
 
-            // ����Layout������
+            // 设置Layout的亮度
             LayoutParams attributes = getWindow().getAttributes();
             float tmp = Float.valueOf(nextLevel) / 100f;
-            // �������Сֵ����Ϊ0��������������
-            // ��galaxy nexus��0.04f��ϵͳ������Ȳ�࣬����������Ե���������������
+            // 这里的最小值不能为0，否则会出现锁屏
+            // 在galaxy nexus中0.04f与系统最低亮度差不多，不会出现明显的亮度跳动的现象
             attributes.screenBrightness = tmp == 0 ? 0.04f : tmp;
             getWindow().setAttributes(attributes);
         }
 
-        // 3. ��Ҫ�����ӳٹرմ���,��Ϊ�����������ӳ�
+        // 3. 需要设置延迟关闭窗体,因为条件亮度有延迟
         Timer timer = new Timer();
         timer.schedule(new NewTask(), 500);
 
-        // ֪ͨwidget��ť���и���
+        // 通知widget按钮进行更新
         Utils.updateWidget(this);
     }
 

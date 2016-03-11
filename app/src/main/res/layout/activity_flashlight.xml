@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/flashlight_main"
+<LinearLayout android:id="@+id/flashlight_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="right" >
+        android:gravity="right">
 
         <ImageView
             android:id="@+id/color_image"
@@ -21,14 +21,14 @@
             android:paddingRight="12dip"
             android:paddingTop="12dip"
             android:scaleType="center"
-            android:src="@drawable/color_wheel" />
+            android:src="@drawable/color_wheel"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/flash_image"
@@ -36,14 +36,14 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:scaleType="center"
-            android:src="@drawable/flash_bg" />
+            android:src="@drawable/flash_bg"/>
 
         <TextView
             android:id="@+id/flash_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="12dip"
-            android:text="@string/close_screen_light_info" />
+            android:text="@string/close_screen_light_info"/>
     </LinearLayout>
 
 </LinearLayout>

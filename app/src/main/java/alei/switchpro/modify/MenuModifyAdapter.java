@@ -50,7 +50,7 @@ public class MenuModifyAdapter extends BaseAdapter {
         }
     }
 
-    // ����ÿһ��ѡ���view
+    // 返回每一个选项的view
     public View getView(int position, View convertView, ViewGroup parent) {
         final ListItem item = (ListItem) getItem(position);
         convertView = mInflater.inflate(R.layout.item_image_checkbox, parent, false);
@@ -70,17 +70,17 @@ public class MenuModifyAdapter extends BaseAdapter {
         return convertView;
     }
 
-    // ������Ŀ�ĸ���
+    // 返回条目的个数
     public int getCount() {
         return mItems.size();
     }
 
-    // ������Ŀ��λ�û�ȡ��Ŀ������
+    // 根据条目的位置获取条目的内容
     public Object getItem(int position) {
         return mItems.get(position);
     }
 
-    // ��ȡĳһλ�õ�Id
+    // 获取某一位置的Id
     public long getItemId(int position) {
         return position;
     }

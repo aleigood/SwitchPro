@@ -91,7 +91,7 @@ public class SwitchUtils {
         } else if (wifiState == WidgetProviderUtil.STATE_DISABLED) {
             wifiManager.setWifiEnabled(true);
 
-            // �����������Ҫ�����ý��棬�ڴ򿪺󵯳�����
+            // 如果配置了需要打开配置界面，在打开后弹出界面
             SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
             boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_WIFI, false);
 
@@ -118,16 +118,16 @@ public class SwitchUtils {
     public static void toggleApn(Context context) {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // �����9���ϵ�ϵͳ��Ĭ����ѡ��APN����
+        // 如果是9以上的系统，默认是选中APN开关
         if (config.getBoolean(Constants.PREFS_USE_APN, false)) {
             ApnUtils.switchAndNotify(context);
             Utils.updateWidget(context);
         }
-        // ���ûѡ��APN����
+        // 如果没选择APN开关
         else {
             if (VERSION.SDK_INT >= 9) {
                 NetUtils.toggleMobileNetwork9(context);
-                // ���״̬������������
+                // 这个状态可以立即更新
                 Utils.updateWidget(context);
             } else {
                 NetUtils.toggleMobileNetwork(context);
@@ -171,11 +171,11 @@ public class SwitchUtils {
      * @param context
      */
     public static void toggleSync(Context context) {
-        // �����������Ҫ�����ý��棬�ڴ򿪺󵯳�����
+        // 如果配置了需要打开配置界面，在打开后弹出界面
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_SYNC, false);
 
-        // �����Ҫ����壬�ҵ�ǰͬ���ǹرյ�
+        // 如果需要打开面板，且当前同步是关闭的
         if (openAction) {
             Intent intent = new Intent("android.settings.SYNC_SETTINGS");
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -200,19 +200,19 @@ public class SwitchUtils {
      * @param context
      */
     public static void toggleGps(Context context) {
-        // �����������Ҫ�����ý��棬�ڴ򿪺󵯳�����
+        // 如果配置了需要打开配置界面，在打开后弹出界面
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
-        // ���SDK����9��Ĭ���Ǵ���壬�����������������
+        // 如果SDK大于9，默认是打开面板，除非设置它不打开面板
         boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_GPS, false);
 
-        // �����Ҫ�����
+        // 如果需要打开面板
         if (openAction) {
             Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
             } catch (CanceledException e1) {
@@ -240,7 +240,7 @@ public class SwitchUtils {
                 }
             }
 
-            // ֪ͨwidget����
+            // 通知widget更新
             Utils.updateWidget(context);
 
             if (!config.contains(Constants.PREFS_GPS_FIRST_LAUNCH) && VERSION.SDK_INT >= 9 && VERSION.SDK_INT != 17) {
@@ -319,7 +319,7 @@ public class SwitchUtils {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         try {
-            // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+            // 如果是从通知栏弹出，需要先弹起通知栏
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             pendingIntent.send();
         } catch (CanceledException e) {
@@ -345,7 +345,7 @@ public class SwitchUtils {
             htcIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 PendingIntent.getActivity(context, 0, htcIntent, 0).send();
             } catch (CanceledException e) {
@@ -360,7 +360,7 @@ public class SwitchUtils {
                 shortcutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 try {
-                    // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                    // 如果是从通知栏弹出，需要先弹起通知栏
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     PendingIntent.getActivity(context, 0, shortcutIntent, 0).send();
                 } catch (CanceledException e) {
@@ -377,7 +377,7 @@ public class SwitchUtils {
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
                 try {
-                    // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                    // 如果是从通知栏弹出，需要先弹起通知栏
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     pendingIntent.send();
                 } catch (CanceledException e) {
@@ -464,7 +464,7 @@ public class SwitchUtils {
     }
 
     /**
-     * ��ȡ��Ļ��ʱ״̬
+     * 获取屏幕超时状态
      *
      * @param context
      * @return
@@ -475,12 +475,12 @@ public class SwitchUtils {
     }
 
     /**
-     * ������Ļ��ʱ
+     * 设置屏幕超时
      *
      * @param context
      */
     public static void toggleScreenTimeout(Context context) {
-        // �����������Ҫ�����ý��棬�ڴ򿪺󵯳�����
+        // 如果配置了需要打开配置界面，在打开后弹出界面
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         boolean openAction = config.getBoolean(Constants.PREFS_TOGGLE_TIMEOUT, false);
 
@@ -489,7 +489,7 @@ public class SwitchUtils {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
             } catch (CanceledException e) {
@@ -501,7 +501,7 @@ public class SwitchUtils {
                     Settings.System.SCREEN_OFF_TIMEOUT, 0);
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
-            // ������ǳ������ͱ������ʱ��ֵ
+            // 如果不是常亮，就保存这个时间值
             if (screenTimeOut != -1) {
                 SharedPreferences.Editor configEditor = sp.edit();
                 configEditor.putInt("Timeout", screenTimeOut);
@@ -514,7 +514,7 @@ public class SwitchUtils {
                     wakeLock.acquire();
                 }
             }
-            // �����ѱ����ʱ��ֵ
+            // 读出已保存的时间值
             else {
                 int time = sp.getInt("Timeout", 30000);
                 Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, time);
@@ -553,7 +553,7 @@ public class SwitchUtils {
     }
 
     /**
-     * ����ģʽ����
+     * 飞行模式开关
      *
      * @param context
      */
@@ -565,7 +565,7 @@ public class SwitchUtils {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
             } catch (CanceledException e) {
@@ -585,7 +585,7 @@ public class SwitchUtils {
         boolean closeWifi = config.getBoolean(Constants.PREFS_AIRPLANE_WIFI, true);
 
         if (state) {
-            // ��������ģʽ
+            // 开启飞行模式
             if (closeWifi) {
                 Settings.System.putInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 1);
             } else {
@@ -605,7 +605,7 @@ public class SwitchUtils {
     }
 
     /**
-     * ��ȡ����ģʽ״̬
+     * 获取飞行模式状态
      *
      * @param context
      * @return
@@ -615,7 +615,7 @@ public class SwitchUtils {
     }
 
     /**
-     * ����SD���е�ý��
+     * 加载SD卡中的媒体
      */
     public static void scanMedia(Context context) {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
@@ -629,7 +629,7 @@ public class SwitchUtils {
         AudioManager audioManager = (AudioManager) context.getApplicationContext().getSystemService(
                 Context.AUDIO_SERVICE);
 
-        // �����ǰ�������ģ�����Ҫ���о���
+        // 如果当前是正常的，则需要进行静音
         if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
             if (btn.equals(Constants.BTN_ONLY_SILENT)) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
@@ -639,7 +639,7 @@ public class SwitchUtils {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
             }
 
-            // ���ѡ����ý�徲�������ھ���ʱ�ر�ý������
+            // 如果选择了媒体静音，则在静音时关闭媒体音量
             if (config.getBoolean(Constants.PREFS_MUTE_MEDIA, false)) {
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
             }
@@ -648,21 +648,21 @@ public class SwitchUtils {
                 audioManager.setStreamMute(AudioManager.STREAM_ALARM, true);
             }
         } else {
-            // ֻѡ���˾�������ָ�����
+            // 只选择了静音，则恢复铃声
             if (btn.equals(Constants.BTN_ONLY_SILENT)) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                 audioManager.setStreamMute(AudioManager.STREAM_ALARM, false);
             }
-            // ֻѡ��������ָ�����
+            // 只选择了振动则恢复铃声
             else if (btn.equals(Constants.BTN_ONLY_VIVERATE)) {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                 audioManager.setStreamMute(AudioManager.STREAM_ALARM, false);
             }
-            // ѡ���˾�������ģʽ
+            // 选择了静音和振动模式
             else {
-                // �����ǰ������������뾲��ģʽ��ע����ط�����������ý�徲������Ϊ������ģʽʱ�Ѿ�����һ���ˣ�������һ�ν��޷��ָ�
+                // 如果当前是振动则下面进入静音模式，注意这地方不用再设置媒体静音，因为进入振动模式时已经设置一次了，再设置一次将无法恢复
                 if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                 } else if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
@@ -675,7 +675,7 @@ public class SwitchUtils {
     }
 
     /**
-     * ��ȡ����ģʽ
+     * 获取静音模式
      *
      * @param context
      * @return
@@ -695,7 +695,7 @@ public class SwitchUtils {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
             } catch (CanceledException e) {
@@ -721,7 +721,7 @@ public class SwitchUtils {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
             } catch (CanceledException e) {
@@ -793,7 +793,7 @@ public class SwitchUtils {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         try {
-            // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+            // 如果是从通知栏弹出，需要先弹起通知栏
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             pendingIntent.send();
         } catch (CanceledException e) {
@@ -821,7 +821,7 @@ public class SwitchUtils {
     }
 
     public static void toggleWimax(Context context) {
-        // �洢��ǰ��״̬���Ա��������Ժ�ָ�״̬
+        // 存储当前的状态，以便在重启以后恢复状态
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor configEditor = config.edit();
         int wimaxState = getWimaxState(context);
@@ -851,7 +851,7 @@ public class SwitchUtils {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
             } catch (CanceledException ce) {
@@ -862,13 +862,13 @@ public class SwitchUtils {
         }
     }
 
-    // ��Ҫ��Widget�ڴ����ǳ�ʼ����Ļ����״̬
+    // 需要在Widget在创建是初始化屏幕锁的状态
     public static void toggleAutoLock(Context context) {
         KeyguardManager keyManager = (KeyguardManager) context.getApplicationContext().getSystemService("keyguard");
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor configEditor = config.edit();
 
-        // �Զ���������Ǵ򿪵�
+        // 自动锁锁如果是打开的
         if (config.getBoolean(Constants.PREF_AUTOLOCK_STATE, true)) {
             if (keyLock == null) {
                 keyLock = keyManager.newKeyguardLock(context.getPackageName());
@@ -971,7 +971,7 @@ public class SwitchUtils {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             try {
-                // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                // 如果是从通知栏弹出，需要先弹起通知栏
                 PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                 pendingIntent.send();
             } catch (CanceledException e) {
@@ -1058,7 +1058,7 @@ public class SwitchUtils {
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
                     try {
-                        // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                        // 如果是从通知栏弹出，需要先弹起通知栏
                         PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0)
                                 .send();
                         pendingIntent.send();
@@ -1083,7 +1083,7 @@ public class SwitchUtils {
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
                     try {
-                        // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                        // 如果是从通知栏弹出，需要先弹起通知栏
                         PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0)
                                 .send();
                         pendingIntent.send();
@@ -1130,7 +1130,7 @@ public class SwitchUtils {
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
                 try {
-                    // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+                    // 如果是从通知栏弹出，需要先弹起通知栏
                     PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
                     pendingIntent.send();
                 } catch (CanceledException e) {
@@ -1147,7 +1147,7 @@ public class SwitchUtils {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         try {
-            // ����Ǵ�֪ͨ����������Ҫ�ȵ���֪ͨ��
+            // 如果是从通知栏弹出，需要先弹起通知栏
             PendingIntent.getBroadcast(context, 0, new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), 0).send();
             pendingIntent.send();
         } catch (Exception e) {

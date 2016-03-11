@@ -16,14 +16,14 @@ public class WidgetConfigActivityX2 extends WidgetConfigBaseActivity {
         setContentView(R.layout.activity_widget_conf);
         addPreferencesFromResource(R.xml.pref_widget_conf);
 
-        // ��������������ͼ�л�ȡApp Widget ID
+        // 从启动这个活动的意图中获取App Widget ID
         Intent launchIntent = getIntent();
         Bundle extras = launchIntent.getExtras();
 
-        // ����������ý����widget��ID
+        // 弹出这个配置界面的widget的ID
         int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
-        // ת������ý�������widgetId����
+        // 转入此配置界面必须带widgetId参数
         if (extras != null) {
             appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
@@ -35,7 +35,7 @@ public class WidgetConfigActivityX2 extends WidgetConfigBaseActivity {
         Intent launchIntent = new Intent();
         launchIntent.setClass(this, WidgetProviderX2.class);
         launchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        // ÿ��Intent����Ψһ�ģ����ᱻ�໥����
+        // 每个Intent都是唯一的，不会被相互覆盖
         launchIntent.setData(Uri.withAppendedPath(Uri.parse(WidgetProviderUtil.URI_SCHEME + "://widget/id/"),
                 String.valueOf(appWidgetId)));
         PendingIntent newIntent = PendingIntent.getBroadcast(this, 0, launchIntent, 0);
@@ -48,7 +48,7 @@ public class WidgetConfigActivityX2 extends WidgetConfigBaseActivity {
     }
 
     /**
-     * ��ȡ���һ�����õİ�ť˳�����û�еĻ�����һ��Ĭ��˳������Ҫ����
+     * 获取最后一次配置的按钮顺序，如果没有的话返回一个默认顺序，子类要覆盖
      *
      * @return
      */
@@ -66,7 +66,7 @@ public class WidgetConfigActivityX2 extends WidgetConfigBaseActivity {
     protected void saveBtnAction() {
         super.saveBtnAction();
         saveCfgToSD(PreferenceManager.getDefaultSharedPreferences(this), false, null);
-        // ת������Ӧ��widget���и���
+        // 转交给相应的widget进行更新
         updateWidget(widgetId);
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);

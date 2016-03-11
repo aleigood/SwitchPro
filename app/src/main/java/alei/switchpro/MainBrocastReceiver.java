@@ -16,7 +16,7 @@ public class MainBrocastReceiver extends BroadcastReceiver {
         SharedPreferences config = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor configEditor = config.edit();
 
-        // ����֪ͨ���а�ť����Ӧ�¼���widget�İ�ť��Ӧ�¼�ֻ�ᱻ����׽
+        // 处理通知栏中按钮的响应事件，widget的按钮响应事件只会被自身捕捉
         WidgetProviderUtil.performButtonEvent(context, intent);
 
         if (intent.getAction() != null) {
@@ -27,13 +27,13 @@ public class MainBrocastReceiver extends BroadcastReceiver {
                     configEditor.putInt(Constants.PREFS_BATTERY_LEVEL, currentBatteryLevel).commit();
                 }
             }
-            // ɨ��SD������¼���ֻ��ʾ�����ʾ
+            // 扫描SD卡完成事件，只显示完成提示
             else if (intent.getAction().equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)
                     && WidgetProviderUtil.scanMediaFlag) {
                 Toast.makeText(context, R.string.media_scanner_finished, Toast.LENGTH_SHORT).show();
                 WidgetProviderUtil.scanMediaFlag = false;
             }
-            // �����Ļ�ر��˾͹ر������
+            // 如果屏幕关闭了就关闭闪光灯
             else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 boolean savedState = config.getBoolean(Constants.PREFS_FLASH_STATE, false);
 
@@ -43,17 +43,17 @@ public class MainBrocastReceiver extends BroadcastReceiver {
                     configEditor.commit();
                 }
             }
-            // �������������������ƺ���Ļ����״̬
+            // 如果刚启动则重置闪光灯和屏幕锁的状态
             else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
                 configEditor.putBoolean(Constants.PREFS_FLASH_STATE, false);
                 configEditor.putBoolean(Constants.PREF_AUTOLOCK_STATE, true);
                 configEditor.commit();
 
-                // ���4G���ر�ϵͳ�Զ��򿪣���ص���
-                // ���һ������
+                // 如果4G开关被系统自动打开，则关掉它
+                // 最后一次配置
                 int state = config.getInt(Constants.PREF_4G_STATE, WidgetProviderUtil.STATE_ENABLED);
 
-                // ������һ�������ǹرյģ��ҵ�ǰ�Ѿ����ˣ��Ͱ����ر�
+                // 如果最后一次配置是关闭的，且当前已经打开了，就把它关闭
                 if (state == WidgetProviderUtil.STATE_DISABLED
                         && SwitchUtils.getWimaxState(context) == WidgetProviderUtil.STATE_ENABLED) {
                     SwitchUtils.toggleWimax(context);
@@ -62,13 +62,13 @@ public class MainBrocastReceiver extends BroadcastReceiver {
                     .equals(intent.getAction())) && SwitchUtils.toggle_bluetooth_te) {
                 if (SwitchUtils.getBluetoothState(context) == WidgetProviderUtil.STATE_ENABLED) {
                     BluetoothTeUtil.toggleBluetoothTe();
-                    // �����һ���Եģ�ֻҪ������������
+                    // 标记是一次性的，只要打开了蓝牙就行
                     SwitchUtils.toggle_bluetooth_te = false;
                 }
             }
         }
 
-        // ֪ͨwidget����
+        // 通知widget更新
         Utils.updateWidget(context);
     }
 }

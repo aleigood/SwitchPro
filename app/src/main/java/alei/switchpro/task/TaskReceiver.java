@@ -50,7 +50,7 @@ public class TaskReceiver extends BroadcastReceiver {
         // information in bug reports.
         long now = System.currentTimeMillis();
 
-        // �մ�������ʱ��͹����ˣ�����Ĭ�ϵ��ӳ�Ϊ30�룬������ǹ���˵��ʱ���ʱ��������
+        // 刚触发任务时间就过期了，设置默认的延迟为30秒，如果还是过期说明时间或时区被改了
         List<Toggle> switches = TaskUtil.getSwitchesByTaskId(dbOper, alarm.id);
 
         for (int i = 0; i < switches.size(); i++) {
@@ -72,7 +72,7 @@ public class TaskReceiver extends BroadcastReceiver {
                             ringtone = Uri.parse(toggle.param1);
                         }
 
-                        // ��ʱ���浱ǰ���������ã��Ա�ָ�
+                        // 此时保存当前的铃声设置，以便恢复
                         TaskUtil.updateSwitch(dbOper, toggle.taskId, toggle.switchId, toggle.param1,
                                 defaultAlert.toString());
                     } else {
@@ -95,12 +95,12 @@ public class TaskReceiver extends BroadcastReceiver {
 
                     boolean radioState = SwitchUtils.getNetworkState(context);
                     if (alarm.type == 0) {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǿ�����
+                        // 是要关闭的，且当前是开启的
                         if ((toggle.param1.equals("0") && radioState) || (toggle.param1.equals("1") && !radioState)) {
                             SwitchUtils.toggleNetwork(context);
                         }
                     } else {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǹرյĻ���Ҫ�����ģ����Ѿ�������
+                        // 是要关闭的，且当前是关闭的或者要开启的，且已经开启了
                         if ((toggle.param1.equals("0") && !radioState) || (toggle.param1.equals("1") && radioState)) {
                             SwitchUtils.toggleNetwork(context);
                         }
@@ -111,13 +111,13 @@ public class TaskReceiver extends BroadcastReceiver {
 
                     int wifiState = SwitchUtils.getWifiState(context);
                     if (alarm.type == 0) {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǿ�����
+                        // 是要关闭的，且当前是开启的
                         if ((toggle.param1.equals("0") && wifiState == WidgetProviderUtil.STATE_ENABLED)
                                 || (toggle.param1.equals("1") && wifiState == WidgetProviderUtil.STATE_DISABLED)) {
                             SwitchUtils.toggleWifi(context);
                         }
                     } else {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǹرյ�
+                        // 是要关闭的，且当前是关闭的
                         if ((toggle.param1.equals("0") && wifiState == WidgetProviderUtil.STATE_DISABLED)
                                 || (toggle.param1.equals("1") && wifiState == WidgetProviderUtil.STATE_ENABLED)) {
                             SwitchUtils.toggleWifi(context);
@@ -128,12 +128,12 @@ public class TaskReceiver extends BroadcastReceiver {
 
                     boolean dataState = SwitchUtils.getApnState(context);
                     if (alarm.type == 0) {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǿ�����
+                        // 是要关闭的，且当前是开启的
                         if ((toggle.param1.equals("0") && dataState) || (toggle.param1.equals("1") && !dataState)) {
                             SwitchUtils.toggleApn(context);
                         }
                     } else {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǹرյ�
+                        // 是要关闭的，且当前是关闭的
                         if ((toggle.param1.equals("0") && !dataState) || (toggle.param1.equals("1") && dataState)) {
                             SwitchUtils.toggleApn(context);
                         }
@@ -143,12 +143,12 @@ public class TaskReceiver extends BroadcastReceiver {
 
                     boolean syncState = SwitchUtils.getSync(context);
                     if (alarm.type == 0) {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǿ�����
+                        // 是要关闭的，且当前是开启的
                         if ((toggle.param1.equals("0") && syncState) || (toggle.param1.equals("1") && !syncState)) {
                             SwitchUtils.toggleSync(context);
                         }
                     } else {
-                        // ��Ҫ�رյģ��ҵ�ǰ�ǹرյ�
+                        // 是要关闭的，且当前是关闭的
                         if ((toggle.param1.equals("0") && !syncState) || (toggle.param1.equals("1") && syncState)) {
                             SwitchUtils.toggleSync(context);
                         }
@@ -158,16 +158,16 @@ public class TaskReceiver extends BroadcastReceiver {
 
                     AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-                    // ����ǿ�ʼ����
+                    // 如果是开始任务
                     if (alarm.type == 0) {
-                        // ����Ǿ������ҵ�ǰ������ģʽ
+                        // 如果是静音，且当前是正常模式
                         if ((toggle.param1.equals("0") && audioManager.getMode() == AudioManager.MODE_NORMAL)) {
                             audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                         } else if ((toggle.param1.equals("1") && audioManager.getMode() == AudioManager.MODE_NORMAL)) {
                             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                         }
                     } else {
-                        // ����ǽ��������ֱ�ӻָ�Normalģʽ
+                        // 如果是结束任务就直接恢复Normal模式
                         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     }
                     break;
@@ -181,7 +181,7 @@ public class TaskReceiver extends BroadcastReceiver {
                         mAudioManager.setStreamVolume(AudioManager.STREAM_RING,
                                 (int) ((Float.parseFloat(toggle.param1) / 100f) * (float) max),
                                 AudioManager.FLAG_SHOW_UI);
-                        // ���浱ǰ���������Ա�ָ�
+                        // 保存当前的音量，以便恢复
                         TaskUtil.updateSwitch(dbOper, toggle.taskId, toggle.switchId, toggle.param1, currentVolume + "");
                     } else {
                         mAudioManager.setStreamVolume(AudioManager.STREAM_RING, Integer.parseInt(toggle.param2),
@@ -194,7 +194,7 @@ public class TaskReceiver extends BroadcastReceiver {
             }
         }
 
-        // ��������ظ��������ҽ��������Ѿ���������������ʧЧ
+        // 如果不是重复的任务，且结束任务已经触发，则让任务失效
         if (!alarm.daysOfWeek.isRepeatSet() && alarm.type == 1) {
             TaskUtil.enableAlarm(dbOper, alarm.id, false);
         } else {

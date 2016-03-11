@@ -1,6 +1,7 @@
 <resources>
 
-    <style name="theme_light_noTitleBar" parent="android:Theme.Light.NoTitleBar" />
-    <style name="theme_translucent_notitlebar" parent="android:Theme.Translucent.NoTitleBar" />
+    <style name="theme_light_noTitleBar" parent="android:Theme.Light.NoTitleBar"/>
+
+    <style name="theme_translucent_notitlebar" parent="android:Theme.Translucent.NoTitleBar"/>
 
 </resources>

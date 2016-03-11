@@ -29,7 +29,7 @@ public class ConfigModifyPref extends Preference {
         final SparseIntArray map = WidgetProviderUtil.getAllWidget(parent, true);
         int count = map.size();
 
-        // ��ȡ�������������ֻ��һ����ֱ���޸�
+        // 获取部件个数，如果只有一个就直接修改
         if (count == 1) {
             int widgetId = map.keyAt(0);
             startModifyActivity(widgetId, map.get(widgetId));

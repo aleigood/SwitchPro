@@ -90,7 +90,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * ��ӵ����˵�
+     * 添加弹出菜单
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,7 +100,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * ��ʼ���˵���״̬
+     * 初始化菜单的状态
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -109,7 +109,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * �����˵�����Ӧ�¼�
+     * 弹出菜单的响应事件
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -125,7 +125,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * ��ʼ������ĳһ��ʱ�ĵ����˵�
+     * 初始化长按某一项时的弹出菜单
      */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
@@ -133,7 +133,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * ��ʼ������ĳһ��ʱ���¼�
+     * 初始化长按某一项时的事件
      */
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
@@ -157,7 +157,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * ���ĳһ�˵���ʱ�����޸Ľ���
+     * 点击某一菜单项时进入修改界面
      */
     public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
         Intent intent = new Intent(this, TaskModifyActivity.class);
@@ -178,7 +178,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     protected void onResume() {
         super.onResume();
         inflateClock();
-        // ���޸�,����Ǵ����ý��淵�غ���ô˷���ˢ���б�
+        // 在修改,添加是从设置界面返回后调用此方法刷新列表
         requery();
     }
 
@@ -200,7 +200,7 @@ public class TaskMainActivity extends PreferenceActivity implements OnItemClickL
     }
 
     /**
-     * ��ɾ��,����,�޸Ļ������½���˽���ʱˢ���б�����ʱ����
+     * 在删除,新增,修改或者重新进入此界面时刷新列表数据时调用
      */
     public void requery() {
         mCursor.requery();

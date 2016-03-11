@@ -13,7 +13,7 @@ public class Constants {
     public static final int NOT_SHOW_FLAG = 100;
 
     public static final String PKG_THEME_HOLO = "alei.switchpro.theme.holo";
-    // ��ť��ʶ
+    // 按钮标识
     public static final int BUTTON_WIFI = 0;
     public static final int BUTTON_EDGE = 1;
     public static final int BUTTON_BLUETOOTH = 2;
@@ -45,7 +45,7 @@ public class Constants {
     public static final int BUTTON_BT_TE = 28;
     public static final int BUTTON_NFC = 29;
 
-    // ͼ��ı�ʶ
+    // 图标的标识
     public static final int ICON_WIFI = 0;
     public static final int ICON_EDGE = 1;
     public static final int ICON_BLUETOOTH = 2;
@@ -80,13 +80,13 @@ public class Constants {
     public static final int ICON_BT_TE = 30;
     public static final int ICON_NFC = 31;
 
-    // �������״̬�Ĳ���
+    // 保存各种状态的参数
     public static final String PREFS_FLASH_STATE = "flashState";
     public static final String PREF_NET_STATE = "netstate";
     public static final String PREF_AUTOLOCK_STATE = "autolockState";
     public static final String PREF_4G_STATE = "4gState";
 
-    // ȫ�ֲ���
+    // 全局参数
     public static final String PREFS_TOGGLE_WIFI = "toggle_wifi";
     public static final String PREFS_TOGGLE_BLUETOOTH = "toggle_bluetooth";
     public static final String PREFS_TOGGLE_GPS = "toggle_gps";
@@ -111,11 +111,11 @@ public class Constants {
     public static final String PREFS_SHOW_BRIGHTNESS_BAR = "show_brightness_bar";
     public static final String PREFS_GPS_FIRST_LAUNCH = "gps_first_launch";
 
-    // ��ز���
+    // 电池参数
     public static final String PREFS_BATTERY_LEVEL = "Pref_Battery_Level";
 
     public static final String PREFS_CUSICON_FIELD_PATTERN = "cusIcon-%d";
-    // ÿ��Widget��˽�в���
+    // 每个Widget的私有参数
     public static final String PREFS_BUTTONS_FIELD_PATTERN = "buttonIds-%d";
     public static final String PREFS_BACK_COLOR_FIELD_PATTERN = "backColor-%d";
     public static final String PREFS_BACK_IMAGE_FIELD_PATTERN = "backImage-%d";
@@ -125,7 +125,7 @@ public class Constants {
     public static final String PREFS_DIVIDER_COLOR_FIELD_PATTERN = "dividerColor-%d";
     public static final String PREFS_LAYOUT_FIELD_PATTERN = "widgetLayout-%d";
 
-    // ����Widget�󱣴���������
+    // 创建Widget后保存的最近配置
     public static final String PREFS_LAST_BUTTONS_ORDER = "lastBtnOrder";
     public static final String PREFS_LAST_BACKGROUND = "lastWidgetLayout";
     public static final String PREFS_LAST_BACK_COLOR = "lastBackColor";
@@ -173,12 +173,12 @@ public class Constants {
 
     public static final String BACK_FILE_PATH = ".switchpro";
 
-    // �����񶯰�ť������
+    // 静音振动按钮的配置
     public static final String BTN_ONLY_SILENT = "2";
     public static final String BTN_ONLY_VIVERATE = "1";
     public static final String BTN_VS = "0";
 
-    // �豸���͵�����
+    // 设备类型的配置
     public static final String DEVICE_TYPE1 = "0";
     public static final String DEVICE_TYPE2 = "1";
     public static final String DEVICE_TYPE3 = "2";
@@ -202,7 +202,7 @@ public class Constants {
         public static final String COLUMN_MESSAGE = "message";
 
         /**
-         * These save calls to cursor.getColumnIndexOrThrow() Ҫ�봴�����ʱ���б���ͬ��
+         * These save calls to cursor.getColumnIndexOrThrow() 要与创建表格时的列保持同步
          */
         public static final int INDEX_ID = 0;
         public static final int INDEX_START_HOUR = 1;
